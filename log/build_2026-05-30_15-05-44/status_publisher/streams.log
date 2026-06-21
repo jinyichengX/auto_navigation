@@ -1,0 +1,37 @@
+[0.502s] Invoking command in '/home/jinyicheng/auto_navigation/core/status_publisher': PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data
+[0.623s] running egg_info
+[0.624s] creating ../../build/status_publisher/status_publisher.egg-info
+[0.624s] writing ../../build/status_publisher/status_publisher.egg-info/PKG-INFO
+[0.624s] writing dependency_links to ../../build/status_publisher/status_publisher.egg-info/dependency_links.txt
+[0.624s] writing entry points to ../../build/status_publisher/status_publisher.egg-info/entry_points.txt
+[0.624s] writing requirements to ../../build/status_publisher/status_publisher.egg-info/requires.txt
+[0.624s] writing top-level names to ../../build/status_publisher/status_publisher.egg-info/top_level.txt
+[0.624s] writing manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.625s] reading manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.625s] adding license file 'LICENSE'
+[0.626s] writing manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.626s] running build
+[0.626s] running build_py
+[0.626s] creating /home/jinyicheng/auto_navigation/build/status_publisher/build
+[0.626s] creating /home/jinyicheng/auto_navigation/build/status_publisher/build/lib
+[0.626s] creating /home/jinyicheng/auto_navigation/build/status_publisher/build/lib/status_publisher
+[0.626s] copying status_publisher/pub_sys_status.py -> /home/jinyicheng/auto_navigation/build/status_publisher/build/lib/status_publisher
+[0.626s] copying status_publisher/__init__.py -> /home/jinyicheng/auto_navigation/build/status_publisher/build/lib/status_publisher
+[0.626s] running install
+[0.626s] running install_lib
+[0.627s] creating /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher
+[0.627s] copying /home/jinyicheng/auto_navigation/build/status_publisher/build/lib/status_publisher/pub_sys_status.py -> /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher
+[0.627s] copying /home/jinyicheng/auto_navigation/build/status_publisher/build/lib/status_publisher/__init__.py -> /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher
+[0.627s] byte-compiling /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher/pub_sys_status.py to pub_sys_status.cpython-310.pyc
+[0.627s] byte-compiling /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher/__init__.py to __init__.cpython-310.pyc
+[0.628s] running install_data
+[0.628s] creating /home/jinyicheng/auto_navigation/install/status_publisher/share/ament_index
+[0.628s] creating /home/jinyicheng/auto_navigation/install/status_publisher/share/ament_index/resource_index
+[0.628s] creating /home/jinyicheng/auto_navigation/install/status_publisher/share/ament_index/resource_index/packages
+[0.628s] copying resource/status_publisher -> /home/jinyicheng/auto_navigation/install/status_publisher/share/ament_index/resource_index/packages
+[0.628s] copying package.xml -> /home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher
+[0.628s] running install_egg_info
+[0.629s] Copying ../../build/status_publisher/status_publisher.egg-info to /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher-0.0.0-py3.10.egg-info
+[0.629s] running install_scripts
+[0.641s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/status_publisher/install.log'
+[0.654s] Invoked command in '/home/jinyicheng/auto_navigation/core/status_publisher' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data

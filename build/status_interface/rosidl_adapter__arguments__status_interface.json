@@ -1,0 +1,6 @@
+{
+  "package_name": "status_interface",
+  "non_idl_tuples": [
+    "/home/jinyicheng/auto_navigation/core/status_interface:msg/SystemStatus.msg"
+  ]
+}

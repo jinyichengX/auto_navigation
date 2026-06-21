@@ -1,0 +1,37 @@
+[0.560s] Invoking command in '/home/jinyicheng/auto_navigation/core/demo_python_service': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/chapt4_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data
+[0.677s] running egg_info
+[0.677s] creating ../../build/demo_python_service/demo_python_service.egg-info
+[0.677s] writing ../../build/demo_python_service/demo_python_service.egg-info/PKG-INFO
+[0.678s] writing dependency_links to ../../build/demo_python_service/demo_python_service.egg-info/dependency_links.txt
+[0.678s] writing entry points to ../../build/demo_python_service/demo_python_service.egg-info/entry_points.txt
+[0.678s] writing requirements to ../../build/demo_python_service/demo_python_service.egg-info/requires.txt
+[0.678s] writing top-level names to ../../build/demo_python_service/demo_python_service.egg-info/top_level.txt
+[0.678s] writing manifest file '../../build/demo_python_service/demo_python_service.egg-info/SOURCES.txt'
+[0.678s] reading manifest file '../../build/demo_python_service/demo_python_service.egg-info/SOURCES.txt'
+[0.678s] adding license file 'LICENSE'
+[0.679s] writing manifest file '../../build/demo_python_service/demo_python_service.egg-info/SOURCES.txt'
+[0.679s] running build
+[0.679s] running build_py
+[0.679s] creating /home/jinyicheng/auto_navigation/build/demo_python_service/build
+[0.679s] creating /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib
+[0.679s] creating /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib/demo_python_service
+[0.679s] copying demo_python_service/demo_service.py -> /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib/demo_python_service
+[0.679s] copying demo_python_service/__init__.py -> /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib/demo_python_service
+[0.679s] running install
+[0.679s] running install_lib
+[0.680s] creating /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service
+[0.680s] copying /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib/demo_python_service/demo_service.py -> /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service
+[0.680s] copying /home/jinyicheng/auto_navigation/build/demo_python_service/build/lib/demo_python_service/__init__.py -> /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service
+[0.680s] byte-compiling /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service/demo_service.py to demo_service.cpython-310.pyc
+[0.680s] byte-compiling /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service/__init__.py to __init__.cpython-310.pyc
+[0.680s] running install_data
+[0.681s] creating /home/jinyicheng/auto_navigation/install/demo_python_service/share/ament_index
+[0.681s] creating /home/jinyicheng/auto_navigation/install/demo_python_service/share/ament_index/resource_index
+[0.681s] creating /home/jinyicheng/auto_navigation/install/demo_python_service/share/ament_index/resource_index/packages
+[0.681s] copying resource/demo_python_service -> /home/jinyicheng/auto_navigation/install/demo_python_service/share/ament_index/resource_index/packages
+[0.681s] copying package.xml -> /home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service
+[0.681s] running install_egg_info
+[0.682s] Copying ../../build/demo_python_service/demo_python_service.egg-info to /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service-0.0.0-py3.10.egg-info
+[0.682s] running install_scripts
+[0.693s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/demo_python_service/install.log'
+[0.705s] Invoked command in '/home/jinyicheng/auto_navigation/core/demo_python_service' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/chapt4_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/chapt4_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data

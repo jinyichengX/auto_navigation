@@ -1,0 +1,7 @@
+[01m[K/home/jinyicheng/auto_navigation/core/status_sub_and_disp/src/sys_status_disp.cpp:46:2:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K;[m[K’ after class definition
+   46 | }
+      |  [01;31m[K^[m[K
+      |  [32m[K;[m[K
+gmake[2]: *** [CMakeFiles/sys_status_disp.dir/build.make:76: CMakeFiles/sys_status_disp.dir/src/sys_status_disp.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/sys_status_disp.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

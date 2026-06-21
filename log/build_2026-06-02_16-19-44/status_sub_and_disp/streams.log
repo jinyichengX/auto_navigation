@@ -1,0 +1,37 @@
+[0.206s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[0.225s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.319s] -- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+[0.476s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.478s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.485s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.496s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.507s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.538s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.540s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[5.985s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[6.031s] -- Found status_interface: 0.0.0 (/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake)
+[6.126s] -- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[6.193s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[6.193s] -- Configured cppcheck include dirs: 
+[6.194s] -- Configured cppcheck exclude dirs and/or files: 
+[6.194s] -- Added test 'lint_cmake' to check CMake code style
+[6.195s] -- Added test 'uncrustify' to check C / C++ code style
+[6.195s] -- Configured uncrustify additional arguments: 
+[6.196s] -- Added test 'xmllint' to check XML markup files
+[6.197s] -- Configuring done
+[6.210s] -- Generating done
+[6.214s] -- Build files have been written to: /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[6.228s] [35m[1mConsolidate compiler generated dependencies of target hello_qt[0m
+[6.233s] [ 25%] [32mBuilding CXX object CMakeFiles/sys_status_disp.dir/src/sys_status_disp.cpp.o[0m
+[6.235s] [ 50%] [32mBuilding CXX object CMakeFiles/hello_qt.dir/src/hello_qt.cpp.o[0m
+[6.623s] [01m[K/home/jinyicheng/auto_navigation/core/status_sub_and_disp/src/sys_status_disp.cpp:5:10:[m[K [01;31m[Kfatal error: [m[Kstatus_interface/msg/status.hpp: No such file or directory
+[6.623s]     5 | #include [01;31m[K<status_interface/msg/status.hpp>[m[K
+[6.623s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[6.623s] compilation terminated.
+[6.624s] gmake[2]: *** [CMakeFiles/sys_status_disp.dir/build.make:76: CMakeFiles/sys_status_disp.dir/src/sys_status_disp.cpp.o] Error 1
+[6.624s] gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/sys_status_disp.dir/all] Error 2
+[6.624s] gmake[1]: *** Waiting for unfinished jobs....
+[6.989s] [ 75%] [32m[1mLinking CXX executable hello_qt[0m
+[7.266s] [ 75%] Built target hello_qt
+[7.267s] gmake: *** [Makefile:146: all] Error 2
+[7.268s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '2': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20

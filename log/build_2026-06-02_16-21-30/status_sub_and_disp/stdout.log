@@ -1,0 +1,3 @@
+[35m[1mConsolidate compiler generated dependencies of target hello_qt[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/sys_status_disp.dir/src/sys_status_disp.cpp.o[0m
+[ 75%] Built target hello_qt

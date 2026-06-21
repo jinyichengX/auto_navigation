@@ -1,0 +1,3 @@
+[console_scripts]
+process_pub_sys_status = status_publisher.pub_sys_status:main
+

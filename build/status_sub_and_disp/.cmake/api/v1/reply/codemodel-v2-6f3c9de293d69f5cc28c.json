@@ -1,0 +1,88 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-a8aeb3d665c7edfbbf8c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "status_sub_and_disp",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "hello_qt::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hello_qt-3bcc6460bc148bd865ae.json",
+					"name" : "hello_qt",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "status_sub_and_disp_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-status_sub_and_disp_uninstall-4b6e6487629c27b98d51.json",
+					"name" : "status_sub_and_disp_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sys_status_disp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sys_status_disp-158ba3bdc7b94c0e23b6.json",
+					"name" : "sys_status_disp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-bc68e07ee55e2664e298.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jinyicheng/auto_navigation/build/status_sub_and_disp",
+		"source" : "/home/jinyicheng/auto_navigation/core/status_sub_and_disp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

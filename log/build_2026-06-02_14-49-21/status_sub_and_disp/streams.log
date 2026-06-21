@@ -1,0 +1,68 @@
+[0.209s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake /home/jinyicheng/auto_navigation/core/status_sub_and_disp -DCMAKE_INSTALL_PREFIX=/home/jinyicheng/auto_navigation/install/status_sub_and_disp
+[0.441s] -- The C compiler identification is GNU 11.4.0
+[1.029s] -- The CXX compiler identification is GNU 11.4.0
+[1.427s] -- Detecting C compiler ABI info
+[1.573s] -- Detecting C compiler ABI info - done
+[1.576s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.577s] -- Detecting C compile features
+[1.577s] -- Detecting C compile features - done
+[1.580s] -- Detecting CXX compiler ABI info
+[1.706s] -- Detecting CXX compiler ABI info - done
+[1.710s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.711s] -- Detecting CXX compile features
+[1.711s] -- Detecting CXX compile features - done
+[1.714s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.803s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.872s] -- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+[2.029s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[2.033s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[2.041s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[2.054s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.068s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.109s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[2.112s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[3.416s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[4.886s] -- Found FastRTPS: /opt/ros/humble/include  
+[7.474s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[7.483s] -- Looking for pthread.h
+[7.612s] -- Looking for pthread.h - found
+[7.612s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[7.729s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[7.730s] -- Found Threads: TRUE  
+[7.774s] -- Found status_interface: 0.0.0 (/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake)
+[7.886s] -- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[7.953s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[7.953s] -- Configured cppcheck include dirs: 
+[7.953s] -- Configured cppcheck exclude dirs and/or files: 
+[7.953s] -- Added test 'lint_cmake' to check CMake code style
+[7.954s] -- Added test 'uncrustify' to check C / C++ code style
+[7.954s] -- Configured uncrustify additional arguments: 
+[7.955s] -- Added test 'xmllint' to check XML markup files
+[7.956s] -- Configuring done
+[7.962s] -- Generating done
+[7.964s] -- Build files have been written to: /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[7.969s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake /home/jinyicheng/auto_navigation/core/status_sub_and_disp -DCMAKE_INSTALL_PREFIX=/home/jinyicheng/auto_navigation/install/status_sub_and_disp
+[7.971s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[7.996s] [ 50%] [32mBuilding CXX object CMakeFiles/hello_qt.dir/src/hello_qt.cpp.o[0m
+[8.671s] [100%] [32m[1mLinking CXX executable hello_qt[0m
+[8.974s] [100%] Built target hello_qt
+[8.980s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[8.982s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[8.986s] -- Install configuration: ""
+[8.986s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/status_sub_and_disp/hello_qt
+[8.986s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/package_run_dependencies/status_sub_and_disp
+[8.986s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/parent_prefix_path/status_sub_and_disp
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.sh
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.dsv
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.sh
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.dsv
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.bash
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.sh
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.zsh
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.dsv
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.dsv
+[8.987s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/packages/status_sub_and_disp
+[8.988s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig.cmake
+[8.988s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig-version.cmake
+[8.988s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.xml
+[8.989s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp

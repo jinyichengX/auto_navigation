@@ -1,0 +1,11 @@
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/uninstall.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/status_sub_and_disp_uninstall.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/hello_qt.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/sys_status_disp.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/test.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/edit_cache.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/rebuild_cache.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/list_install_components.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/install.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/install/local.dir
+/home/jinyicheng/auto_navigation/build/status_sub_and_disp/CMakeFiles/install/strip.dir

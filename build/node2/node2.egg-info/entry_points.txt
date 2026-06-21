@@ -1,0 +1,4 @@
+[console_scripts]
+process_pub_novel = node2.novel_pub_node:main
+process_sub_novel = node2.novel_sub_node:main
+

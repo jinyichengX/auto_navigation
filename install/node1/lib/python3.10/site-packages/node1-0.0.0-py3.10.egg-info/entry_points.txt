@@ -1,0 +1,5 @@
+[console_scripts]
+process1 = node1.node_test:main
+process_download_novel = node1.download_novel:main
+process_learn_thread = node1.learn_thread:main
+

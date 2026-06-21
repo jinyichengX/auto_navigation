@@ -1,0 +1,8 @@
+setup.py
+status_interface/__init__.py
+status_interface.egg-info/PKG-INFO
+status_interface.egg-info/SOURCES.txt
+status_interface.egg-info/dependency_links.txt
+status_interface.egg-info/top_level.txt
+status_interface/msg/__init__.py
+status_interface/msg/_system_status.py

@@ -1,0 +1,49 @@
+#订阅小说
+
+import rclpy
+from rclpy.node import Node
+from example_interfaces.msg import String
+from queue import Queue
+import threading
+
+class novel_sub_node(Node):
+    def __init__(self, node_name):
+        super().__init__(node_name)
+        self.get_logger().info(f'{node_name},start!')
+        self.novel_queue = Queue()
+        self.subscription = self.create_subscription(
+                    String,           # 消息类型
+                    'publish_novel',  # 订阅话题名
+                    self.subscribe_callback,    # 收到消息时调用的函数
+                    10                # 队列深度
+                )
+
+        # self.create_timer(5, self.timer_callback) # period : 5s
+        self.show_novel_thread = threading.Thread(target=self.show_novel)
+
+    def subscribe_callback(self, msg1):
+        print(type(msg1))
+        self.novel_queue.put(msg1.data)
+        self.get_logger().info(f'收到消息，队列长度: {self.novel_queue.qsize()}')
+        pass
+
+    # def timer_callback(self):# 显示小说
+    #     while self.novel_queue.qsize() > 0: #while可以改为if
+    #         line = self.novel_queue.get()# 这个队列操作是在定时器线程执行的，有线程安全问题
+    #         msg = String()
+    #         msg.data = line
+    #         self.get_logger().info(f'{msg}')
+
+    def show_novel(self):
+        while self.novel_queue.qsize() > 0: #while可以改为if
+            line = self.novel_queue.get()# 这个队列操作是在定时器线程执行的，有线程安全问题
+            msg = String()
+            msg.data = line
+            self.get_logger().info(f'{msg}')
+
+def main():
+    rclpy.init()
+    node = novel_sub_node('novel_pub_node1')
+    node.subscribe_novel()
+    rclpy.spin(node)
+    rclpy.shutdown()

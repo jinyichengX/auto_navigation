@@ -1,0 +1,17 @@
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/status_sub_and_disp/hello_qt
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/status_sub_and_disp/sys_status_disp
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/package_run_dependencies/status_sub_and_disp
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/parent_prefix_path/status_sub_and_disp
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.sh
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.dsv
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.sh
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.dsv
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.bash
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.sh
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.zsh
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.dsv
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.dsv
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/packages/status_sub_and_disp
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig.cmake
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig-version.cmake
+/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.xml

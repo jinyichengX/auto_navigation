@@ -1,0 +1,34 @@
+{
+  "package_name": "status_interface",
+  "output_dir": "/home/jinyicheng/auto_navigation/build/status_interface/rosidl_generator_rs/status_interface",
+  "template_dir": "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource",
+  "idl_tuples": [
+    "/home/jinyicheng/auto_navigation/build/status_interface/rosidl_adapter/status_interface:msg/SystemStatus.idl"
+  ],
+  "ros_interface_files": [
+    "/home/jinyicheng/auto_navigation/build/status_interface/rosidl_adapter/status_interface/msg/SystemStatus.idl"
+  ],
+  "ros_interface_dependencies": [
+    "builtin_interfaces:/opt/ros/humble/share/builtin_interfaces/msg/Duration.idl",
+    "builtin_interfaces:/opt/ros/humble/share/builtin_interfaces/msg/Time.idl"
+  ],
+  "target_dependencies": [
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../../../lib/rosidl_generator_rs/rosidl_generator_rs",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../../../local/lib/python3.10/dist-packages/rosidl_generator_rs/__init__.py",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/action.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/action/rmw.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/msg.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/msg/rmw.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/srv.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/srv/rmw.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/templates/msg_idiomatic.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/templates/msg_rmw.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/templates/srv_idiomatic.rs.em",
+    "/opt/ros/humble/share/rosidl_generator_rs/cmake/../resource/templates/srv_rmw.rs.em",
+    "/home/jinyicheng/auto_navigation/build/status_interface/rosidl_adapter/status_interface/msg/SystemStatus.idl",
+    "/home/jinyicheng/auto_navigation/build/status_interface/rosidl_adapter/status_interface/msg/SystemStatus.idl",
+    "/opt/ros/humble/share/builtin_interfaces/msg/Duration.idl",
+    "/opt/ros/humble/share/builtin_interfaces/msg/Time.idl"
+  ],
+  "package_version": "0.0.0"
+}

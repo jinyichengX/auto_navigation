@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "status_interface__rs",
+		"source" : "/home/jinyicheng/auto_navigation/build/status_interface/status_interface__rs"
+	}
+}
