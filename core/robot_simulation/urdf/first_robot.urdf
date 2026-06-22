@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<robot name = "first_robot">
+    <!-- 机器人的身体部件部分 -->
+    <link name = "base_link">
+        <!-- 部件的外观描述 -->
+        <visual>
+            <!-- 相对于它所属 link 原点的位置偏移 -->
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <!-- 几何形状 -->
+            <geometry>
+                <box size="0.5 0.3 0.1"/>   <!-- 长0.5m 宽0.3m 高0.1m -->
+            </geometry>
+        </visual>
+    </link>
+</robot>
