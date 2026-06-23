@@ -12,6 +12,7 @@ setup.py
 demo_python_tf/__init__.py
 demo_python_tf/dynamic_tf_broadcaster.py
 demo_python_tf/static_tf_broadcaster.py
+demo_python_tf/tf_listener.py
 resource/demo_python_tf
 test/test_copyright.py
 test/test_flake8.py

@@ -1,0 +1,9 @@
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/uninstall.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/robot_simulation_uninstall.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/test.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/edit_cache.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/rebuild_cache.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/list_install_components.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/install.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/install/local.dir
+/home/jinyicheng/auto_navigation/build/robot_simulation/CMakeFiles/install/strip.dir

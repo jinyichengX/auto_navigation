@@ -1,0 +1,6 @@
+XML parsing error: unbound prefix: line 4, column 4
+when processing file: /home/jinyicheng/auto_navigation/core/robot_simulation/urdf/first_robot.xacro
+
+Check that:
+ - Your XML is well-formed
+ - You have the xacro xmlns declaration: xmlns:xacro="http://www.ros.org/wiki/xacro"
