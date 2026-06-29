@@ -2,6 +2,12 @@
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/first_robot.urdf
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/first_robot.pdf
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/first_robot.gv
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/caster_wheel.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/laser.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/base.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/imu.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/fishbot.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/drive_wheel.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/first_robot.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/ament_index/resource_index/package_run_dependencies/robot_simulation
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/ament_index/resource_index/parent_prefix_path/robot_simulation

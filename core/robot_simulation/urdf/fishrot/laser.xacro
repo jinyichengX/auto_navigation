@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name = "laser_xacro" params = "xyz">
+        <!-- 雷达支撑杆部件 -->
+        <link name = "laser_cylinder_link">
+            <!-- 部件的外观描述 -->
+            <visual>
+                <!-- 相对于它所属 link 原点的位置偏移 -->
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <cylinder radius = "0.01" length = "0.1"/>  <!-- 圆柱体：半径0.01m 高0.1m -->
+                </geometry>
+                <!-- 材质颜色 -->
+                <material name="black">
+                    <color rgba="0 0 0 1.0"/>
+                </material>
+            </visual>
+        </link>
+        
+        <!-- 雷达部件 -->
+        <link name = "laser_link">
+            <!-- 部件的外观描述 -->
+            <visual>
+                <!-- 相对于它所属 link 原点的位置偏移 -->
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <cylinder radius = "0.02" length = "0.2"/>  <!-- 圆柱体：半径0.02m 高0.2m -->
+                </geometry>
+                <!-- 材质颜色 -->
+                <material name="red">
+                    <color rgba="1 0 0 1.0"/>
+                </material>
+            </visual>
+        </link>
+
+        <!-- 将雷达固定到支撑杆 -->
+        <joint name = "laser_joint" type = "fixed">
+            <parent link = "laser_cylinder_link"/>
+            <child link = "laser_link"/>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/> <!-- child(laser_link) 相对于 parent(laser_cylinder_link) 的偏移 -->
+        </joint>
+
+        <!-- 将雷达支撑杆固定到机器人身体 -->
+        <joint name = "laser_cylinder_joint" type = "fixed">
+            <parent link = "base_link"/>
+            <child link = "laser_cylinder_link"/>
+            <origin xyz="${xyz}" rpy="0 0 0"/> <!-- child(laser_cylinder_link) 相对于 parent(base_link) 的偏移 -->
+        </joint>
+    </xacro:macro>
+</robot>

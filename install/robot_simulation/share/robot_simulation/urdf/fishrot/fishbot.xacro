@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<robot name="fishbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- 包含机器人的身体部件 -->
+    <xacro:include filename="base.xacro"/>
+    <xacro:include filename="imu.xacro"/>
+    <xacro:include filename="laser.xacro"/>
+    <xacro:include filename="drive_wheel.xacro"/>
+    <xacro:include filename="caster_wheel.xacro"/>
+
+    <!-- 调用宏 -->
+    <xacro:base_xacro length="0.5" width="0.5" height="0.1"/> <!-- 机器人的身体部件 -->
+    <xacro:imu_xacro xyz = "0 0 -0.1"/> <!-- 机器人的IMU部件 -->
+    <xacro:laser_xacro xyz = "0 0 0.1"/> <!-- 机器人的激光雷达部件 -->
+    <xacro:drive_wheel_xacro wheel_name="left_front_wheel"   xyz = " 0.25  0.25 -0.08"/> <!-- 左前驱动轮 -->
+    <xacro:drive_wheel_xacro wheel_name="right_front_wheel"  xyz = " 0.25 -0.25 -0.08"/> <!-- 右前驱动轮 -->
+    <xacro:drive_wheel_xacro wheel_name="left_rear_wheel"    xyz = "-0.25  0.25 -0.08"/> <!-- 左后驱动轮 -->
+    <xacro:drive_wheel_xacro wheel_name="right_rear_wheel"   xyz = "-0.25 -0.25 -0.08"/> <!-- 右后驱动轮 -->
+    <xacro:caster_wheel_xacro wheel_name="center_caster" xyz = "0 0 -0.096"/> <!-- 中心万向轮 -->
+    
+</robot>
