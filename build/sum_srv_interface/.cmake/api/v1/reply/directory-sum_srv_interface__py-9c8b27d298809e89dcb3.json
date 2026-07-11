@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "sum_srv_interface__py",
+		"source" : "/home/jinyicheng/auto_navigation/build/sum_srv_interface/sum_srv_interface__py"
+	}
+}

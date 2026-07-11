@@ -17,6 +17,19 @@
                     <color rgba="0 0 0 1.0"/>
                 </material>
             </visual>
+            <!-- 碰撞体积 (与visual几何一致) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.01" length="0.1"/>
+                </geometry>
+            </collision>
+            <!-- 惯性 (质量与转动惯量，Gazebo仿真必需) -->
+            <inertial>
+                <mass value="0.1"/>
+                <inertia ixx="0.0000858" iyy="0.000005" izz="0.0000858"
+                         ixy="0" ixz="0" iyz="0"/>
+            </inertial>
         </link>
         
         <!-- 雷达部件 -->
@@ -30,10 +43,23 @@
                     <cylinder radius = "0.02" length = "0.2"/>  <!-- 圆柱体：半径0.02m 高0.2m -->
                 </geometry>
                 <!-- 材质颜色 -->
-                <material name="red">
-                    <color rgba="1 0 0 1.0"/>
+                <material name="black">
+                    <color rgba="0 0 0 1.0"/>
                 </material>
             </visual>
+            <!-- 碰撞体积 (与visual几何一致) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.02" length="0.2"/>
+                </geometry>
+            </collision>
+            <!-- 惯性 (质量与转动惯量，Gazebo仿真必需) -->
+            <inertial>
+                <mass value="0.2"/>
+                <inertia ixx="0.000687" iyy="0.00004" izz="0.000687"
+                         ixy="0" ixz="0" iyz="0"/>
+            </inertial>
         </link>
 
         <!-- 将雷达固定到支撑杆 -->
@@ -49,5 +75,25 @@
             <child link = "laser_cylinder_link"/>
             <origin xyz="${xyz}" rpy="0 0 0"/> <!-- child(laser_cylinder_link) 相对于 parent(base_link) 的偏移 -->
         </joint>
+        <gazebo reference="laser_cylinder_link">
+            <visual>
+                <material>
+                    <ambient>0 0 1 1</ambient>
+                    <diffuse>0 0 1 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+            </visual>
+        </gazebo>
+        <gazebo reference="laser_link">
+            <visual>
+                <material>
+                    <ambient>0 0 1 1</ambient>
+                    <diffuse>0 0 1 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+            </visual>
+        </gazebo>
     </xacro:macro>
 </robot>

@@ -10,6 +10,7 @@ setup.py
 ../../build/demo_python_service/demo_python_service.egg-info/top_level.txt
 ../../build/demo_python_service/demo_python_service.egg-info/zip-safe
 demo_python_service/__init__.py
+demo_python_service/demo_client.py
 demo_python_service/demo_service.py
 resource/demo_python_service
 test/test_copyright.py

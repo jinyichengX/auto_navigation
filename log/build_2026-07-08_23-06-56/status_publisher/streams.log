@@ -1,0 +1,22 @@
+[0.654s] Invoking command in '/home/jinyicheng/auto_navigation/core/status_publisher': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/robot_simulation:/home/jinyicheng/auto_navigation/install/chapt4_interfaces PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data
+[0.784s] running egg_info
+[0.784s] writing ../../build/status_publisher/status_publisher.egg-info/PKG-INFO
+[0.784s] writing dependency_links to ../../build/status_publisher/status_publisher.egg-info/dependency_links.txt
+[0.784s] writing entry points to ../../build/status_publisher/status_publisher.egg-info/entry_points.txt
+[0.784s] writing requirements to ../../build/status_publisher/status_publisher.egg-info/requires.txt
+[0.784s] writing top-level names to ../../build/status_publisher/status_publisher.egg-info/top_level.txt
+[0.785s] reading manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.785s] adding license file 'LICENSE'
+[0.786s] writing manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.786s] running build
+[0.786s] running build_py
+[0.786s] running install
+[0.786s] running install_lib
+[0.787s] running install_data
+[0.787s] running install_egg_info
+[0.788s] removing '/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher-0.0.0-py3.10.egg-info' (and everything under it)
+[0.788s] Copying ../../build/status_publisher/status_publisher.egg-info to /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher-0.0.0-py3.10.egg-info
+[0.789s] running install_scripts
+[0.801s] Installing process_pub_sys_status script to /home/jinyicheng/auto_navigation/install/status_publisher/lib/status_publisher
+[0.802s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/status_publisher/install.log'
+[0.816s] Invoked command in '/home/jinyicheng/auto_navigation/core/status_publisher' returned '0': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/robot_simulation:/home/jinyicheng/auto_navigation/install/chapt4_interfaces PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data

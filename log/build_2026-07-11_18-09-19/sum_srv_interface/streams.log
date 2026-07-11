@@ -1,0 +1,172 @@
+[0.576s] Invoking command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/home/jinyicheng/auto_navigation/install/demo_python_service:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/sum_srv_interface -- -j20 -l20
+[0.603s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_generator_c[0m
+[0.603s] [  3%] Built target sum_srv_interface__rs
+[0.606s] [  6%] Built target sum_srv_interface__cpp
+[0.606s] [ 15%] Built target sum_srv_interface__rosidl_generator_c
+[0.613s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_fastrtps_c[0m
+[0.614s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_introspection_c[0m
+[0.615s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_introspection_cpp[0m
+[0.619s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_c[0m
+[0.620s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_cpp[0m
+[0.620s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_fastrtps_cpp[0m
+[0.623s] [ 15%] Built target ament_cmake_python_copy_sum_srv_interface
+[0.623s] [ 25%] Built target sum_srv_interface__rosidl_typesupport_fastrtps_c
+[0.623s] [ 34%] Built target sum_srv_interface__rosidl_typesupport_introspection_c
+[0.625s] [ 43%] Built target sum_srv_interface__rosidl_typesupport_introspection_cpp
+[0.626s] [ 53%] Built target sum_srv_interface__rosidl_typesupport_c
+[0.630s] [ 62%] Built target sum_srv_interface__rosidl_typesupport_fastrtps_cpp
+[0.631s] [ 71%] Built target sum_srv_interface__rosidl_typesupport_cpp
+[0.641s] [ 71%] Built target sum_srv_interface
+[0.657s] [ 75%] Built target sum_srv_interface__py
+[0.666s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_generator_py[0m
+[0.675s] [ 81%] Built target sum_srv_interface__rosidl_generator_py
+[0.684s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_c__pyext[0m
+[0.684s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_introspection_c__pyext[0m
+[0.685s] [35m[1mConsolidate compiler generated dependencies of target sum_srv_interface__rosidl_typesupport_fastrtps_c__pyext[0m
+[0.692s] [ 87%] Built target sum_srv_interface__rosidl_typesupport_fastrtps_c__pyext
+[0.692s] [ 93%] Built target sum_srv_interface__rosidl_typesupport_introspection_c__pyext
+[0.693s] [100%] Built target sum_srv_interface__rosidl_typesupport_c__pyext
+[0.763s] running egg_info
+[0.764s] writing sum_srv_interface.egg-info/PKG-INFO
+[0.764s] writing dependency_links to sum_srv_interface.egg-info/dependency_links.txt
+[0.764s] writing top-level names to sum_srv_interface.egg-info/top_level.txt
+[0.765s] reading manifest file 'sum_srv_interface.egg-info/SOURCES.txt'
+[0.766s] writing manifest file 'sum_srv_interface.egg-info/SOURCES.txt'
+[0.781s] [100%] Built target ament_cmake_python_build_sum_srv_interface_egg
+[0.924s] Invoked command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/home/jinyicheng/auto_navigation/install/demo_python_service:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/sum_srv_interface -- -j20 -l20
+[0.926s] Invoking command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/home/jinyicheng/auto_navigation/install/demo_python_service:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/sum_srv_interface
+[0.936s] -- Install configuration: ""
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/ament_index/resource_index/rosidl_interfaces/sum_srv_interface
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/sum.h
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__type_support.h
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__functions.h
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__functions.c
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__struct.h
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg/rosidl_generator_c__visibility_control.h
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/library_path.sh
+[0.937s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/library_path.dsv
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_generator_c.so
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__rosidl_typesupport_fastrtps_c.h
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_fastrtps_c.so
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__type_support.c
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__rosidl_typesupport_introspection_c.h
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.938s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_introspection_c.so
+[0.939s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_c.so
+[0.939s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.939s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/sum.hpp
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__struct.hpp
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__traits.hpp
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__type_support.hpp
+[0.940s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__builder.hpp
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg/rosidl_generator_cpp__visibility_control.hpp
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/dds_fastrtps
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__rosidl_typesupport_fastrtps_cpp.hpp
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_fastrtps_cpp.so
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv
+[0.941s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__type_support.cpp
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/include/sum_srv_interface/sum_srv_interface/srv/detail/sum__rosidl_typesupport_introspection_cpp.hpp
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_introspection_cpp.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_typesupport_cpp.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/pythonpath.sh
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/pythonpath.dsv
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface-0.0.0-py3.10.egg-info
+[0.942s] -- Installing: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface-0.0.0-py3.10.egg-info/top_level.txt
+[0.942s] -- Installing: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface-0.0.0-py3.10.egg-info/dependency_links.txt
+[0.942s] -- Installing: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface-0.0.0-py3.10.egg-info/SOURCES.txt
+[0.942s] -- Installing: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface-0.0.0-py3.10.egg-info/PKG-INFO
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/srv
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/srv/_sum.py
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/srv/_sum_s.c
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/srv/__init__.py
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/_sum_srv_interface_s.ep.rosidl_typesupport_c.c
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/libsum_srv_interface__rosidl_generator_py.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/_sum_srv_interface_s.ep.rosidl_typesupport_fastrtps_c.c
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/__init__.py
+[0.942s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/_sum_srv_interface_s.ep.rosidl_typesupport_introspection_c.c
+[0.964s] Listing '/home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface'...
+[0.964s] Listing '/home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/srv'...
+[0.967s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.970s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.970s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages/sum_srv_interface/sum_srv_interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.970s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/libsum_srv_interface__rosidl_generator_py.so
+[0.970s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/ament_index/resource_index/rust_packages/sum_srv_interface
+[0.971s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust
+[0.971s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/src
+[0.971s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/src/srv
+[0.972s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/src/srv/rmw.rs
+[0.972s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/src/srv.rs
+[0.972s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/src/lib.rs
+[0.973s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/Cargo.toml
+[0.973s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/rust/build.rs
+[0.973s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/srv/Sum.idl
+[0.973s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/srv/Sum.srv
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/srv/Sum_Request.msg
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/srv/Sum_Response.msg
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/ament_index/resource_index/package_run_dependencies/sum_srv_interface
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/ament_index/resource_index/parent_prefix_path/sum_srv_interface
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/ament_prefix_path.sh
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/ament_prefix_path.dsv
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/path.sh
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/environment/path.dsv
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/local_setup.bash
+[0.974s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/local_setup.sh
+[0.975s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/local_setup.zsh
+[0.975s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/local_setup.dsv
+[0.975s] -- Installing: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.dsv
+[0.975s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/ament_index/resource_index/packages/sum_srv_interface
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_generator_cExport.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_generator_cExport-noconfig.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_typesupport_fastrtps_cExport.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_introspection_cExport.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_cExport.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_cExport-noconfig.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_generator_cppExport.cmake
+[0.976s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_typesupport_fastrtps_cppExport.cmake
+[0.977s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[0.977s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_introspection_cppExport.cmake
+[0.977s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.977s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_cppExport.cmake
+[0.977s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interface__rosidl_typesupport_cppExport-noconfig.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_generator_pyExport.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/export_sum_srv_interface__rosidl_generator_pyExport-noconfig.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/rosidl_cmake-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/ament_cmake_export_libraries-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/ament_cmake_export_targets-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.978s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interfaceConfig.cmake
+[0.979s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/cmake/sum_srv_interfaceConfig-version.cmake
+[0.979s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.xml
+[0.987s] Invoked command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/home/jinyicheng/auto_navigation/install/demo_python_service:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/sum_srv_interface

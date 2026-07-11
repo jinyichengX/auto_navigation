@@ -16,11 +16,40 @@
                     <color rgba="1 1 0 0.8"/>    <!-- 红 绿 蓝 透明度，范围0~1 -->
                 </material>
             </visual>
+            <!-- 碰撞体积 (与visual几何一致) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="0.016"/>
+                </geometry>
+            </collision>
+            <!-- 惯性 (质量与转动惯量，Gazebo仿真必需) -->
+            <inertial>
+                <mass value="0.05"/>
+                <!-- 球体转动惯量: I = 2/5 * m * r² -->
+                <inertia ixx="0.00000512" iyy="0.00000512" izz="0.00000512"
+                         ixy="0" ixz="0" iyz="0"/>
+            </inertial>
         </link>
         <joint name = "${wheel_name}_joint" type = "fixed">
             <parent link = "base_link"/>
             <child link = "${wheel_name}_link"/>
             <origin xyz="${xyz}" rpy="0 0 0"/> <!-- child(${${wheel_name}_link) 相对于 parent(base_link) 的偏移 -->
         </joint>
+        <!-- Gazebo Fortress 万向轮接触物理参数，无摩擦可自由滑动 -->
+        <gazebo reference="${wheel_name}_link">
+            <collision>
+                <surface>
+                    <contact>
+                        <ode>
+                            <mu>0.0</mu>      <!-- 滚动摩擦为0，万向轮无阻力 -->
+                            <mu2>0.0</mu2>    <!-- 侧滑摩擦为0，万向轮可自由转向 -->
+                            <kp>10000000000.0</kp> <!-- 接触刚度，避免陷地 -->
+                            <kd>1.0</kd>      <!-- 接触阻尼，落地缓冲 -->
+                        </ode>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo>
     </xacro:macro>
 </robot>

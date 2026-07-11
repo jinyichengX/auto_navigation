@@ -9,7 +9,6 @@ def generate_launch_description():
     # 默认xacro文件路径
     default_model_path = urdf_tutorial_path + '/urdf/first_robot.xacro'
 
-    # 声明launch参数，支持运行时自定义传入xacro路径
     action_declare_arg_mode_path = launch.actions.DeclareLaunchArgument(
         name='model',
         default_value=str(default_model_path),
@@ -33,7 +32,8 @@ def generate_launch_description():
     # 2. 关节状态发布节点
     joint_state_publisher_node = launch_ros.actions.Node(
         package='joint_state_publisher',
-        executable='joint_state_publisher'
+        executable='joint_state_publisher',
+        parameters=[{'robot_description': robot_description}]
     )
 
     # 3. RViz可视化节点

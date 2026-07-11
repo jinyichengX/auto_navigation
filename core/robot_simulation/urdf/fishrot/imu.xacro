@@ -17,6 +17,19 @@
                     <color rgba="0 0 0 0.5"/>
                 </material>
             </visual>
+            <!-- 碰撞体积 (与visual几何一致) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.02 0.02 0.02"/>
+                </geometry>
+            </collision>
+            <!-- 惯性 (质量与转动惯量，Gazebo仿真必需) -->
+            <inertial>
+                <mass value="0.01"/>
+                <inertia ixx="0.000000667" iyy="0.000000667" izz="0.000000667"
+                         ixy="0" ixz="0" iyz="0"/>
+            </inertial>
         </link>
         
         <!-- 将IMU部件固定到机器人身体部件 -->

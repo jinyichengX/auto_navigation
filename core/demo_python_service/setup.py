@@ -24,6 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'srv_process = demo_python_service.demo_service:main',
+            'client_process = demo_python_service.demo_client:main'
         ],
     },
 )

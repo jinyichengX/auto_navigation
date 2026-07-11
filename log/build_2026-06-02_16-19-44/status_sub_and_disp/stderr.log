@@ -1,8 +1,0 @@
-[01m[K/home/jinyicheng/auto_navigation/core/status_sub_and_disp/src/sys_status_disp.cpp:5:10:[m[K [01;31m[Kfatal error: [m[Kstatus_interface/msg/status.hpp: No such file or directory
-    5 | #include [01;31m[K<status_interface/msg/status.hpp>[m[K
-      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-compilation terminated.
-gmake[2]: *** [CMakeFiles/sys_status_disp.dir/build.make:76: CMakeFiles/sys_status_disp.dir/src/sys_status_disp.cpp.o] Error 1
-gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/sys_status_disp.dir/all] Error 2
-gmake[1]: *** Waiting for unfinished jobs....
-gmake: *** [Makefile:146: all] Error 2

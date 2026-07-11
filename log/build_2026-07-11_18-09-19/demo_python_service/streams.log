@@ -1,0 +1,21 @@
+[0.944s] Invoking command in '/home/jinyicheng/auto_navigation/core/demo_python_service': PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data
+[1.086s] running egg_info
+[1.087s] writing ../../build/demo_python_service/demo_python_service.egg-info/PKG-INFO
+[1.087s] writing dependency_links to ../../build/demo_python_service/demo_python_service.egg-info/dependency_links.txt
+[1.087s] writing entry points to ../../build/demo_python_service/demo_python_service.egg-info/entry_points.txt
+[1.087s] writing requirements to ../../build/demo_python_service/demo_python_service.egg-info/requires.txt
+[1.087s] writing top-level names to ../../build/demo_python_service/demo_python_service.egg-info/top_level.txt
+[1.089s] reading manifest file '../../build/demo_python_service/demo_python_service.egg-info/SOURCES.txt'
+[1.089s] adding license file 'LICENSE'
+[1.090s] writing manifest file '../../build/demo_python_service/demo_python_service.egg-info/SOURCES.txt'
+[1.090s] running build
+[1.090s] running build_py
+[1.090s] running install
+[1.090s] running install_lib
+[1.091s] running install_data
+[1.091s] running install_egg_info
+[1.092s] removing '/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service-0.0.0-py3.10.egg-info' (and everything under it)
+[1.093s] Copying ../../build/demo_python_service/demo_python_service.egg-info to /home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages/demo_python_service-0.0.0-py3.10.egg-info
+[1.095s] running install_scripts
+[1.110s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/demo_python_service/install.log'
+[1.132s] Invoked command in '/home/jinyicheng/auto_navigation/core/demo_python_service' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data

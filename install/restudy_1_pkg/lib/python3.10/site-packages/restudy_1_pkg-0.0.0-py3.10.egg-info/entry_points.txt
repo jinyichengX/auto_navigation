@@ -1,0 +1,3 @@
+[console_scripts]
+node1 = restudy_1_pkg.node1:main
+

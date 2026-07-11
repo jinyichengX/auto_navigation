@@ -17,6 +17,22 @@
                     <color rgba="1 0 0 0.2"/>    <!-- 红 绿 蓝 透明度，范围0~1 -->
                 </material>
             </visual>
+            <!-- 碰撞体积 (与visual几何一致) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${length} ${width} ${height}"/>
+                </geometry>
+            </collision>
+            <!-- 惯性 (质量与转动惯量，Gazebo仿真必需) -->
+            <inertial>
+                <mass value="5"/>
+                <!-- 长方体转动惯量: Ixx=m/12*(y²+z²), Iyy=m/12*(x²+z²), Izz=m/12*(x²+y²) -->
+                <inertia ixx="${5.0/12.0 * (width*width + height*height)}"
+                         iyy="${5.0/12.0 * (length*length + height*height)}"
+                         izz="${5.0/12.0 * (length*length + width*width)}"
+                         ixy="0" ixz="0" iyz="0"/>
+            </inertial>
         </link>
 
     <!-- 添加虚拟部件，使机器人轮子贴合地面 -->

@@ -1,0 +1,73 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target"
+		],
+		"files" : 
+		[
+			"/home/jinyicheng/auto_navigation/build/sum_srv_interface/sum_srv_interface__rs/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 35,
+				"parent" : 0
+			}
+		]
+	},
+	"id" : "sum_srv_interface__rs::@26109458b568fc850da4",
+	"name" : "sum_srv_interface__rs",
+	"paths" : 
+	{
+		"build" : "sum_srv_interface__rs",
+		"source" : "/home/jinyicheng/auto_navigation/build/sum_srv_interface/sum_srv_interface__rs"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "/home/jinyicheng/auto_navigation/build/sum_srv_interface/sum_srv_interface__rs/CMakeFiles/sum_srv_interface__rs",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "/home/jinyicheng/auto_navigation/build/sum_srv_interface/sum_srv_interface__rs/CMakeFiles/sum_srv_interface__rs.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "/home/jinyicheng/auto_navigation/build/sum_srv_interface/rosidl_generator_rs/sum_srv_interface/rust/src/lib.rs.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

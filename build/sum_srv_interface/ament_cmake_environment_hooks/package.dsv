@@ -1,0 +1,4 @@
+source;share/sum_srv_interface/local_setup.bash
+source;share/sum_srv_interface/local_setup.dsv
+source;share/sum_srv_interface/local_setup.sh
+source;share/sum_srv_interface/local_setup.zsh

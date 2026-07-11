@@ -8,6 +8,7 @@ setup.py
 ../../build/node1/node1.egg-info/requires.txt
 ../../build/node1/node1.egg-info/top_level.txt
 ../../build/node1/node1.egg-info/zip-safe
+launch/learn_thread.launch.py
 node1/__init__.py
 node1/download_novel.py
 node1/learn_thread.py

@@ -1,0 +1,22 @@
+running egg_info
+writing ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/PKG-INFO
+writing dependency_links to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/dependency_links.txt
+writing entry points to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/entry_points.txt
+writing requirements to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/requires.txt
+writing top-level names to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/top_level.txt
+reading manifest file '../../build/restudy_1_pkg/restudy_1_pkg.egg-info/SOURCES.txt'
+writing manifest file '../../build/restudy_1_pkg/restudy_1_pkg.egg-info/SOURCES.txt'
+running build
+running build_py
+copying restudy_1_pkg/node1.py -> /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg
+running install
+running install_lib
+copying /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg/node1.py -> /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg
+byte-compiling /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg/node1.py to node1.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/restudy_1_pkg/restudy_1_pkg.egg-info to /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg-0.0.0-py3.10.egg-info
+running install_scripts
+Installing node1 script to /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/restudy_1_pkg
+writing list of installed files to '/home/jinyicheng/auto_navigation/build/restudy_1_pkg/install.log'

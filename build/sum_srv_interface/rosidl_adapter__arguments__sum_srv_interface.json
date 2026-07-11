@@ -1,0 +1,6 @@
+{
+  "package_name": "sum_srv_interface",
+  "non_idl_tuples": [
+    "/home/jinyicheng/auto_navigation/core/sum_srv_interface:srv/Sum.srv"
+  ]
+}

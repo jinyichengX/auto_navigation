@@ -1,3 +1,4 @@
 [console_scripts]
-
+client_process = demo_python_service.demo_client:main
+srv_process = demo_python_service.demo_service:main
 

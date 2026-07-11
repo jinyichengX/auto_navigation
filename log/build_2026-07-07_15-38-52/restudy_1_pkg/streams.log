@@ -1,0 +1,37 @@
+[1.082s] Invoking command in '/home/jinyicheng/auto_navigation/core/restudy_1_pkg': PYTHONPATH=/home/jinyicheng/auto_navigation/build/restudy_1_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/restudy_1_pkg build --build-base /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build install --record /home/jinyicheng/auto_navigation/build/restudy_1_pkg/install.log --single-version-externally-managed install_data
+[1.210s] running egg_info
+[1.211s] creating ../../build/restudy_1_pkg/restudy_1_pkg.egg-info
+[1.211s] writing ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/PKG-INFO
+[1.212s] writing dependency_links to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/dependency_links.txt
+[1.212s] writing entry points to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/entry_points.txt
+[1.212s] writing requirements to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/requires.txt
+[1.212s] writing top-level names to ../../build/restudy_1_pkg/restudy_1_pkg.egg-info/top_level.txt
+[1.212s] writing manifest file '../../build/restudy_1_pkg/restudy_1_pkg.egg-info/SOURCES.txt'
+[1.214s] reading manifest file '../../build/restudy_1_pkg/restudy_1_pkg.egg-info/SOURCES.txt'
+[1.215s] writing manifest file '../../build/restudy_1_pkg/restudy_1_pkg.egg-info/SOURCES.txt'
+[1.215s] running build
+[1.215s] running build_py
+[1.215s] creating /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build
+[1.217s] creating /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib
+[1.217s] creating /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg
+[1.217s] copying restudy_1_pkg/node1.py -> /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg
+[1.217s] copying restudy_1_pkg/__init__.py -> /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg
+[1.217s] running install
+[1.217s] running install_lib
+[1.221s] creating /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg
+[1.221s] copying /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg/node1.py -> /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg
+[1.222s] copying /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build/lib/restudy_1_pkg/__init__.py -> /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg
+[1.222s] byte-compiling /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg/node1.py to node1.cpython-310.pyc
+[1.223s] byte-compiling /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg/__init__.py to __init__.cpython-310.pyc
+[1.226s] running install_data
+[1.226s] creating /home/jinyicheng/auto_navigation/install/restudy_1_pkg/share/ament_index
+[1.226s] creating /home/jinyicheng/auto_navigation/install/restudy_1_pkg/share/ament_index/resource_index
+[1.226s] creating /home/jinyicheng/auto_navigation/install/restudy_1_pkg/share/ament_index/resource_index/packages
+[1.226s] copying resource/restudy_1_pkg -> /home/jinyicheng/auto_navigation/install/restudy_1_pkg/share/ament_index/resource_index/packages
+[1.226s] copying package.xml -> /home/jinyicheng/auto_navigation/install/restudy_1_pkg/share/restudy_1_pkg
+[1.226s] running install_egg_info
+[1.227s] Copying ../../build/restudy_1_pkg/restudy_1_pkg.egg-info to /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages/restudy_1_pkg-0.0.0-py3.10.egg-info
+[1.227s] running install_scripts
+[1.233s] Installing node1 script to /home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/restudy_1_pkg
+[1.233s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/restudy_1_pkg/install.log'
+[1.268s] Invoked command in '/home/jinyicheng/auto_navigation/core/restudy_1_pkg' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/restudy_1_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/restudy_1_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/restudy_1_pkg build --build-base /home/jinyicheng/auto_navigation/build/restudy_1_pkg/build install --record /home/jinyicheng/auto_navigation/build/restudy_1_pkg/install.log --single-version-externally-managed install_data
