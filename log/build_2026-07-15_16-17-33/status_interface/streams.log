@@ -1,0 +1,154 @@
+[0.023s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/demo_python_service:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_interface -- -j20 -l20
+[0.473s] [  9%] Built target status_interface__rosidl_generator_c
+[0.473s] [ 12%] Built target status_interface__rs
+[0.474s] [ 12%] Built target ament_cmake_python_copy_status_interface
+[0.475s] [ 15%] Built target status_interface__cpp
+[0.475s] [ 25%] Built target status_interface__rosidl_typesupport_c
+[0.475s] [ 34%] Built target status_interface__rosidl_typesupport_introspection_c
+[0.475s] [ 43%] Built target status_interface__rosidl_typesupport_fastrtps_c
+[0.475s] [ 53%] Built target status_interface__rosidl_typesupport_cpp
+[0.475s] [ 62%] Built target status_interface__rosidl_typesupport_fastrtps_cpp
+[0.475s] [ 71%] Built target status_interface__rosidl_typesupport_introspection_cpp
+[0.476s] [ 71%] Built target status_interface
+[0.476s] [ 75%] Built target status_interface__py
+[0.476s] [ 81%] Built target status_interface__rosidl_generator_py
+[0.476s] [ 87%] Built target status_interface__rosidl_typesupport_introspection_c__pyext
+[0.476s] [100%] Built target status_interface__rosidl_typesupport_c__pyext
+[0.476s] [ 96%] Built target status_interface__rosidl_typesupport_fastrtps_c__pyext
+[0.476s] running egg_info
+[0.476s] writing status_interface.egg-info/PKG-INFO
+[0.476s] writing dependency_links to status_interface.egg-info/dependency_links.txt
+[0.476s] writing top-level names to status_interface.egg-info/top_level.txt
+[0.477s] reading manifest file 'status_interface.egg-info/SOURCES.txt'
+[0.477s] writing manifest file 'status_interface.egg-info/SOURCES.txt'
+[0.478s] [100%] Built target ament_cmake_python_build_status_interface_egg
+[0.488s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/demo_python_service:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_interface -- -j20 -l20
+[0.490s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/demo_python_service:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_interface
+[0.498s] -- Install configuration: ""
+[0.504s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/ament_index/resource_index/rosidl_interfaces/status_interface
+[0.504s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.504s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.504s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/system_status.h
+[0.504s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/rosidl_generator_c__visibility_control.h
+[0.506s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.506s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__functions.h
+[0.506s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__functions.c
+[0.506s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__type_support.h
+[0.506s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__struct.h
+[0.510s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/library_path.sh
+[0.510s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/library_path.dsv
+[0.510s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_generator_c.so
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__rosidl_typesupport_fastrtps_c.h
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_fastrtps_c.so
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/rosidl_generator_cpp__visibility_control.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/system_status.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__traits.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__builder.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__type_support.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__struct.hpp
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.511s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__rosidl_typesupport_fastrtps_cpp.hpp
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/dds_fastrtps
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_fastrtps_cpp.so
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__rosidl_typesupport_introspection_c.h
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__type_support.c
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_introspection_c.so
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_c.so
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__rosidl_typesupport_introspection_cpp.hpp
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/include/status_interface/status_interface/msg/detail/system_status__type_support.cpp
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_introspection_cpp.so
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_typesupport_cpp.so
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/pythonpath.sh
+[0.512s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/pythonpath.dsv
+[0.513s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface-0.0.0-py3.10.egg-info
+[0.513s] -- Installing: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface-0.0.0-py3.10.egg-info/top_level.txt
+[0.513s] -- Installing: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface-0.0.0-py3.10.egg-info/dependency_links.txt
+[0.513s] -- Installing: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface-0.0.0-py3.10.egg-info/SOURCES.txt
+[0.513s] -- Installing: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface-0.0.0-py3.10.egg-info/PKG-INFO
+[0.513s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface
+[0.514s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.514s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/_status_interface_s.ep.rosidl_typesupport_introspection_c.c
+[0.514s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/msg
+[0.514s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/msg/_system_status_s.c
+[0.514s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/msg/_system_status.py
+[0.515s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/msg/__init__.py
+[0.515s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/_status_interface_s.ep.rosidl_typesupport_c.c
+[0.515s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/_status_interface_s.ep.rosidl_typesupport_fastrtps_c.c
+[0.515s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.515s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/libstatus_interface__rosidl_generator_py.so
+[0.516s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/__init__.py
+[0.516s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.521s] Listing '/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface'...
+[0.521s] Listing '/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/msg'...
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages/status_interface/status_interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/lib/libstatus_interface__rosidl_generator_py.so
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/ament_index/resource_index/rust_packages/status_interface
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust
+[0.523s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/src
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/src/msg
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/src/msg/rmw.rs
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/src/msg.rs
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/src/lib.rs
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/Cargo.toml
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/rust/build.rs
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/msg/SystemStatus.idl
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/msg/SystemStatus.msg
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/ament_index/resource_index/package_run_dependencies/status_interface
+[0.524s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/ament_index/resource_index/parent_prefix_path/status_interface
+[0.525s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/ament_prefix_path.sh
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/ament_prefix_path.dsv
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/path.sh
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/environment/path.dsv
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/local_setup.bash
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/local_setup.sh
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/local_setup.zsh
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/local_setup.dsv
+[0.526s] -- Installing: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.dsv
+[0.526s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/ament_index/resource_index/packages/status_interface
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_generator_cExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_generator_cExport-noconfig.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_typesupport_fastrtps_cExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_generator_cppExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_typesupport_fastrtps_cppExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_introspection_cExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_cExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_cExport-noconfig.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_introspection_cppExport.cmake
+[0.527s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_cppExport.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interface__rosidl_typesupport_cppExport-noconfig.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_generator_pyExport.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/export_status_interface__rosidl_generator_pyExport-noconfig.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/rosidl_cmake-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/ament_cmake_export_libraries-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/ament_cmake_export_targets-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interfaceConfig.cmake
+[0.528s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/cmake/status_interfaceConfig-version.cmake
+[0.529s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.xml
+[0.535s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jinyicheng/auto_navigation/install/demo_python_service:/home/jinyicheng/auto_navigation/install/status_publisher:/home/jinyicheng/auto_navigation/install/restudy_1_pkg:/home/jinyicheng/auto_navigation/install/node2:/home/jinyicheng/auto_navigation/install/node1:/home/jinyicheng/auto_navigation/install/demo_python_tf:/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_interface

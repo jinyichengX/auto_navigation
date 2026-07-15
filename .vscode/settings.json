@@ -1,3 +1,7 @@
 {
-    "editor.mouseWheelZoom": true
+    "editor.mouseWheelZoom": true,
+        "files.associations": {
+        "*.sdf": "xml",
+        "*.world": "xml"
+    }
 }

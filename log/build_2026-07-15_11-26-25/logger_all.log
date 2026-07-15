@@ -1,0 +1,612 @@
+[0.430s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.430s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=20, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7049e4d4b910>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7049e4d4b4f0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7049e4d4b4f0>>, mixin_verb=('build',))
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.877s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.877s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/jinyicheng/auto_navigation'
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.877s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['ignore', 'ignore_ament_install']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'ignore'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'ignore_ament_install'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['colcon_pkg']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'colcon_pkg'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['colcon_meta']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'colcon_meta'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['ros']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'ros'
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['cmake', 'python']
+[0.936s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'cmake'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'python'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extensions ['python_setup_py']
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core) by extension 'python_setup_py'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extensions ['ignore', 'ignore_ament_install']
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extension 'ignore'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extension 'ignore_ament_install'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extensions ['colcon_pkg']
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extension 'colcon_pkg'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extensions ['colcon_meta']
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extension 'colcon_meta'
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extensions ['ros']
+[0.937s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_service) by extension 'ros'
+[0.940s] DEBUG:colcon.colcon_core.package_identification:Package 'core/demo_python_service' with type 'ros.ament_python' and name 'demo_python_service'
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extensions ['ignore', 'ignore_ament_install']
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extension 'ignore'
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extension 'ignore_ament_install'
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extensions ['colcon_pkg']
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extension 'colcon_pkg'
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extensions ['colcon_meta']
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extension 'colcon_meta'
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extensions ['ros']
+[0.940s] Level 1:colcon.colcon_core.package_identification:_identify(core/demo_python_tf) by extension 'ros'
+[0.941s] DEBUG:colcon.colcon_core.package_identification:Package 'core/demo_python_tf' with type 'ros.ament_python' and name 'demo_python_tf'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extensions ['ignore', 'ignore_ament_install']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extension 'ignore'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extension 'ignore_ament_install'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extensions ['colcon_pkg']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extension 'colcon_pkg'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extensions ['colcon_meta']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extension 'colcon_meta'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extensions ['ros']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node1) by extension 'ros'
+[0.941s] DEBUG:colcon.colcon_core.package_identification:Package 'core/node1' with type 'ros.ament_python' and name 'node1'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extensions ['ignore', 'ignore_ament_install']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extension 'ignore'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extension 'ignore_ament_install'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extensions ['colcon_pkg']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extension 'colcon_pkg'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extensions ['colcon_meta']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extension 'colcon_meta'
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extensions ['ros']
+[0.941s] Level 1:colcon.colcon_core.package_identification:_identify(core/node2) by extension 'ros'
+[0.942s] DEBUG:colcon.colcon_core.package_identification:Package 'core/node2' with type 'ros.ament_python' and name 'node2'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extensions ['ignore', 'ignore_ament_install']
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extension 'ignore'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extension 'ignore_ament_install'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extensions ['colcon_pkg']
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extension 'colcon_pkg'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extensions ['colcon_meta']
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extension 'colcon_meta'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extensions ['ros']
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/robot_simulation) by extension 'ros'
+[0.942s] DEBUG:colcon.colcon_core.package_identification:Package 'core/robot_simulation' with type 'ros.ament_cmake' and name 'robot_simulation'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extensions ['ignore', 'ignore_ament_install']
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extension 'ignore'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extension 'ignore_ament_install'
+[0.942s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extensions ['colcon_pkg']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extension 'colcon_pkg'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extensions ['colcon_meta']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extension 'colcon_meta'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extensions ['ros']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_interface) by extension 'ros'
+[0.943s] DEBUG:colcon.colcon_core.package_identification:Package 'core/status_interface' with type 'ros.ament_cmake' and name 'status_interface'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extensions ['ignore', 'ignore_ament_install']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extension 'ignore'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extension 'ignore_ament_install'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extensions ['colcon_pkg']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extension 'colcon_pkg'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extensions ['colcon_meta']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extension 'colcon_meta'
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extensions ['ros']
+[0.943s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_publisher) by extension 'ros'
+[0.943s] DEBUG:colcon.colcon_core.package_identification:Package 'core/status_publisher' with type 'ros.ament_python' and name 'status_publisher'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extensions ['ignore', 'ignore_ament_install']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extension 'ignore'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extension 'ignore_ament_install'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extensions ['colcon_pkg']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extension 'colcon_pkg'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extensions ['colcon_meta']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extension 'colcon_meta'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extensions ['ros']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/status_sub_and_disp) by extension 'ros'
+[0.944s] DEBUG:colcon.colcon_core.package_identification:Package 'core/status_sub_and_disp' with type 'ros.ament_cmake' and name 'status_sub_and_disp'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extensions ['ignore', 'ignore_ament_install']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extension 'ignore'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extension 'ignore_ament_install'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extensions ['colcon_pkg']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extension 'colcon_pkg'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extensions ['colcon_meta']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extension 'colcon_meta'
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extensions ['ros']
+[0.944s] Level 1:colcon.colcon_core.package_identification:_identify(core/sum_srv_interface) by extension 'ros'
+[0.945s] DEBUG:colcon.colcon_core.package_identification:Package 'core/sum_srv_interface' with type 'ros.ament_cmake' and name 'sum_srv_interface'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['ignore', 'ignore_ament_install']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'ignore'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'ignore_ament_install'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['colcon_pkg']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'colcon_pkg'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['colcon_meta']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'colcon_meta'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['ros']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'ros'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['cmake', 'python']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'cmake'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'python'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extensions ['python_setup_py']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(launch文件解析) by extension 'python_setup_py'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.945s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.946s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.946s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.946s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.946s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.946s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.975s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.975s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.980s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 333 installed packages in /opt/ros/humble
+[0.981s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.003s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_args' from command line to 'None'
+[1.003s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_target' from command line to 'None'
+[1.003s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_clean_cache' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_clean_first' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'cmake_force_configure' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'ament_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'catkin_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'demo_python_tf' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.004s] DEBUG:colcon.colcon_core.verb:Building package 'demo_python_tf' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/demo_python_tf', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/demo_python_tf', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/demo_python_tf', 'symlink_install': False, 'test_result_base': None}
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_target' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_clean_cache' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_clean_first' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'cmake_force_configure' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'ament_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'catkin_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node1' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.004s] DEBUG:colcon.colcon_core.verb:Building package 'node1' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/node1', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/node1', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/node1', 'symlink_install': False, 'test_result_base': None}
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_target' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_clean_cache' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_clean_first' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'cmake_force_configure' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'ament_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'catkin_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'node2' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.004s] DEBUG:colcon.colcon_core.verb:Building package 'node2' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/node2', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/node2', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/node2', 'symlink_install': False, 'test_result_base': None}
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_target' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_clean_cache' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_clean_first' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'cmake_force_configure' from command line to 'False'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'ament_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'catkin_cmake_args' from command line to 'None'
+[1.004s] Level 5:colcon.colcon_core.verb:set package 'robot_simulation' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.004s] DEBUG:colcon.colcon_core.verb:Building package 'robot_simulation' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/robot_simulation', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/robot_simulation', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/robot_simulation', 'symlink_install': False, 'test_result_base': None}
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_target' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_clean_cache' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_clean_first' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'cmake_force_configure' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'ament_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'catkin_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'status_interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.005s] DEBUG:colcon.colcon_core.verb:Building package 'status_interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/status_interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/status_interface', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/status_interface', 'symlink_install': False, 'test_result_base': None}
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_target' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_clean_cache' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_clean_first' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'cmake_force_configure' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'ament_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'catkin_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'sum_srv_interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.005s] DEBUG:colcon.colcon_core.verb:Building package 'sum_srv_interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/sum_srv_interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/sum_srv_interface', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/sum_srv_interface', 'symlink_install': False, 'test_result_base': None}
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_target' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_clean_cache' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_clean_first' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'cmake_force_configure' from command line to 'False'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'ament_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'catkin_cmake_args' from command line to 'None'
+[1.005s] Level 5:colcon.colcon_core.verb:set package 'demo_python_service' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.005s] DEBUG:colcon.colcon_core.verb:Building package 'demo_python_service' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/demo_python_service', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/demo_python_service', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/demo_python_service', 'symlink_install': False, 'test_result_base': None}
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_target' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_clean_cache' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_clean_first' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'cmake_force_configure' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'ament_cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'catkin_cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_publisher' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.006s] DEBUG:colcon.colcon_core.verb:Building package 'status_publisher' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/status_publisher', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/status_publisher', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/status_publisher', 'symlink_install': False, 'test_result_base': None}
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_target' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_clean_cache' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_clean_first' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'cmake_force_configure' from command line to 'False'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'ament_cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'catkin_cmake_args' from command line to 'None'
+[1.006s] Level 5:colcon.colcon_core.verb:set package 'status_sub_and_disp' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.006s] DEBUG:colcon.colcon_core.verb:Building package 'status_sub_and_disp' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jinyicheng/auto_navigation/build/status_sub_and_disp', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jinyicheng/auto_navigation/install/status_sub_and_disp', 'merge_install': False, 'path': '/home/jinyicheng/auto_navigation/core/status_sub_and_disp', 'symlink_install': False, 'test_result_base': None}
+[1.006s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.007s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.007s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/status_interface' with build type 'ament_cmake'
+[1.007s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jinyicheng/auto_navigation/core/status_interface'
+[1.015s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.015s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.015s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.017s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/sum_srv_interface' with build type 'ament_cmake'
+[1.017s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jinyicheng/auto_navigation/core/sum_srv_interface'
+[1.017s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.017s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.019s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/demo_python_tf' with build type 'ament_python'
+[1.019s] Level 1:colcon.colcon_core.shell:create_environment_hook('demo_python_tf', 'ament_prefix_path')
+[1.020s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/ament_prefix_path.ps1'
+[1.020s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/ament_prefix_path.dsv'
+[1.022s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/ament_prefix_path.sh'
+[1.024s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.024s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.025s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/node1' with build type 'ament_python'
+[1.026s] Level 1:colcon.colcon_core.shell:create_environment_hook('node1', 'ament_prefix_path')
+[1.026s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/ament_prefix_path.ps1'
+[1.026s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/ament_prefix_path.dsv'
+[1.027s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/ament_prefix_path.sh'
+[1.027s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.027s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.029s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/node2' with build type 'ament_python'
+[1.029s] Level 1:colcon.colcon_core.shell:create_environment_hook('node2', 'ament_prefix_path')
+[1.029s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/ament_prefix_path.ps1'
+[1.030s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/ament_prefix_path.dsv'
+[1.030s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/ament_prefix_path.sh'
+[1.030s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.030s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.032s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/robot_simulation' with build type 'ament_cmake'
+[1.032s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jinyicheng/auto_navigation/core/robot_simulation'
+[1.032s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.033s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.040s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/status_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_interface -- -j20 -l20
+[1.044s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/sum_srv_interface -- -j20 -l20
+[1.203s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jinyicheng/auto_navigation/core/demo_python_tf'
+[1.203s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.203s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.350s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jinyicheng/auto_navigation/core/node1'
+[1.350s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.350s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.480s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jinyicheng/auto_navigation/core/node2'
+[1.480s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.480s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.485s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/robot_simulation': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/robot_simulation -- -j20 -l20
+[1.491s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/status_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_interface -- -j20 -l20
+[1.495s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/status_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_interface
+[1.495s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/sum_srv_interface -- -j20 -l20
+[1.498s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/sum_srv_interface
+[1.521s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/robot_simulation' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/robot_simulation -- -j20 -l20
+[1.522s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/robot_simulation': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/robot_simulation
+[1.533s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(sum_srv_interface)
+[1.540s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/sum_srv_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/sum_srv_interface
+[1.548s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface' for CMake module files
+[1.548s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface' for CMake config files
+[1.548s] Level 1:colcon.colcon_core.shell:create_environment_hook('sum_srv_interface', 'cmake_prefix_path')
+[1.548s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.ps1'
+[1.549s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.dsv'
+[1.549s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.sh'
+[1.549s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib'
+[1.549s] Level 1:colcon.colcon_core.shell:create_environment_hook('sum_srv_interface', 'ld_library_path_lib')
+[1.549s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.ps1'
+[1.550s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.dsv'
+[1.550s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.sh'
+[1.550s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/bin'
+[1.550s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/pkgconfig/sum_srv_interface.pc'
+[1.550s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/python3.10/site-packages'
+[1.550s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/bin'
+[1.551s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.ps1'
+[1.552s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.dsv'
+[1.553s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.sh'
+[1.555s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.bash'
+[1.556s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.zsh'
+[1.557s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/colcon-core/packages/sum_srv_interface)
+[1.557s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(sum_srv_interface)
+[1.557s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface' for CMake module files
+[1.558s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface' for CMake config files
+[1.558s] Level 1:colcon.colcon_core.shell:create_environment_hook('sum_srv_interface', 'cmake_prefix_path')
+[1.558s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.ps1'
+[1.558s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.dsv'
+[1.559s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/cmake_prefix_path.sh'
+[1.559s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib'
+[1.559s] Level 1:colcon.colcon_core.shell:create_environment_hook('sum_srv_interface', 'ld_library_path_lib')
+[1.559s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.ps1'
+[1.559s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.dsv'
+[1.560s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/hook/ld_library_path_lib.sh'
+[1.560s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/bin'
+[1.560s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/pkgconfig/sum_srv_interface.pc'
+[1.560s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib/python3.10/site-packages'
+[1.560s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/sum_srv_interface/bin'
+[1.560s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.ps1'
+[1.561s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.dsv'
+[1.561s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.sh'
+[1.561s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.bash'
+[1.561s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/sum_srv_interface/package.zsh'
+[1.562s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/sum_srv_interface/share/colcon-core/packages/sum_srv_interface)
+[1.562s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/demo_python_service' with build type 'ament_python'
+[1.562s] Level 1:colcon.colcon_core.shell:create_environment_hook('demo_python_service', 'ament_prefix_path')
+[1.562s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/ament_prefix_path.ps1'
+[1.563s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/ament_prefix_path.dsv'
+[1.563s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/ament_prefix_path.sh'
+[1.564s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.564s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.565s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robot_simulation)
+[1.565s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/robot_simulation' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/robot_simulation
+[1.566s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation' for CMake module files
+[1.566s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation' for CMake config files
+[1.566s] Level 1:colcon.colcon_core.shell:create_environment_hook('robot_simulation', 'cmake_prefix_path')
+[1.566s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.ps1'
+[1.566s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.dsv'
+[1.567s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.sh'
+[1.567s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/bin'
+[1.567s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/lib/pkgconfig/robot_simulation.pc'
+[1.567s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/lib/python3.10/site-packages'
+[1.567s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/bin'
+[1.568s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.ps1'
+[1.568s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.dsv'
+[1.568s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.sh'
+[1.569s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.bash'
+[1.569s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.zsh'
+[1.569s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/robot_simulation/share/colcon-core/packages/robot_simulation)
+[1.569s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robot_simulation)
+[1.569s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation' for CMake module files
+[1.570s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation' for CMake config files
+[1.570s] Level 1:colcon.colcon_core.shell:create_environment_hook('robot_simulation', 'cmake_prefix_path')
+[1.570s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.ps1'
+[1.570s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.dsv'
+[1.570s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/hook/cmake_prefix_path.sh'
+[1.571s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/bin'
+[1.571s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/lib/pkgconfig/robot_simulation.pc'
+[1.571s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/lib/python3.10/site-packages'
+[1.571s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/robot_simulation/bin'
+[1.571s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.ps1'
+[1.571s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.dsv'
+[1.573s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.sh'
+[1.573s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.bash'
+[1.573s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/package.zsh'
+[1.573s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/robot_simulation/share/colcon-core/packages/robot_simulation)
+[1.574s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(status_interface)
+[1.574s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface' for CMake module files
+[1.575s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/status_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_interface
+[1.575s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface' for CMake config files
+[1.575s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_interface', 'cmake_prefix_path')
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.ps1'
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.dsv'
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.sh'
+[1.576s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib'
+[1.576s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_interface', 'ld_library_path_lib')
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.ps1'
+[1.577s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.dsv'
+[1.577s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.sh'
+[1.577s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/bin'
+[1.577s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib/pkgconfig/status_interface.pc'
+[1.577s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib/python3.10/site-packages'
+[1.578s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/bin'
+[1.578s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.ps1'
+[1.578s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.dsv'
+[1.578s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.sh'
+[1.579s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.bash'
+[1.579s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.zsh'
+[1.579s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/status_interface/share/colcon-core/packages/status_interface)
+[1.579s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(status_interface)
+[1.580s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface' for CMake module files
+[1.580s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface' for CMake config files
+[1.580s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_interface', 'cmake_prefix_path')
+[1.580s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.ps1'
+[1.580s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.dsv'
+[1.581s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/cmake_prefix_path.sh'
+[1.581s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib'
+[1.581s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_interface', 'ld_library_path_lib')
+[1.582s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.ps1'
+[1.582s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.dsv'
+[1.582s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/hook/ld_library_path_lib.sh'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/bin'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib/pkgconfig/status_interface.pc'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/lib/python3.10/site-packages'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_interface/bin'
+[1.583s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.ps1'
+[1.583s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.dsv'
+[1.583s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.sh'
+[1.584s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.bash'
+[1.584s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_interface/share/status_interface/package.zsh'
+[1.584s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/status_interface/share/colcon-core/packages/status_interface)
+[1.585s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/status_publisher' with build type 'ament_python'
+[1.585s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_publisher', 'ament_prefix_path')
+[1.585s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/ament_prefix_path.ps1'
+[1.585s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/ament_prefix_path.dsv'
+[1.586s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/ament_prefix_path.sh'
+[1.587s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.587s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.589s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jinyicheng/auto_navigation/core/status_sub_and_disp' with build type 'ament_cmake'
+[1.589s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jinyicheng/auto_navigation/core/status_sub_and_disp'
+[1.589s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.589s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.683s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[1.842s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jinyicheng/auto_navigation/core/demo_python_service'
+[1.842s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.842s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.979s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jinyicheng/auto_navigation/core/status_publisher'
+[1.979s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.979s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.984s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/core/node2': PYTHONPATH=/home/jinyicheng/auto_navigation/build/node2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/node2/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/node2 build --build-base /home/jinyicheng/auto_navigation/build/node2/build install --record /home/jinyicheng/auto_navigation/build/node2/install.log --single-version-externally-managed install_data
+[1.987s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/core/node1': PYTHONPATH=/home/jinyicheng/auto_navigation/build/node1/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/node1/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/node1 build --build-base /home/jinyicheng/auto_navigation/build/node1/build install --record /home/jinyicheng/auto_navigation/build/node1/install.log --single-version-externally-managed install_data
+[1.991s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/core/demo_python_tf': PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_tf/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_tf/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_tf build --build-base /home/jinyicheng/auto_navigation/build/demo_python_tf/build install --record /home/jinyicheng/auto_navigation/build/demo_python_tf/install.log --single-version-externally-managed install_data
+[1.991s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[1.992s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[1.995s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(status_sub_and_disp)
+[1.995s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp' for CMake module files
+[1.995s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[1.996s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp' for CMake config files
+[1.996s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_sub_and_disp', 'cmake_prefix_path')
+[1.996s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.ps1'
+[1.997s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.dsv'
+[1.997s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.sh'
+[1.997s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib'
+[1.997s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/bin'
+[1.997s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/pkgconfig/status_sub_and_disp.pc'
+[1.997s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/python3.10/site-packages'
+[1.997s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/bin'
+[1.998s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.ps1'
+[1.998s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.dsv'
+[1.998s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.sh'
+[1.998s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.bash'
+[1.999s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.zsh'
+[1.999s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/colcon-core/packages/status_sub_and_disp)
+[1.999s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(status_sub_and_disp)
+[1.999s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp' for CMake module files
+[2.000s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp' for CMake config files
+[2.000s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_sub_and_disp', 'cmake_prefix_path')
+[2.000s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.ps1'
+[2.000s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.dsv'
+[2.001s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/hook/cmake_prefix_path.sh'
+[2.001s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib'
+[2.001s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/bin'
+[2.001s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/pkgconfig/status_sub_and_disp.pc'
+[2.001s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/python3.10/site-packages'
+[2.001s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/bin'
+[2.001s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.ps1'
+[2.002s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.dsv'
+[2.002s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.sh'
+[2.002s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.bash'
+[2.002s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.zsh'
+[2.003s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/colcon-core/packages/status_sub_and_disp)
+[2.156s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2' for CMake module files
+[2.157s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/core/node2' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/node2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/node2/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/node2 build --build-base /home/jinyicheng/auto_navigation/build/node2/build install --record /home/jinyicheng/auto_navigation/build/node2/install.log --single-version-externally-managed install_data
+[2.157s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2' for CMake config files
+[2.158s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2/lib'
+[2.158s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2/bin'
+[2.158s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2/lib/pkgconfig/node2.pc'
+[2.158s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2/lib/python3.10/site-packages'
+[2.158s] Level 1:colcon.colcon_core.shell:create_environment_hook('node2', 'pythonpath')
+[2.158s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/pythonpath.ps1'
+[2.158s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/pythonpath.dsv'
+[2.159s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node2/share/node2/hook/pythonpath.sh'
+[2.159s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node2/bin'
+[2.160s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(node2)
+[2.160s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node2/share/node2/package.ps1'
+[2.160s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/node2/share/node2/package.dsv'
+[2.160s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node2/share/node2/package.sh'
+[2.160s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node2/share/node2/package.bash'
+[2.161s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node2/share/node2/package.zsh'
+[2.161s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/node2/share/colcon-core/packages/node2)
+[2.162s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1' for CMake module files
+[2.163s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/core/node1' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/node1/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/node1/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/node1 build --build-base /home/jinyicheng/auto_navigation/build/node1/build install --record /home/jinyicheng/auto_navigation/build/node1/install.log --single-version-externally-managed install_data
+[2.164s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1' for CMake config files
+[2.164s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1/lib'
+[2.164s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1/bin'
+[2.164s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1/lib/pkgconfig/node1.pc'
+[2.164s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1/lib/python3.10/site-packages'
+[2.164s] Level 1:colcon.colcon_core.shell:create_environment_hook('node1', 'pythonpath')
+[2.164s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/pythonpath.ps1'
+[2.164s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/pythonpath.dsv'
+[2.165s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/node1/share/node1/hook/pythonpath.sh'
+[2.165s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/node1/bin'
+[2.165s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(node1)
+[2.165s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node1/share/node1/package.ps1'
+[2.166s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/node1/share/node1/package.dsv'
+[2.166s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node1/share/node1/package.sh'
+[2.166s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node1/share/node1/package.bash'
+[2.166s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/node1/share/node1/package.zsh'
+[2.166s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/node1/share/colcon-core/packages/node1)
+[2.167s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf' for CMake module files
+[2.168s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/core/demo_python_tf' returned '0': PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_tf/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_tf/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_tf build --build-base /home/jinyicheng/auto_navigation/build/demo_python_tf/build install --record /home/jinyicheng/auto_navigation/build/demo_python_tf/install.log --single-version-externally-managed install_data
+[2.168s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf' for CMake config files
+[2.168s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf/lib'
+[2.168s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf/bin'
+[2.168s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf/lib/pkgconfig/demo_python_tf.pc'
+[2.169s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf/lib/python3.10/site-packages'
+[2.169s] Level 1:colcon.colcon_core.shell:create_environment_hook('demo_python_tf', 'pythonpath')
+[2.169s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/pythonpath.ps1'
+[2.169s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/pythonpath.dsv'
+[2.169s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/hook/pythonpath.sh'
+[2.170s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_tf/bin'
+[2.170s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(demo_python_tf)
+[2.170s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/package.ps1'
+[2.170s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/package.dsv'
+[2.171s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/package.sh'
+[2.171s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/package.bash'
+[2.171s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_tf/share/demo_python_tf/package.zsh'
+[2.172s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/demo_python_tf/share/colcon-core/packages/demo_python_tf)
+[2.193s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/core/demo_python_service': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data
+[2.320s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jinyicheng/auto_navigation/core/status_publisher': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data
+[2.338s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service' for CMake module files
+[2.338s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/core/demo_python_service' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/demo_python_service/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/sum_srv_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/demo_python_service build --build-base /home/jinyicheng/auto_navigation/build/demo_python_service/build install --record /home/jinyicheng/auto_navigation/build/demo_python_service/install.log --single-version-externally-managed install_data
+[2.338s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service' for CMake config files
+[2.339s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service/lib'
+[2.339s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service/bin'
+[2.339s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service/lib/pkgconfig/demo_python_service.pc'
+[2.339s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service/lib/python3.10/site-packages'
+[2.339s] Level 1:colcon.colcon_core.shell:create_environment_hook('demo_python_service', 'pythonpath')
+[2.339s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/pythonpath.ps1'
+[2.339s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/pythonpath.dsv'
+[2.340s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/hook/pythonpath.sh'
+[2.340s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/demo_python_service/bin'
+[2.340s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(demo_python_service)
+[2.340s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/package.ps1'
+[2.340s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/package.dsv'
+[2.341s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/package.sh'
+[2.341s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/package.bash'
+[2.341s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/demo_python_service/share/demo_python_service/package.zsh'
+[2.341s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/demo_python_service/share/colcon-core/packages/demo_python_service)
+[2.473s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher' for CMake module files
+[2.473s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jinyicheng/auto_navigation/core/status_publisher' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data
+[2.473s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher' for CMake config files
+[2.473s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher/lib'
+[2.473s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher/bin'
+[2.474s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher/lib/pkgconfig/status_publisher.pc'
+[2.474s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages'
+[2.474s] Level 1:colcon.colcon_core.shell:create_environment_hook('status_publisher', 'pythonpath')
+[2.474s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/pythonpath.ps1'
+[2.474s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/pythonpath.dsv'
+[2.475s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/hook/pythonpath.sh'
+[2.475s] Level 1:colcon.colcon_core.environment:checking '/home/jinyicheng/auto_navigation/install/status_publisher/bin'
+[2.475s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(status_publisher)
+[2.475s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/package.ps1'
+[2.476s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/package.dsv'
+[2.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/package.sh'
+[2.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/package.bash'
+[2.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/jinyicheng/auto_navigation/install/status_publisher/share/status_publisher/package.zsh'
+[2.476s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jinyicheng/auto_navigation/install/status_publisher/share/colcon-core/packages/status_publisher)
+[2.477s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.477s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.477s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.477s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.531s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[2.531s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.531s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.531s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.532s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[2.532s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.532s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jinyicheng/auto_navigation/install/local_setup.ps1'
+[2.534s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jinyicheng/auto_navigation/install/_local_setup_util_ps1.py'
+[2.536s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jinyicheng/auto_navigation/install/setup.ps1'
+[2.537s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jinyicheng/auto_navigation/install/local_setup.sh'
+[2.538s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jinyicheng/auto_navigation/install/_local_setup_util_sh.py'
+[2.538s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jinyicheng/auto_navigation/install/setup.sh'
+[2.540s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jinyicheng/auto_navigation/install/local_setup.bash'
+[2.541s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jinyicheng/auto_navigation/install/setup.bash'
+[2.542s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jinyicheng/auto_navigation/install/local_setup.zsh'
+[2.543s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jinyicheng/auto_navigation/install/setup.zsh'

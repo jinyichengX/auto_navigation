@@ -15,7 +15,7 @@ def generate_launch_description():
 
     # 默认 xacro 和 world 文件路径
     default_model_path = os.path.join(pkg_share, 'urdf/fishrot/fishbot.xacro')
-    default_world_path = os.path.join(pkg_share, 'world/world1.sdf')
+    default_world_path = os.path.join(pkg_share, 'world/world1.sdf') #字符串拼接路径
 
     # 运行时参数：模型路径、世界路径
     model_arg = DeclareLaunchArgument(

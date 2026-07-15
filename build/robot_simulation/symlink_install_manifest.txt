@@ -7,9 +7,11 @@
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/base.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/caster_wheel.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/drive_wheel.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/fishbot.urdf
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/fishbot.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/imu.xacro
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/urdf/fishrot/laser.xacro
+/home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/world/building_robot.sdf
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/robot_simulation/world/world1.sdf
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/ament_index/resource_index/package_run_dependencies/robot_simulation
 /home/jinyicheng/auto_navigation/install/robot_simulation/share/ament_index/resource_index/parent_prefix_path/robot_simulation

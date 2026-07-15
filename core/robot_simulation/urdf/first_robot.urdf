@@ -16,6 +16,14 @@
                 <color rgba="1 0 0 0.2"/>    <!-- 红 绿 蓝 透明度，范围0~1 -->
             </material>
         </visual>
+        <!-- 惯性参数（Gazebo 仿真必须） -->
+        <inertial>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <mass value="1.0"/>
+            <inertia ixx="0.01" ixy="0.0" ixz="0.0"
+                     iyy="0.01" iyz="0.0"
+                     izz="0.01"/>
+        </inertial>
     </link>
 
     <!-- 机器人的IMU部件 -->
@@ -33,6 +41,14 @@
                 <color rgba="0 0 0 0.5"/>
             </material>
         </visual>
+        <!-- 惯性参数（Gazebo 仿真必须） -->
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia ixx="0.00001" ixy="0.0" ixz="0.0"
+                     iyy="0.00001" iyz="0.0"
+                     izz="0.00001"/>
+        </inertial>
     </link>
 
     <!-- 机器人的关节，用于组合机器人的部件 -->

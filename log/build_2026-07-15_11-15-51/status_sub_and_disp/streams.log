@@ -1,0 +1,24 @@
+[0.404s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[0.463s] [ 50%] Built target hello_qt
+[0.477s] [100%] Built target sys_status_disp
+[0.484s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/jinyicheng/auto_navigation/build/status_sub_and_disp -- -j20 -l20
+[0.487s] Invoking command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp
+[0.491s] -- Install configuration: ""
+[0.491s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/status_sub_and_disp/hello_qt
+[0.492s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/lib/status_sub_and_disp/sys_status_disp
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/package_run_dependencies/status_sub_and_disp
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/parent_prefix_path/status_sub_and_disp
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.sh
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/ament_prefix_path.dsv
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.sh
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/environment/path.dsv
+[0.493s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.bash
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.sh
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.zsh
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/local_setup.dsv
+[0.494s] -- Installing: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.dsv
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/ament_index/resource_index/packages/status_sub_and_disp
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig.cmake
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/cmake/status_sub_and_dispConfig-version.cmake
+[0.494s] -- Up-to-date: /home/jinyicheng/auto_navigation/install/status_sub_and_disp/share/status_sub_and_disp/package.xml
+[0.495s] Invoked command in '/home/jinyicheng/auto_navigation/build/status_sub_and_disp' returned '0': AMENT_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/opt/ros/humble LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jinyicheng/auto_navigation/install/status_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/jinyicheng/auto_navigation/build/status_sub_and_disp
