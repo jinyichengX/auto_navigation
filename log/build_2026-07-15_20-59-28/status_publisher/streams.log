@@ -1,0 +1,22 @@
+[0.606s] Invoking command in '/home/jinyicheng/auto_navigation/core/status_publisher': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/sum_srv_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/robot_simulation:/home/jinyicheng/auto_navigation/install/chapt4_interfaces LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib:/home/jinyicheng/auto_navigation/install/chapt4_interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data
+[0.733s] running egg_info
+[0.733s] writing ../../build/status_publisher/status_publisher.egg-info/PKG-INFO
+[0.734s] writing dependency_links to ../../build/status_publisher/status_publisher.egg-info/dependency_links.txt
+[0.734s] writing entry points to ../../build/status_publisher/status_publisher.egg-info/entry_points.txt
+[0.734s] writing requirements to ../../build/status_publisher/status_publisher.egg-info/requires.txt
+[0.734s] writing top-level names to ../../build/status_publisher/status_publisher.egg-info/top_level.txt
+[0.735s] reading manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.735s] adding license file 'LICENSE'
+[0.735s] writing manifest file '../../build/status_publisher/status_publisher.egg-info/SOURCES.txt'
+[0.735s] running build
+[0.735s] running build_py
+[0.735s] running install
+[0.735s] running install_lib
+[0.736s] running install_data
+[0.736s] running install_egg_info
+[0.737s] removing '/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher-0.0.0-py3.10.egg-info' (and everything under it)
+[0.737s] Copying ../../build/status_publisher/status_publisher.egg-info to /home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages/status_publisher-0.0.0-py3.10.egg-info
+[0.738s] running install_scripts
+[0.750s] Installing process_pub_sys_status script to /home/jinyicheng/auto_navigation/install/status_publisher/lib/status_publisher
+[0.750s] writing list of installed files to '/home/jinyicheng/auto_navigation/build/status_publisher/install.log'
+[0.765s] Invoked command in '/home/jinyicheng/auto_navigation/core/status_publisher' returned '0': CMAKE_PREFIX_PATH=/home/jinyicheng/auto_navigation/install/status_interface:/home/jinyicheng/auto_navigation/install/sum_srv_interface:/home/jinyicheng/auto_navigation/install/status_sub_and_disp:/home/jinyicheng/auto_navigation/install/robot_simulation:/home/jinyicheng/auto_navigation/install/chapt4_interfaces LD_LIBRARY_PATH=/home/jinyicheng/auto_navigation/install/status_interface/lib:/home/jinyicheng/auto_navigation/install/sum_srv_interface/lib:/home/jinyicheng/auto_navigation/install/chapt4_interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib PYTHONPATH=/home/jinyicheng/auto_navigation/build/status_publisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jinyicheng/auto_navigation/install/status_publisher/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/status_publisher build --build-base /home/jinyicheng/auto_navigation/build/status_publisher/build install --record /home/jinyicheng/auto_navigation/build/status_publisher/install.log --single-version-externally-managed install_data

@@ -19,18 +19,40 @@
     <xacro:drive_wheel_xacro wheel_name="right_rear_wheel"   xyz = "-0.25 -0.25 -0.08"/> <!-- 右后驱动轮 -->
     <xacro:caster_wheel_xacro wheel_name="center_caster" xyz = "0 0 -0.096"/> <!-- 中心万向轮 -->
 
-    <!-- 差速驱动插件（作用在整个模型上） -->
+    <!-- ==================== 差速驱动插件 ==================== -->
+    <!--
+        数据流概览：
+          /cmd_vel (Twist)  ──→  ① 差速运动学解算  ──→  ② 驱动四个轮子关节  ──→  ③ Gazebo 物理引擎
+                                                                                        │
+                                                                       ④ 读取关节实际转角 ←──┘
+                                                                                        │
+                                /odom (Odometry) + /tf (odom→base_footprint)  ←──  ⑤ 反向推算里程计
+
+        步骤详解：
+        ① ros_gz_sim 内部桥接把 ROS 的 /cmd_vel 转发给 Gazebo 插件，插件收到 v_x, ω_z
+        ② 差速解算：v_left = (v_x - ω_z*separation/2)/radius, v_right = (v_x + ω_z*separation/2)/radius
+        ③ 对四个 *_wheel_joint 施加速度控制，Gazebo 物理引擎解算摩擦力、碰撞、重力，驱动真实物理运动
+        ④ 每个周期(30Hz)读取四个关节的实际转动角度（真实物理结果，打滑也会体现）
+        ⑤ 反向推算：delta_s = avg(左右轮行进量), delta_θ = (右-左)/separation，积分累加得到 odom 位姿
+        ⑥ 发布 /odom (nav_msgs/Odometry) 和 TF (odom→base_footprint)，供导航栈使用
+    -->
     <gazebo>
         <plugin
-            filename="libignition-gazebo-diff-drive-system.so"
-            name="ignition::gazebo::systems::DiffDrive">
+            filename="libignition-gazebo-diff-drive-system.so"   
+            name="ignition::gazebo::systems::DiffDrive">        <!-- Gazebo 内置差速驱动插件库 --> <!-- 插件全限定名 -->
+            <!-- 左侧驱动轮关节（两个轮子速度一致，通过差速实现转向） -->
             <left_joint>left_front_wheel_joint</left_joint>
             <left_joint>left_rear_wheel_joint</left_joint>
+            <!-- 右侧驱动轮关节 -->
             <right_joint>right_front_wheel_joint</right_joint>
             <right_joint>right_rear_wheel_joint</right_joint>
+            <!-- 左右轮间距（米），用于差速运动学解算 -->
             <wheel_separation>0.5</wheel_separation>
+            <!-- 轮子半径（米），用于线速度与角速度转换 -->
             <wheel_radius>0.032</wheel_radius>
+            <!-- 里程计话题发布频率（Hz） -->
             <odom_publish_frequency>30</odom_publish_frequency>
+            <!-- 订阅的速度控制话题，导航栈通过此话题下发运动指令 -->
             <topic>cmd_vel</topic>
         </plugin>
     </gazebo>

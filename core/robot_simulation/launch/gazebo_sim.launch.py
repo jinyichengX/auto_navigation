@@ -74,10 +74,28 @@ def generate_launch_description():
         executable='create',
         arguments=[
             '-topic', 'robot_description',
-            '-name', 'fishbot',
+            '-name', 'fishbot', #gz侧会基于这个名字生成话题名称，/model/fishbot/xxx（xxx是话题名称）
             '-x', '0.0',
             '-y', '0.0',
-            '-z', '0.0',
+            '-z', '0.1',
+        ],
+        output='screen'
+    )
+
+    # 5. ros_gz_bridge 桥接：把 Gazebo Transport 话题映射为 ROS 2 话题
+    #     - /cmd_vel: ROS → Gazebo，导航栈下发速度指令给 DiffDrive 插件
+    #     - /odom:    Gazebo → ROS，DiffDrive 插件发布的里程计
+    #     - /tf:      Gazebo → ROS，DiffDrive 插件发布的 odom→base_footprint 变换
+    gz_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            # ROS → Gazebo（速度指令）
+            '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+            # Gazebo → ROS（里程计）
+            '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+            # Gazebo → ROS（TF 变换：odom→base_footprint）
+            '/model/fishbot/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
         ],
         output='screen'
     )
@@ -90,4 +108,5 @@ def generate_launch_description():
         joint_state_publisher,
         gz_sim,
         spawn_robot,
+        gz_bridge,
     ])
