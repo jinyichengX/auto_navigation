@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROS 2 × Gazebo 架构完全拆解</title>
+<style>
+:root {
+  --bg: #1e1e2e; --bg2: #282840;
+  --ink: #cdd6f4; --muted: #6c7086;
+  --rule: #45475a; --accent: #89b4fa;
+  --green: #a6e3a1; --purple: #cba6f7;
+  --orange: #fab387; --cyan: #94e2d5;
+  --red: #f38ba8; --code-bg: #181825;
+  --max-w: 1100px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.7;color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+.hero{
+  background:linear-gradient(135deg,#11111b,#181825,#1e1e2e);
+  text-align:center;padding:56px 24px 40px;
+  border-bottom:1px solid var(--rule);
+}
+.hero h1{font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:8px}
+.hero .sub{font-size:1rem;color:var(--muted);max-width:560px;margin:0 auto 20px}
+.nav{position:sticky;top:0;z-index:100;background:var(--code-bg);border-bottom:1px solid var(--rule)}
+.nav-inner{max-width:var(--max-w);margin:0 auto;padding:0 20px;display:flex;gap:2px;overflow-x:auto}
+.nav a{padding:11px 12px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.nav a:hover,.nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.wrap{max-width:var(--max-w);margin:0 auto;padding:0 24px}
+.section{padding:40px 0}
+.section:nth-child(even){background:var(--bg2)}
+.section h2{font-size:1.5rem;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.section h2 .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#1e1e2e;font-size:.85rem;font-weight:700;flex-shrink:0}
+.section h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin:24px 0 8px}
+.section p.sub{color:var(--muted);font-size:.88rem;margin-bottom:16px}
+.mermaid-wrap{background:var(--code-bg);border:1px solid var(--rule);border-radius:10px;padding:20px;margin:16px 0;overflow-x:auto}
+.mermaid-wrap.tight{padding:12px;margin:10px 0}
+.step-label{font-size:.82rem;font-weight:700;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--bg2);border:1px solid var(--rule);color:var(--muted);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:50;text-decoration:none}
+.back-top:hover{background:var(--accent);color:#1e1e2e}
+footer{background:#11111b;color:var(--muted);padding:28px 24px;text-align:center;font-size:.8rem;border-top:1px solid var(--rule)}
+.sbs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.hero h1{font-size:1.5rem}.section{padding:28px 0}.section h2{font-size:1.25rem}.nav a{font-size:.72rem;padding:9px 8px}.sbs{grid-template-columns:1fr}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#313244',primaryTextColor:'#cdd6f4',primaryBorderColor:'#45475a',lineColor:'#a6adc8',secondaryColor:'#1e1e2e',tertiaryColor:'#181825',fontFamily:'"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif'},flowchart:{useMaxWidth:true,htmlLabels:true,curve:'basis'}});</script>
+</head>
+<body>
+
+<header class="hero">
+  <h1>ROS 2 × Gazebo 架构完全拆解</h1>
+  <p class="sub">全图解。每个概念、每条数据流、每个调用关系，都在图上。</p>
+</header>
+
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="#s1">1.组件总览</a><a href="#s2">2.ROS2地基</a><a href="#s3">3.Gazebo进场</a><a href="#s4">4.方案A</a><a href="#s5">5.方案B</a><a href="#s6">6.AB对比</a><a href="#s7">7.真机</a><a href="#s8">8.多机器人</a><a href="#s9">9.全景</a>
+  </div>
+</nav>
+
+<!-- ==================== 1 ==================== -->
+<section class="section" id="s1"><div class="wrap">
+  <h2><span class="num">1</span> 组件总览：谁在哪，干什么</h2>
+  <p class="sub">所有参与方按域分组。绿色=ROS2 DDS，青色=Gazebo，橙色=跨域桥接，紫色=ros2_control</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart LR
+    subgraph ROS2["ROS 2 DDS 域"]
+        direction TB
+        XACRO["xacro 处理器<br/>展开宏 → 纯 URDF"]
+        RD["/robot_description<br/>参数服务器上的 URDF 字符串"]
+        RSP["robot_state_publisher<br/>读 URDF + /joint_states → 广播 /tf"]
+        JSP["joint_state_publisher<br/>发默认 /joint_states 全 0.0"]
+        TELEOP["teleop_twist_keyboard<br/>键盘 → /cmd_vel"]
+        RV2["RViz2 / rqt_plot<br/>消费 /tf /odom /joint_states"]
+        XACRO --"注入参数"--> RD
+        RD --"读取"--> RSP
+        RSP --"/tf /tf_static"--> RV2
+        JSP --"/joint_states"--> RSP
+        TELEOP --"/cmd_vel"--> RV2
+    end
+
+    subgraph GZ["Gazebo 进程"]
+        direction TB
+        PE["物理引擎 ODE/Bullet<br/>碰撞、重力、摩擦"]
+        TRANS["Gazebo Transport<br/>Protobuf 零拷贝消息总线"]
+        SENSOR["IMU/激光/相机 传感器插件"]
+        CLOCK["/clock<br/>仿真时钟"]
+        TRANS --- PE
+        SENSOR --- TRANS
+        CLOCK --- TRANS
+    end
+
+    subgraph BRIDGE_DOMAIN["跨域"]
+        direction TB
+        BRIDGE["ros_gz_bridge<br/>DDS ↔ Protobuf 翻译"]
+        SPAWN["spawn_robot<br/>读 /robot_description → 生成模型到 GZ"]
+    end
+
+    subgraph RC["ros2_control（仿真时在 GZ 内）"]
+        direction TB
+        SO["libgz_ros2_control-system.so<br/>GZ 模型级插件，每 spawn 加载一份"]
+        CM["controller_manager<br/>.so 自动启动，管理 controller"]
+        DDC["diff_drive_controller<br/>订阅 /cmd_vel → 发布 /odom + /tf"]
+        JSB["joint_state_broadcaster<br/>取代 joint_state_publisher"]
+        GS["GazeboSystem<br/>虚拟硬件驱动：write/read → ECM API → 物理引擎"]
+        SO --> CM
+        CM --> DDC
+        CM --> JSB
+        DDC --> GS
+        JSB --> GS
+    end
+
+    RD --"读取"--> SPAWN
+    SPAWN --"生成模型<br/>GZ Transport"--> GZ
+    BRIDGE --"Protobuf"--> TRANS
+    BRIDGE --"DDS"--> RV2
+    TRANS --"Protobuf"--> BRIDGE
+    DDC --"DDS: /odom /tf"--> RV2
+    JSB --"DDS: /joint_states"--> RSP
+    DDC --"DDS: /cmd_vel 订阅"--> TELEOP
+    GS --"ECM API"--> PE
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 2 ==================== -->
+<section class="section" id="s2"><div class="wrap">
+  <h2><span class="num">2</span> ROS 2 地基：还没 Gazebo，先搭 TF 树</h2>
+  <p class="sub">3 步构建 ROS 2 侧的 URDF 解析 + TF 广播链</p>
+
+  <div class="step-label">Step 1 · xacro 展开 → /robot_description</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    X["xacro 处理器<br/>Command('xacro fishbot.xacro')"] --"展开宏 → 纯 URDF 字符串"--> RD["/robot_description<br/>ROS 参数服务器<br/>不是话题！不是节点！"]
+    </div>
+  </div>
+
+  <div class="step-label">Step 2 · + robot_state_publisher 读 URDF 广播 TF</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    RD2["/robot_description"] --"读取 link 几何关系"--> RSP2["robot_state_publisher"]
+    RSP2 --"广播 /tf + /tf_static<br/>base_footprint→base_link→lidar_link→..."--> TF["TF 坐标变换树"]
+    </div>
+  </div>
+
+  <div class="step-label">Step 3 · + joint_state_publisher 供关节状态（临时用，方案 B 会被取代）</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    RD3["/robot_description"] --"扫描非 fixed 关节"--> JSP3["joint_state_publisher"]
+    RD3 --"读取 link 树"--> RSP3["robot_state_publisher"]
+    JSP3 --"发布 /joint_states<br/>全=0.0"--> RSP3
+    RSP3 --"/tf + /tf_static"--> TF3["TF 树"]
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 3 ==================== -->
+<section class="section" id="s3"><div class="wrap">
+  <h2><span class="num">3</span> Gazebo 进场：仿真器 + 模型生成</h2>
+  <p class="sub">Gazebo 内部有独立的消息系统 Gazebo Transport，与 ROS 2 DDS 互不相通</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TB
+    subgraph ROS2_3["ROS 2 进程"]
+        RD_3["/robot_description<br/>URDF 参数"]
+        SPAWN_3["spawn_robot<br/>ros_gz_sim create"]
+        RSP_3["robot_state_publisher<br/>已运行"]
+        JSP_3["joint_state_publisher<br/>已运行"]
+        RSP_3 --"/tf"--> DDS_3["DDS 总线"]
+        JSP_3 --"/joint_states"--> RSP_3
+    end
+
+    subgraph GZ_3["Gazebo 进程"]
+        PE_3["物理引擎<br/>ODE/Bullet"]
+        GT_3["Gazebo Transport<br/>Protobuf 消息系统"]
+        MODEL_3["机器人模型<br/>collision + visual + inertial"]
+        CLK_3["/clock<br/>仿真时钟"]
+        GT_3 --- PE_3
+        MODEL_3 --- PE_3
+    end
+
+    RD_3 --"读取 URDF"--> SPAWN_3
+    SPAWN_3 --"GZ Transport → 生成模型<br/>/world/default/create"--> GZ_3
+
+    GT_3 -.-"与 DDS 不互通<br/>需要 ros_gz_bridge"—-> DDS_3
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 4 ==================== -->
+<section class="section" id="s4"><div class="wrap">
+  <h2><span class="num">4</span> 方案 A：DiffDrive 插件 + ros_gz_bridge</h2>
+  <p class="sub">最直观：Gazebo DiffDrive 内置插件控制轮子，ros_gz_bridge 翻译 cmd_vel / odom / tf</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TB
+    subgraph ROS2_A["ROS 2 进程 · DDS 数据总线"]
+        TEL_A["teleop_twist_keyboard<br/>读键盘 → 发布 /cmd_vel"]
+        JSP_A["joint_state_publisher<br/>发布 /joint_states=0.0"]
+        RSP_A["robot_state_publisher<br/>读 URDF + /joint_states → /tf"]
+        BR_A["ros_gz_bridge<br/>DDS ↔ Protobuf 双向翻译"]
+        CONSUMER_A["RViz2 / rqt_plot<br/>消费 /odom /tf"]
+    end
+
+    subgraph GZ_A["Gazebo 进程"]
+        PE_A["物理引擎<br/>ODE/Bullet"]
+        DD_A["DiffDrive 插件<br/>内置差速驱动<br/>订阅 gz.msgs.Twist<br/>发布 gz.msgs.Odometry + Pose_V"]
+        SENSOR_A["IMU / 激光 / 相机 插件"]
+    end
+
+    TEL_A --"DDS: /cmd_vel<br/>geometry_msgs/Twist"--> BR_A
+    JSP_A --"DDS: /joint_states"--> RSP_A
+    RSP_A --"DDS: /tf_static<br/>base→各连杆（静态）"--> CONSUMER_A
+    BR_A --"GZ Transport: gz.msgs.Twist"--> DD_A
+    DD_A --"作用关节力/速度"--> PE_A
+    DD_A --"GZ Transport: gz.msgs.Odometry"--> BR_A
+    DD_A --"GZ Transport: gz.msgs.Pose_V<br/>/model/fishbot/tf"--> BR_A
+    BR_A --"DDS: /odom<br/>nav_msgs/Odometry"--> CONSUMER_A
+    BR_A --"DDS: /tf<br/>tf2_msgs/TFMessage"--> CONSUMER_A
+    SENSOR_A --"GZ Transport: IMU/激光/相机"--> BR_A
+    BR_A --"DDS: /imu /scan /image"--> CONSUMER_A
+
+    PE_A --"物理数据"--> SENSOR_A
+    PE_A --"关节状态"--> DD_A
+    </div>
+  </div>
+
+  <div class="mermaid-wrap tight">
+    <div class="step-label">方案 A · bridge 规则（必须全部配置）</div>
+    <div class="mermaid">
+flowchart LR
+    R1["/cmd_vel<br/>geometry_msgs/Twist<br/>↔ gz.msgs.Twist<br/>ROS → GZ"] --> R2["/odom<br/>nav_msgs/Odometry<br/>↔ gz.msgs.Odometry<br/>GZ → ROS"] --> R3["/model/fishbot/tf<br/>tf2_msgs/TFMessage<br/>↔ gz.msgs.Pose_V<br/>GZ → ROS"]
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 5 ==================== -->
+<section class="section" id="s5"><div class="wrap">
+  <h2><span class="num">5</span> 方案 B：ros2_control（推荐）</h2>
+  <p class="sub">Gazebo 加载 libgz_ros2_control-system.so，内部启动 controller_manager + controllers + 虚拟硬件驱动</p>
+
+  <div class="step-label">Step 4 · URDF 里删 DiffDrive，换 gz_ros2_control 插件</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    subgraph BEFORE["方案 A 的 URDF 插件"]
+        DD_OLD["DiffDrive 插件<br/>libgz-sim-diff-drive-system.so<br/>发布 gz.msgs.Odometry<br/>订阅 gz.msgs.Twist"]
+    end
+    subgraph AFTER["方案 B 的 URDF 插件"]
+        RC_NEW["gz_ros2_control 插件<br/>libgz_ros2_control-system.so<br/>内部拉起完整 ros2_control 框架"]
+    end
+    BEFORE -.->|"替换，删 3 条 bridge 规则"| AFTER
+    </div>
+  </div>
+
+  <div class="step-label">Step 5 · .so 加载时自动启动 controller_manager</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    GZ_LOAD["Gazebo spawn 模型<br/>读取 URDF 中 plugin 标签"] --> SO_LOAD["加载 libgz_ros2_control-system.so"]
+    SO_LOAD --> CM_AUTO["controller_manager<br/>自动启动<br/>通过 DDS 提供加载服务"]
+    CM_AUTO -.-"spawner 工具可通过 DDS<br/>远程加载/卸载 controller"-.-> DDS_5["DDS"]
+    </div>
+  </div>
+
+  <div class="step-label">Step 6 · controller_manager 按 YAML 加载两个 controller</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    CM_6["controller_manager<br/>读 controller YAML"] --> DDC_6["diff_drive_controller<br/>订阅 DDS /cmd_vel<br/>发布 DDS /odom + /tf"]
+    CM_6 --> JSB_6["joint_state_broadcaster<br/>发布 DDS /joint_states<br/>取代 joint_state_publisher"]
+    TEL_6["teleop"] --"DDS: /cmd_vel"--> DDC_6
+    DDC_6 --"DDS: /odom"--> OUT_6["RViz2"]
+    DDC_6 --"DDS: /tf<br/>odom→base_footprint"--> OUT_6
+    JSB_6 --"DDS: /joint_states"--> RSP_6["robot_state_publisher"]
+    </div>
+  </div>
+
+  <div class="step-label">Step 7 · controller ↔ GazeboSystem：进程内函数调用（不经 DDS、不经 Transport）</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart TB
+    subgraph SO_7["libgz_ros2_control-system.so 内部"]
+        CM_7["controller_manager"]
+        DDC_7["diff_drive_controller"]
+        JSB_7["joint_state_broadcaster"]
+        GS_7["GazeboSystem<br/>虚拟硬件驱动<br/>ros2_control HardwareInterface"]
+        CM_7 --> DDC_7
+        CM_7 --> JSB_7
+        DDC_7 --"进程内 C++ 函数调用<br/>write() 下发速度指令"--> GS_7
+        DDC_7 --"进程内 read()<br/>读关节位置/速度"--> GS_7
+        JSB_7 --"进程内 read()<br/>读关节状态"--> GS_7
+    end
+    subgraph GZ_7["Gazebo 物理引擎"]
+        ECM["Entity Component Manager<br/>ECM API"]
+    end
+    GS_7 --"ECM API<br/>直接读写 Gazebo 关节 Entity"--> ECM
+    DDC_7 --"DDS"--> DDS_7["DDS 总线"]
+    JSB_7 --"DDS"--> DDS_7
+    </div>
+  </div>
+
+  <div class="step-label">Step 8 · ros_gz_bridge 瘦身：只留传感器 + 时钟</div>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart TB
+    subgraph ROS2_8["ROS 2 进程"]
+        TEL_8["teleop<br/>/cmd_vel"]
+        BR_8["ros_gz_bridge<br/>仅传感器+时钟"]
+        RSP_8["robot_state_publisher<br/>/joint_states → /tf"]
+        RV2_8["RViz2"]
+    end
+    subgraph GZ_8["Gazebo 进程"]
+        SO_8["libgz_ros2_control-system.so<br/>controller_manager<br/>+ diff_drive_controller<br/>+ joint_state_broadcaster<br/>+ GazeboSystem"]
+        PE_8["物理引擎"]
+        SENSOR_8["IMU/激光/相机 插件"]
+        CLK_8["/clock"]
+    end
+    TEL_8 --"DDS: /cmd_vel"--> SO_8
+    SO_8 --"DDS: /odom /tf"--> RV2_8
+    SO_8 --"DDS: /joint_states"--> RSP_8
+    RSP_8 --"DDS: /tf_static"--> RV2_8
+    SO_8 --"ECM"--> PE_8
+    SENSOR_8 --"GZ Transport"--> BR_8
+    CLK_8 --"GZ Transport: /clock"--> BR_8
+    BR_8 --"DDS: /imu /scan /image /clock"--> RV2_8
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 6 ==================== -->
+<section class="section" id="s6"><div class="wrap">
+  <h2><span class="num">6</span> 方案 A vs 方案 B：一图对比</h2>
+
+  <div class="sbs">
+    <div class="mermaid-wrap tight">
+      <div class="step-label" style="color:var(--red)">方案 A · DiffDrive + 重 bridge</div>
+      <div class="mermaid">
+flowchart TB
+    subgraph RA["ROS 2"]
+        TA["teleop"] --> BA["ros_gz_bridge<br/>3 条规则"]
+        BA --> OA["消费者"]
+    end
+    subgraph GA["Gazebo"]
+        DA["DiffDrive 插件<br/>内置"] --> PEA["物理引擎"]
+    end
+    BA --"Protobuf"--> DA
+    DA --"Protobuf"--> BA
+      </div>
+    </div>
+    <div class="mermaid-wrap tight" style="border-color:rgba(166,227,161,.4)">
+      <div class="step-label" style="color:var(--green)">方案 B · ros2_control · 推荐</div>
+      <div class="mermaid">
+flowchart TB
+    subgraph RB["ROS 2"]
+        TB1["teleop"] --> OB["消费者"]
+    end
+    subgraph GB["Gazebo · .so"]
+        CB["diff_drive_controller<br/>+ joint_state_broadcaster"] --> VH["GazeboSystem"]
+        VH --> PEB["物理引擎"]
+    end
+    TB1 --"DDS 直达"--> CB
+    CB --"DDS 直发"--> OB
+      </div>
+    </div>
+  </div>
+
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+flowchart LR
+    subgraph DIFF["差异"]
+        D1["❌ 方案A<br/>joint_state_publisher<br/>= 全 0.0 假数据"] --> D2["✅ 方案B<br/>joint_state_broadcaster<br/>= 物理引擎真实关节角"]
+        D3["❌ 方案A<br/>bridge 3条<br/>每条约 10% 通信开销"] --> D4["✅ 方案B<br/>bridge 0条<br/>controller DDS 直连"]
+        D5["❌ 方案A<br/>不能复用到真机<br/>DiffDrive 只活在 GZ"] --> D6["✅ 方案B<br/>真机只换硬件接口<br/>controller 代码完全不变"]
+    end
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 7 ==================== -->
+<section class="section" id="s7"><div class="wrap">
+  <h2><span class="num">7</span> 真机模式：拿走 Gazebo</h2>
+  <p class="sub">仿真和真机的唯一区别：ros2_control 跑在独立进程（launch 启动），硬件接口换真实驱动</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TB
+    subgraph REAL["真机 · ROS 2 进程 · ros2_control_node（launch 启动）"]
+        CM_R["controller_manager<br/>由 launch 文件启动"]
+        DDC_R["diff_drive_controller<br/>← 代码与仿真完全相同 →"]
+        JSB_R["joint_state_broadcaster<br/>← 代码与仿真完全相同 →"]
+        HI_R["真实硬件接口<br/>自定义 HardwareInterface"]
+        TEL_R["teleop_twist_keyboard"]
+        RSP_R["robot_state_publisher"]
+        CM_R --> DDC_R
+        CM_R --> JSB_R
+        DDC_R --"进程内 write()<br/>下发速度指令"--> HI_R
+        DDC_R --"进程内 read()<br/>读编码器"--> HI_R
+        JSB_R --"进程内 read()<br/>读关节位置"--> HI_R
+        TEL_R --"DDS: /cmd_vel"--> DDC_R
+        DDC_R --"DDS: /odom"--> RV_R["RViz2"]
+        DDC_R --"DDS: /tf<br/>odom→base_footprint"--> RV_R
+        JSB_R --"DDS: /joint_states"--> RSP_R
+        RSP_R --"DDS: /tf_static<br/>base→各连杆"--> RV_R
+    end
+    subgraph HW["真实硬件"]
+        MCU["电机驱动板"]
+        ENC["编码器"]
+    end
+    HI_R --"串口 / CAN / EtherCAT"--> MCU
+    HI_R --"串口 / CAN / EtherCAT"--> ENC
+    </div>
+  </div>
+
+  <div class="mermaid-wrap tight">
+    <div class="step-label">仿真 ↔ 真机：controller 代码完全不变，只换硬件接口</div>
+    <div class="mermaid">
+flowchart LR
+    subgraph SIM["仿真模式"]
+        S1["ros2_control 嵌在 Gazebo .so 内<br/>由 Gazebo 自动拉起"] --> S2["硬件接口: GazeboSystem<br/>ECM API → 物理引擎"]
+    end
+    subgraph HW2["真机模式"]
+        H1["ros2_control 独立进程<br/>launch 文件启动 ros2_control_node"] --> H2["硬件接口: 自定义驱动<br/>串口/CAN → 电机/编码器"]
+    end
+    S1 -.-"controller 代码<br/>完全相同"-.-> H1
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 8 ==================== -->
+<section class="section" id="s8"><div class="wrap">
+  <h2><span class="num">8</span> 多机器人：同时 spawn 两个</h2>
+  <p class="sub">每 spawn 一个机器人 = 一份独立 .so 实例 = 一套完整 ros2_control。物理引擎共享，话题按命名空间隔离</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TB
+    subgraph ROS2_M["ROS 2 · DDS 数据总线"]
+        TEL_A_M["teleop<br/>机器人 A"]
+        TEL_B_M["teleop<br/>机器人 B"]
+        RSP_A_M["robot_state_publisher<br/>机器人 A"]
+        RSP_B_M["robot_state_publisher<br/>机器人 B"]
+        RV_M["RViz2"]
+        BR_M["ros_gz_bridge<br/>传感器+时钟(共享)"]
+    end
+    subgraph GZ_M["Gazebo 进程"]
+        PE_M["物理引擎 共享(ODE/Bullet)"]
+        SENSOR_M["IMU/激光/相机 插件(各模型独立)"]
+        CLK_M["/clock 共享"]
+        subgraph SO_A[".so 实例 #1 · 机器人 A"]
+            CM_A_M["controller_manager"]
+            DDC_A_M["diff_drive_controller<br/>+ joint_state_broadcaster"]
+            GS_A_M["GazeboSystem"]
+            CM_A_M --> DDC_A_M
+            DDC_A_M --> GS_A_M
+        end
+        subgraph SO_B[".so 实例 #2 · 机器人 B"]
+            CM_B_M["controller_manager"]
+            DDC_B_M["diff_drive_controller<br/>+ joint_state_broadcaster"]
+            GS_B_M["GazeboSystem"]
+            CM_B_M --> DDC_B_M
+            DDC_B_M --> GS_B_M
+        end
+        GS_A_M --"ECM API<br/>读写 A 的关节"--> PE_M
+        GS_B_M --"ECM API<br/>读写 B 的关节"--> PE_M
+    end
+    TEL_A_M --"DDS: /robotA/cmd_vel"--> DDC_A_M
+    TEL_B_M --"DDS: /robotB/cmd_vel"--> DDC_B_M
+    DDC_A_M --"DDS: /robotA/odom<br/>/robotA/tf<br/>/robotA/joint_states"--> RSP_A_M
+    DDC_B_M --"DDS: /robotB/odom<br/>/robotB/tf<br/>/robotB/joint_states"--> RSP_B_M
+    RSP_A_M --"DDS: /tf_static"--> RV_M
+    RSP_B_M --"DDS: /tf_static"--> RV_M
+    SENSOR_M --"GZ Transport"--> BR_M
+    CLK_M --"GZ Transport: /clock"--> BR_M
+    BR_M --"DDS"--> RV_M
+    </div>
+  </div>
+</div></section>
+
+<!-- ==================== 9 ==================== -->
+<section class="section" id="s9"><div class="wrap">
+  <h2><span class="num">9</span> 最终全景图</h2>
+  <p class="sub">一张图囊括所有组件、所有数据流、所有调用关系</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TB
+    subgraph ROS2_F["ROS 2 进程空间 · DDS 数据总线"]
+        direction TB
+        XACRO_F["xacro 处理器"] --"注入参数"--> RD_F["/robot_description<br/>参数服务器"]
+        RD_F --"读取"--> RSP_F["robot_state_publisher"]
+        RSP_F --"广播 /tf + /tf_static<br/>base→各连杆"--> DDS_F["DDS 总线"]
+        JSP_F["joint_state_publisher<br/>┄ 方案 B 不启动 ┄"]
+        JSP_F -.->|"/joint_states=0.0"| DDS_F
+        TELEOP_F["teleop_twist_keyboard"] --"发布 /cmd_vel"--> DDS_F
+        RV2_F["RViz2 / rqt_plot<br/>消费方"]
+        DDS_F --"/tf /odom /joint_states"--> RV2_F
+        BRIDGE_F["ros_gz_bridge<br/>仅传感器+时钟"]
+    end
+
+    subgraph GZ_F["Gazebo 进程"]
+        direction TB
+        PE_F["物理引擎 ODE/Bullet<br/>碰撞·重力·摩擦·关节约束"]
+        TRANS_F["Gazebo Transport<br/>Protobuf 零拷贝总线"]
+        TRANS_F --- PE_F
+        SENSOR_F["IMU · 激光雷达 · 相机<br/>Gazebo 传感器插件"]
+        PE_F --"物理数据"--> SENSOR_F
+        SENSOR_F --"GZ 话题<br/>/imu /scan /image"--> BRIDGE_F
+        CLK_F["/clock 仿真时钟"] --"GZ /clock"--> BRIDGE_F
+        BRIDGE_F --"DDS 话题"--> DDS_F
+
+        subgraph SO_F["libgz_ros2_control-system.so<br/>每个机器人各加载一份独立实例"]
+            CM_F["controller_manager<br/>.so 自动启动"]
+            CM_F --> DDC_F["diff_drive_controller"]
+            CM_F --> JSB_F["joint_state_broadcaster"]
+            DDC_F --> GS_F["GazeboSystem<br/>虚拟硬件驱动"]
+            JSB_F --> GS_F
+            GS_F --"ECM API<br/>进程内读写关节"--> PE_F
+            CM_F -.-"DDS 加载服务"-.-> DDS_F
+            DDC_F --"DDS: /cmd_vel 订阅"--> DDS_F
+            DDC_F --"DDS: /odom 发布"--> DDS_F
+            DDC_F --"DDS: /tf 发布<br/>odom→base_footprint"--> DDS_F
+            JSB_F --"DDS: /joint_states 发布<br/>真实关节角 取代 JSP"--> DDS_F
+        end
+    end
+
+    DDS_F --"/joint_states"--> RSP_F
+    </div>
+  </div>
+
+  <h3>5 个核心要点</h3>
+  <div class="mermaid-wrap tight">
+    <div class="mermaid">
+mindmap
+  root((ROS2 × Gazebo<br/>核心要点))
+    1.Gazebo Transport ≠ DDS
+      两个独立消息系统
+      不通 需要 ros_gz_bridge 翻译
+      Protobuf vs CDR 序列化
+    2.方案B不需要bridge传cmd_vel/odom/tf
+      controller DDS 直连
+      joint_states DDS 直发
+      仅传感器+时钟走bridge
+    3.真机只换硬件接口
+      diff_drive_controller 代码不变
+      joint_state_broadcaster 代码不变
+      GazeboSystem → 串口/CAN驱动
+    4.仿真不需要launch ros2_control
+      .so 在 Gazebo 内自动拉起
+      controller_manager 由 .so 启动
+      真机才手动 launch ros2_control_node
+    5.1机器人=1份.so实例
+      每spawn=独立ros2_control框架
+      物理引擎共享 ECM API 隔离
+      话题按命名空间隔离
+    </div>
+  </div>
+</div></section>
+
+<footer>ROS 2 × Gazebo 架构完全拆解 · 全图解版</footer>
+<a href="#" class="back-top" title="回到顶部">↑</a>
+
+<script>
+(function(){
+  const nav=document.getElementById('mainNav');
+  if(!nav)return;
+  const links=nav.querySelectorAll('a');
+  const sections=[];
+  links.forEach(a=>{const id=a.getAttribute('href');if(id&&id.startsWith('#')){const el=document.getElementById(id.slice(1));if(el)sections.push({el,link:a});}});
+  function update(){let idx=-1;const sy=window.scrollY+100;
+    sections.forEach((s,i)=>{if(s.el.offsetTop<=sy)idx=i;});
+    links.forEach(a=>a.classList.remove('active'));
+    if(idx>=0)sections[idx].link.classList.add('active');
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLAM 与 slam_toolbox 完全指南 — 从第一性原理到工业级实战</title>
+<style>
+/* ============================================================
+   CSS RESET & DESIGN SYSTEM
+   ============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* Colors - Dark Professional Theme */
+  --bg-deep:    #06060e;
+  --bg:         #0a0a18;
+  --bg-card:    #0e0e22;
+  --bg-code:    #08081c;
+  --border:     #1a1a36;
+  --border-hi:  #252550;
+  --text:       #b8b8cc;
+  --text-dim:   #707088;
+  --text-bright:#e4e4f8;
+  --text-head:  #f0f0ff;
+
+  /* Accent Colors */
+  --blue:       #5b9cf5;
+  --blue-bg:    rgba(91,156,245,0.06);
+  --blue-border:rgba(91,156,245,0.18);
+  --green:      #3cc97a;
+  --green-bg:   rgba(60,201,122,0.06);
+  --green-border:rgba(60,201,122,0.18);
+  --orange:     #e89440;
+  --orange-bg:  rgba(232,148,64,0.06);
+  --orange-border:rgba(232,148,64,0.18);
+  --red:        #e85555;
+  --red-bg:     rgba(232,85,85,0.06);
+  --red-border: rgba(232,85,85,0.18);
+  --purple:     #a78bfa;
+  --purple-bg:  rgba(167,139,250,0.06);
+  --purple-border:rgba(167,139,250,0.18);
+  --yellow:     #e8c840;
+  --cyan:       #38bdf8;
+  --pink:       #f472b6;
+
+  /* Layout */
+  --nav-w:      250px;
+  --max-w:      880px;
+  --gap:        16px;
+  --radius-sm:  6px;
+  --radius:     10px;
+  --radius-lg:  14px;
+
+  /* Typography */
+  --font:       'Inter','Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;
+  --mono:       'JetBrains Mono','Fira Code','Cascadia Code','Consolas','Monaco',monospace;
+  --fs-base:    15px;
+  --lh-base:    1.75;
+}
+
+/* ============================================================
+   BASE ELEMENTS
+   ============================================================ */
+html{scroll-behavior:smooth;font-size:var(--fs-base);-webkit-font-smoothing:antialiased}
+body{
+  font-family:var(--font);background:var(--bg-deep);color:var(--text);
+  line-height:var(--lh-base);overflow-x:hidden;
+  counter-reset: section figure table;
+}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-hi)}
+
+/* ============================================================
+   NAVIGATION - Fixed Left Sidebar
+   ============================================================ */
+nav{
+  position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;
+  background:var(--bg);border-right:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;z-index:1000;
+  padding:24px 0 40px;scrollbar-width:thin;
+}
+nav header{
+  padding:0 20px 18px;border-bottom:1px solid var(--border);margin-bottom:6px;
+}
+nav header h2{font-size:0.95rem;color:var(--blue);font-weight:700;letter-spacing:0.02em}
+nav header p{font-size:0.7rem;color:var(--text-dim);margin-top:3px}
+nav .part-label{
+  padding:18px 20px 4px;font-size:0.68rem;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:0.12em;font-weight:600;
+}
+nav a{
+  display:block;padding:5px 20px;color:var(--text-dim);text-decoration:none;
+  font-size:0.78rem;transition:all 0.18s;border-left:2px solid transparent;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+nav a:hover{color:var(--text-bright);background:rgba(91,156,245,0.04);border-left-color:rgba(91,156,245,0.4)}
+nav a.active{color:var(--blue);background:var(--blue-bg);border-left-color:var(--blue);font-weight:600}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+main{
+  margin-left:var(--nav-w);max-width:var(--max-w);
+  padding:40px 48px 120px;
+}
+@media(max-width:960px){nav{display:none}main{margin-left:0;padding:20px 16px 80px}}
+
+/* ============================================================
+   TYPOGRAPHY HIERARCHY
+   ============================================================ */
+h1{
+  font-size:2rem;font-weight:800;color:var(--text-head);margin-bottom:6px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.subtitle{font-size:0.9rem;color:var(--text-dim);margin-bottom:36px}
+h2{
+  font-size:1.35rem;font-weight:700;color:var(--blue);margin:48px 0 16px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+  scroll-margin-top:24px;
+}
+h3{font-size:1.08rem;font-weight:600;color:var(--green);margin:30px 0 12px;scroll-margin-top:24px}
+h4{font-size:0.95rem;font-weight:600;color:var(--orange);margin:22px 0 8px}
+p{margin:10px 0;color:var(--text)}
+strong{color:var(--text-bright);font-weight:600}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ============================================================
+   INLINE CODE & CODE BLOCKS
+   ============================================================ */
+code{
+  font-family:var(--mono);font-size:0.85em;
+  background:rgba(91,156,245,0.08);color:var(--cyan);
+  padding:1px 6px;border-radius:3px;
+}
+pre{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 20px;
+  overflow-x:auto;margin:14px 0;
+  font-family:var(--mono);font-size:0.78rem;line-height:1.55;color:var(--text);
+  position:relative;
+}
+pre .kw{color:var(--purple)}pre .str{color:var(--green)}pre .num{color:var(--orange)}
+pre .cm{color:var(--text-dim);font-style:italic}pre .fn{color:var(--blue)}
+pre .var{color:var(--yellow)}
+pre::before{
+  content:attr(data-lang);position:absolute;top:0;right:14px;
+  font-size:0.65rem;color:var(--text-dim);text-transform:uppercase;
+  letter-spacing:0.06em;padding:2px 8px;background:var(--border);
+  border-radius:0 0 4px 4px;
+}
+
+/* ============================================================
+   COMPONENTS: Cards, Callouts, Tags
+   ============================================================ */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px 24px;margin:16px 0;
+}
+.card h3,.card h4{margin-top:0}
+.card ul,.card ol{padding-left:20px;margin:8px 0}
+.card li{margin:4px 0;font-size:0.9rem}
+
+.callout{
+  padding:14px 20px;border-radius:var(--radius);margin:14px 0;
+  font-size:0.88rem;line-height:1.7;position:relative;
+}
+.callout::before{
+  font-weight:700;font-size:0.78rem;display:block;margin-bottom:4px;
+  letter-spacing:0.04em;
+}
+.callout.info{background:var(--blue-bg);border:1px solid var(--blue-border);color:#8abcf8}
+.callout.info::before{content:'ℹ 信息';color:var(--blue)}
+.callout.warn{background:var(--orange-bg);border:1px solid var(--orange-border);color:#e8a860}
+.callout.warn::before{content:'⚠ 注意';color:var(--orange)}
+.callout.tip{background:var(--green-bg);border:1px solid var(--green-border);color:#5cd990}
+.callout.tip::before{content:'💡 提示';color:var(--green)}
+.callout.err{background:var(--red-bg);border:1px solid var(--red-border);color:#f07070}
+.callout.err::before{content:'✖ 错误';color:var(--red)}
+.callout.idea{background:var(--purple-bg);border:1px solid var(--purple-border);color:#b89ffa}
+.callout.idea::before{content:'🔬 深入';color:var(--purple)}
+
+/* Tags */
+.tag{display:inline-block;padding:1px 8px;border-radius:4px;font-size:0.72rem;font-weight:600;margin:0 2px;vertical-align:middle}
+.tag-blue{background:rgba(91,156,245,0.12);color:var(--blue)}
+.tag-green{background:rgba(60,201,122,0.12);color:var(--green)}
+.tag-orange{background:rgba(232,148,64,0.12);color:var(--orange)}
+.tag-red{background:rgba(232,85,85,0.12);color:var(--red)}
+.tag-purple{background:rgba(167,139,250,0.12);color:var(--purple)}
+.tag-yellow{background:rgba(232,200,64,0.12);color:var(--yellow)}
+
+/* Inline highlights */
+.hl{color:var(--blue);font-weight:600}
+.hl-g{color:var(--green);font-weight:600}
+.hl-o{color:var(--orange);font-weight:600}
+.hl-r{color:var(--red);font-weight:600}
+.hl-p{color:var(--purple);font-weight:600}
+.hl-y{color:var(--yellow);font-weight:600}
+.hl-c{color:var(--cyan);font-weight:600}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:0.84rem;min-width:500px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--text-bright);font-weight:600;background:var(--bg);font-size:0.78rem;letter-spacing:0.03em;text-transform:uppercase}
+tr:hover td{background:rgba(91,156,245,0.025)}
+td code{font-size:0.8em}
+
+/* ============================================================
+   LAYOUT HELPERS
+   ============================================================ */
+.row{display:flex;gap:var(--gap);flex-wrap:wrap}
+.col{flex:1;min-width:240px}
+.col-2{flex:2;min-width:300px}
+
+/* Step numbered list */
+.steps{counter-reset:step;list-style:none;padding:0;margin:12px 0}
+.steps li{counter-increment:step;padding:8px 0 8px 44px;position:relative;border-left:1px solid var(--border);margin-left:16px}
+.steps li::before{
+  content:counter(step);position:absolute;left:-18px;top:8px;
+  width:32px;height:32px;border-radius:50%;background:var(--blue);
+  color:#000;display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;font-weight:800;line-height:1;
+}
+.steps li:last-child{border-left-color:transparent}
+
+/* Key-Value list */
+.kv-list{list-style:none;padding:0;margin:8px 0}
+.kv-list li{padding:4px 0;display:flex;gap:12px}
+.kv-list .kv-key{color:var(--blue);font-weight:600;min-width:140px;font-family:var(--mono);font-size:0.82rem}
+.kv-list .kv-val{color:var(--text);flex:1;font-size:0.88rem}
+
+/* ============================================================
+   CANVAS DIAGRAM CONTAINER
+   ============================================================ */
+.diagram-box{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);margin:18px 0;
+  overflow:hidden;position:relative;
+}
+.diagram-box canvas{display:block;width:100%}
+.diagram-box .diagram-controls{
+  display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);
+  background:var(--bg);align-items:center;
+}
+.diagram-box .diagram-controls button{
+  background:var(--border);color:var(--text);border:none;padding:6px 14px;
+  border-radius:var(--radius-sm);cursor:pointer;font-size:0.78rem;font-family:var(--font);
+  font-weight:600;transition:all 0.15s;
+}
+.diagram-box .diagram-controls button:hover{background:var(--blue);color:#000}
+.diagram-box .diagram-controls button.active{background:var(--blue);color:#000}
+.diagram-box .diagram-controls .step-label{
+  margin-left:auto;font-size:0.78rem;color:var(--text-dim);font-family:var(--mono);
+}
+.diagram-box .diagram-caption{
+  padding:8px 14px;font-size:0.75rem;color:var(--text-dim);
+  border-top:1px solid var(--border);text-align:center;background:var(--bg);
+}
+
+/* ============================================================
+   MATH FORMULA STYLING
+   ============================================================ */
+.formula{
+  display:block;padding:14px 20px;margin:12px 0;
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);font-family:var(--mono);font-size:0.85rem;
+  color:var(--text-bright);overflow-x:auto;white-space:pre-wrap;
+  text-align:center;line-height:1.8;
+}
+
+/* ============================================================
+   TABS (for mode comparison etc)
+   ============================================================ */
+.tabs{display:flex;gap:2px;margin-bottom:-1px;flex-wrap:wrap}
+.tab-btn{
+  padding:8px 16px;background:var(--bg);border:1px solid var(--border);
+  border-bottom:none;border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  cursor:pointer;font-size:0.78rem;color:var(--text-dim);font-family:var(--font);
+  transition:all 0.15s;
+}
+.tab-btn:hover{color:var(--text-bright)}
+.tab-btn.active{background:var(--bg-card);color:var(--blue);border-color:var(--border-hi);font-weight:600}
+.tab-content{display:none;border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:16px 20px;background:var(--bg-card)}
+.tab-content.active{display:block}
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+.timeline{position:relative;padding-left:28px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;margin-bottom:20px}
+.timeline-item::before{
+  content:'';position:absolute;left:-24px;top:4px;
+  width:12px;height:12px;border-radius:50%;background:var(--blue);
+  border:2px solid var(--bg);
+}
+.timeline-item h4{margin:0 0 4px;color:var(--text-bright);font-size:0.9rem}
+.timeline-item p{font-size:0.84rem;color:var(--text-dim);margin:0}
+
+/* ============================================================
+   BREADCRUMB / PROGRESS
+   ============================================================ */
+.progress-bar{
+  height:3px;background:var(--border);border-radius:2px;margin:20px 0 8px;
+  position:relative;overflow:hidden;
+}
+.progress-bar::after{
+  content:'';position:absolute;left:0;top:0;height:100%;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  border-radius:2px;transition:width 0.3s;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:960px){
+  :root{--fs-base:14px}
+  h1{font-size:1.5rem} h2{font-size:1.15rem}
+  .row{flex-direction:column}
+  .col,.col-2{min-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION SIDEBAR
+     ============================================================ -->
+<nav>
+  <header>
+    <h2>SLAM 完全指南</h2>
+    <p>从第一性原理到工业级实战</p>
+  </header>
+  <div class="part-label">零 · 出发之前</div>
+  <a href="#ch0">0. 阅读指南与知识地图</a>
+  <div class="part-label">一 · 空间认知的本质</div>
+  <a href="#ch1">1. 什么是 SLAM</a>
+  <a href="#ch2">2. 蒙眼探房间 — 人类如何导航</a>
+  <a href="#ch3">3. 机器人如何「看」世界</a>
+  <a href="#ch4">4. 机器人如何「感受」自己</a>
+  <a href="#ch5">5. 鸡与蛋的死锁</a>
+  <div class="part-label">二 · 概率论的救赎</div>
+  <a href="#ch6">6. 为什么要用概率</a>
+  <a href="#ch7">7. 高斯分布与不确定性</a>
+  <a href="#ch8">8. 运动模型 — 预测的艺术</a>
+  <a href="#ch9">9. 观测模型 — 感知的数学</a>
+  <a href="#ch10">10. 贝叶斯滤波 — SLAM 的心脏</a>
+  <a href="#ch11">11. 最小二乘 — 优化即一切</a>
+  <div class="part-label">三 · 三大算法家族</div>
+  <a href="#ch12">12. EKF-SLAM — 卡尔曼的荣光与局限</a>
+  <a href="#ch13">13. FastSLAM — 粒子滤波的智慧</a>
+  <a href="#ch14">14. GraphSLAM — 图优化的崛起</a>
+  <a href="#ch15">15. 三大家族横向对比</a>
+  <div class="part-label">四 · 现代 SLAM 架构拆解</div>
+  <a href="#ch16">16. 前端：扫描匹配</a>
+  <a href="#ch17">17. 后端：位姿图优化</a>
+  <a href="#ch18">18. 回环检测：SLAM 的灵魂</a>
+  <a href="#ch19">19. 占据栅格地图</a>
+  <a href="#ch20">20. 系统架构全景</a>
+  <div class="part-label">五 · slam_toolbox 深度解析</div>
+  <a href="#ch21">21. 项目概述与技术栈</a>
+  <a href="#ch22">22. 五种运行模式</a>
+  <a href="#ch23">23. 配置文件完全指南</a>
+  <a href="#ch24">24. ROS2 集成详解</a>
+  <a href="#ch25">25. Nav2 对接全流程</a>
+  <a href="#ch26">26. 性能调优</a>
+  <a href="#ch27">27. 故障排查手册</a>
+  <div class="part-label">六 · 实战与进阶</div>
+  <a href="#ch28">28. 与其他方案对比</a>
+  <a href="#ch29">29. 学习路径总结</a>
+  <a href="#ch30">30. 附录：公式速查与术语表</a>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main>
+
+<h1>SLAM 与 slam_toolbox 完全指南</h1>
+<p class="subtitle">从「为什么要同时定位与建图」到「如何用 slam_toolbox 跑通真实机器人导航」——一份 30 章、万字级别的深度教程。</p>
+
+<!-- ============================================================
+     CH0: 阅读指南
+     ============================================================ -->
+<h2 id="ch0">0. 阅读指南与知识地图</h2>
+
+<p>本文档的目标读者是<strong>零基础的机器人爱好者和 ROS2 开发者</strong>。你不会看到「先修要求：概率论、线性代数、最优控制」这样的前提——需要的数学知识会在文中用直觉化的方式引入。</p>
+
+<div class="card">
+<h4>使用建议</h4>
+<ul>
+  <li><strong>如果你完全不懂 SLAM：</strong>从第 1 章顺序读，前 5 章建立直觉后再进入数学部分</li>
+  <li><strong>如果你已经懂 SLAM 原理、只想学 slam_toolbox：</strong>跳转到第 21 章</li>
+  <li><strong>如果你在调试 slam_toolbox 出了 bug：</strong>直接看第 27 章故障排查</li>
+  <li><strong>图表说明：</strong>文中带 <span class="tag tag-green">交互</span> 标记的图表可以用按钮控制步骤推进</li>
+</ul>
+</div>
+
+<div class="callout tip"><strong>最重要的建议：</strong>SLAM 是实践性极强的领域。建议每读完一章，都在 Gazebo 仿真中实际跑一下对应的现象。只看不练，理解只能停留在表面。</div>
+
+<!-- ============================================================
+     CH1: 什么是 SLAM
+     ============================================================ -->
+<h2 id="ch1">1. 什么是 SLAM</h2>
+
+<p><strong>SLAM</strong> = <strong>S</strong>imultaneous <strong>L</strong>ocalization <strong>a</strong>nd <strong>M</strong>apping，中文：<strong>同时定位与地图构建</strong>。</p>
+
+<div class="card">
+<h3>一句话解释</h3>
+<p>把一个机器人放进完全陌生的环境，不给它任何地图。<strong>让它一边探索，一边在脑子里画地图，同时时刻知道自己在哪。</strong></p>
+</div>
+
+<h3>拆开看三个词</h3>
+
+<div class="row">
+<div class="col card">
+<h4>Simultaneous <span class="tag tag-blue">同时</span></h4>
+<p>不是「先建图再定位」也不是「先定位再建图」。两者必须同时进行，因为它们互相依赖。</p>
+</div>
+<div class="col card">
+<h4>Localization <span class="tag tag-green">定位</span></h4>
+<p>回答「<strong>我在哪里？</strong>」——确定机器人在空间中的位置坐标和朝向角度。在 2D 平面中就是 (x, y, θ) 三个数。</p>
+</div>
+<div class="col card">
+<h4>Mapping <span class="tag tag-orange">建图</span></h4>
+<p>回答「<strong>周围长什么样？</strong>」——构建环境的几何模型。通常是一张「占据栅格地图」，告诉你哪里能走、哪里是墙。</p>
+</div>
+</div>
+
+<h3>为什么 SLAM 是机器人学的「圣杯问题」之一</h3>
+<p>在过去 30 年里，SLAM 从一个「理论上可能不存在解」的问题，演变为「室内场景已基本解决」的问题。这个过程浓缩了概率机器人学、稀疏矩阵计算、非线性优化的几乎所有核心进展。理解了 SLAM，你就理解了机器人如何「认知空间」。</p>
+
+<div class="callout idea"><strong>SLAM 的哲学意义：</strong>它探讨的是一个根本问题——一个智能体如何在没有外部参照的情况下，仅凭传感器和自身运动，构建对世界的认知。这个问题在生物学（动物如何导航）、神经科学（海马体位置细胞）和人工智能（空间智能）中都有对应。</div>
+
+<!-- ============================================================
+     CH2: 蒙眼探房间
+     ============================================================ -->
+<h2 id="ch2">2. 蒙眼探房间 — 人类如何不靠视觉导航</h2>
+
+<p>在进入数学之前，先用一个生活中的类比建立直觉。</p>
+
+<h3>场景设定</h3>
+<p>想象你被蒙上眼睛，推进一个完全陌生的房间。你不知道房间多大、什么形状、有没有家具。你只能做两件事：</p>
+<ol class="steps">
+  <li><strong>伸手摸</strong> — 感知前方、左右有没有墙壁或障碍物。这叫「观测」。</li>
+  <li><strong>数步子</strong> — 走几步大概知道移动了多少。这叫「里程计」。</li>
+</ol>
+
+<div class="diagram-box">
+  <canvas id="cv_ch2" width="760" height="320"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch2_step(0)">第1步：初始</button>
+    <button onclick="ch2_step(1)">第2步：摸墙</button>
+    <button onclick="ch2_step(2)">第3步：走几步</button>
+    <button onclick="ch2_step(3)">第4步：再摸</button>
+    <span class="step-label" id="ch2_label">第 1 步</span>
+  </div>
+  <div class="diagram-caption">图 1：蒙眼人在未知房间中探索的四个步骤。左侧是真实房间，右侧是脑中构建的地图。</div>
+</div>
+
+<h3>你会发现什么</h3>
+<ul>
+  <li>第一步摸到墙 → 知道「房间边界在这里」→ 在脑中画一条线段</li>
+  <li>走几步 → 步子数得不精确，可能多走了半米或少走了半米 → <strong>脑中地图开始变形</strong></li>
+  <li>再摸 → 发现「咦，这个墙角我好像摸过？」→ 回头修正脑中地图</li>
+  <li>回到起点附近 → 「啊，这里是我最开始摸的地方！」→ <strong>回环闭合</strong>，地图被「拉正」</li>
+</ul>
+
+<p>这四步恰好对应了 SLAM 的四个核心操作：<strong>局部建图 → 里程计更新 → 扫描匹配 → 回环检测与全局优化</strong>。</p>
+
+<div class="callout info">人类的这套「蒙眼导航系统」在神经科学中称为<strong>路径整合（Path Integration）</strong>，由海马体中的位置细胞（place cells）和网格细胞（grid cells）实现。SLAM 算法在很多方面模仿了这个生物机制。</div>
+
+<!-- ============================================================
+     CH3: 机器人如何看世界
+     ============================================================ -->
+<h2 id="ch3">3. 机器人如何「看」世界 — 外部感知传感器</h2>
+
+<p>机器人没有眼睛和手，但有传感器。SLAM 依赖两大类传感器：<strong>外部感知传感器</strong>（看世界）和<strong>内部运动传感器</strong>（感受自己）。本章先讲前者。</p>
+
+<h3>3.1 激光雷达 (LiDAR) <span class="tag tag-green">slam_toolbox 使用的</span></h3>
+
+<p>LiDAR = <strong>Li</strong>ght <strong>D</strong>etection <strong>a</strong>nd <strong>R</strong>anging。工作原理：发射一束激光脉冲 → 碰到物体反射回来 → 测量往返时间 → 距离 = 光速 × 时间 / 2。</p>
+
+<div class="card">
+<h4>2D LiDAR 输出的数据长什么样</h4>
+<p>一个 360° 的 2D LiDAR 每转一圈，输出一个数组，里面是几百个距离值。比如：</p>
+<pre>// sensor_msgs/LaserScan 的核心字段（简化表示）
+angle_min: -3.14      // 扫描起始角度（-180°）
+angle_max:  3.14      // 扫描结束角度（+180°）
+angle_increment: 0.01745  // 每个测距点间隔（1°）
+ranges: [2.3, 2.3, 2.2, 1.8, 1.5, 0.9, 0.5, 0.5, 0.6, 1.0, 1.5, 2.0, ...]
+//       ↑正前方2.3m  ↑左前1.8m  ↑左侧0.5m(墙)   ↑右前1.5m</pre>
+</div>
+
+<div class="diagram-box">
+  <canvas id="cv_ch3" width="760" height="340"></canvas>
+  <div class="diagram-caption">图 2：2D LiDAR 扫描示意。红点 = 激光击中的障碍物，绿色虚线 = 激光射线。右侧是距离数组的极坐标可视化。</div>
+</div>
+
+<div class="row">
+<div class="col card">
+<h4>LiDAR 的优点</h4>
+<ul>
+  <li>精度高（厘米级甚至毫米级）</li>
+  <li>不受光照影响（黑暗中也能工作）</li>
+  <li>360° 全覆盖（2D LiDAR）</li>
+  <li>数据简单：就是一堆距离值，处理快</li>
+</ul>
+</div>
+<div class="col card">
+<h4>LiDAR 的局限</h4>
+<ul>
+  <li>无法感知颜色和纹理</li>
+  <li>透明物体（玻璃）、镜面反射会测不准</li>
+  <li>强阳光下性能下降</li>
+  <li>3D LiDAR 昂贵（几千到几万元），2D 便宜（几百元）</li>
+</ul>
+</div>
+</div>
+
+<h3>3.2 视觉相机 (Camera)</h3>
+
+<p>RGB 相机输出图像，通过提取特征点（角点、边缘）来做 SLAM。分三种：</p>
+
+<div class="table-wrap"><table>
+<tr><th>类型</th><th>输出</th><th>优点</th><th>缺点</th><th>代表方案</th></tr>
+<tr><td>单目 (Monocular)</td><td>2D 图像</td><td>最便宜、体积小</td><td>有尺度歧义（不知道实际大小）</td><td>ORB-SLAM3</td></tr>
+<tr><td>双目 (Stereo)</td><td>2D 图像 + 视差深度</td><td>有真实尺度</td><td>需要标定、计算量大</td><td>VINS-Fusion</td></tr>
+<tr><td>RGB-D</td><td>2D 图像 + 深度图</td><td>直接获取深度</td><td>室外强光失效、量程短</td><td>RTAB-Map</td></tr>
+</table></div>
+
+<div class="callout info">本文第 21 章开始讲的 <strong>slam_toolbox 只使用 2D LiDAR</strong>，不使用视觉。之所以提视觉 SLAM，是为了让你理解整个 SLAM 生态的全貌。如果你只关心 slam_toolbox 实战，可以跳过视觉相关内容。</div>
+
+<h3>3.3 毫米波雷达 (Radar)</h3>
+<p>发射电磁波、测量反射。优点是穿透雨雾烟尘，缺点是角分辨率低（几个弧度 vs. LiDAR 的零点几度）。在自动驾驶中用作 LiDAR 的补充，slam_toolbox 不支持。</p>
+
+<!-- ============================================================
+     CH4: 机器人如何感受自己
+     ============================================================ -->
+<h2 id="ch4">4. 机器人如何「感受」自己 — 内部运动传感器</h2>
+
+<p>外部传感器告诉你「世界长什么样」，内部传感器告诉你「我动了多少」。</p>
+
+<h3>4.1 轮式里程计 (Wheel Odometry) <span class="tag tag-orange">最常见的运动源</span></h3>
+
+<p>原理极其简单：</p>
+<ul>
+  <li>电机编码器记录轮子转了多少圈 → 乘以轮子周长 → 得到走了多远</li>
+  <li>左右轮差速 → 算出转了多少角度</li>
+</ul>
+
+<div class="card">
+<h4>差速驱动机器人的里程计公式</h4>
+<p>设左右轮分别走了 d<sub>L</sub> 和 d<sub>R</sub> 的距离，轮距为 B：</p>
+<div class="formula">d_center = (d_L + d_R) / 2           ← 中心前进了多少
+d_theta  = (d_R - d_L) / B           ← 转了多少弧度
+x_new = x_old + d_center × cos(θ_old + d_theta/2)
+y_new = y_old + d_center × sin(θ_old + d_theta/2)
+θ_new = θ_old + d_theta</div>
+</div>
+
+<div class="callout warn"><strong>里程计的致命问题：漂移。</strong>轮子打滑、地面不平、轮胎气压变化、轮径磨损——所有这些都会让里程计产生误差。而且误差会<strong>随时间累积</strong>：1 秒偏 1 厘米，60 秒偏 60 厘米，5 分钟偏 3 米。没有外部纠正的话，机器人对自己位置的认知会像醉汉一样越走越偏。</div>
+
+<h3>4.2 惯性测量单元 (IMU)</h3>
+
+<p>IMU 包含两个传感器：</p>
+<ul>
+  <li><strong>加速度计：</strong>测量三个轴的线性加速度（m/s²）→ 积分两次得位移（但漂移极其严重）</li>
+  <li><strong>陀螺仪：</strong>测量三个轴的角速度（rad/s）→ 积分一次得角度（短期较准）</li>
+</ul>
+
+<p>IMU 的特点是：<strong>短期精度高</strong>（100-1000Hz 高频输出），但<strong>积分漂移随时间的平方增长</strong>。单独用 IMU 做定位，10 秒后偏几度，1 分钟后角度完全不可信。</p>
+
+<h3>4.3 里程计和 IMU 怎么互补</h3>
+<div class="table-wrap"><table>
+<tr><th>传感器</th><th>优势</th><th>劣势</th><th>融合后的收益</th></tr>
+<tr><td>轮式里程计</td><td>平移精度尚可（厘米级/秒漂移）</td><td>转弯时误差大、打滑会跳变</td><td>提供平移先验</td></tr>
+<tr><td>IMU</td><td>旋转精度高（零点几度/秒漂移）</td><td>平移积分漂移巨大</td><td>提供旋转先验</td></tr>
+<tr><td><strong>两者融合</strong></td><td colspan="2">用 EKF（扩展卡尔曼滤波）融合 → 定位精度提高 2-5 倍</td><td>工程标准做法</td></tr>
+</table></div>
+
+<p>ROS 2 中通常用 <code>robot_localization</code> 包来融合里程计和 IMU，输出更精确的 <code>/odom</code> 话题。slam_toolbox 不直接使用 IMU，但它会受益于更精确的里程计输入。</p>
+
+<div class="callout tip"><strong>slam_toolbox 的标准输入公式：</strong><br>
+<code>/scan</code>（激光数据，<span class="hl-r">必需</span>）+ <code>/odom</code>（里程计，<span class="hl-o">强烈推荐</span>）+ TF 坐标变换树（<span class="hl-r">必需</span>）<br>
+缺少任何一个，SLAM 要么跑不起来，要么精度大幅下降。</div>
+
+<!-- ============================================================
+     CH5: 鸡与蛋的死锁
+     ============================================================ -->
+<h2 id="ch5">5. 鸡与蛋的死锁 — SLAM 的核心矛盾</h2>
+
+<p>现在你知道了传感器怎么工作。但为什么 SLAM 是一个「难题」？因为以下这个看似无解的矛盾：</p>
+
+<div class="diagram-box">
+  <canvas id="cv_ch5" width="760" height="260"></canvas>
+  <div class="diagram-caption">图 3：SLAM 的鸡-蛋死锁。建图需要位姿 → 定位需要地图 → 形成闭环依赖。</div>
+</div>
+
+<h3>为什么不能「先建图再定位」？</h3>
+<p>建图的本质是把多个时刻的激光扫描「拼」在一起。但每次扫描是<strong>以机器人为原点的极坐标数据</strong>（前方 2m 有障碍、左方 0.5m 有墙……）。要把这些局部数据转换到统一的全局坐标系中，必须知道<strong>每次扫描时机器人的精确位姿 (x, y, θ)</strong>。</p>
+
+<div class="card">
+<h4>一个具体例子</h4>
+<p>机器人在 t=1 时刻，扫描到前方 2m 有墙。它当时在位置 (0, 0)，面朝 0°。所以这堵墙在全局坐标系的 (2, 0) 位置。<br><br>
+机器人在 t=2 时刻，又扫描到「前方 2m 有墙」。但此时机器人在哪？如果它在 (1, 0)，那这堵墙在 (3, 0)——注意，和上一堵墙不是同一个！如果它在 (0, 0) 但在原来位置的右边 0.1m（由于里程计漂移），那这堵墙在 (2.1, 0)——本来应该是同一堵墙，现在偏了 0.1m。<br><br>
+<strong>没有精确位姿，就无法把不同时刻扫描到的「同一堵墙」正确重合在一起。</strong></p>
+</div>
+
+<h3>为什么不能「先定位再建图」？</h3>
+<p>定位需要把当前扫描与已有地图做匹配，找到匹配度最高的位置。但如果没有地图，就<strong>没有可以匹配的参照物</strong>。</p>
+
+<p>纯靠里程计行不行？可以撑<strong>几秒钟</strong>——但在那之后，漂移会累积到不可接受的程度。只靠里程计定位，机器人实际上在「盲走」。</p>
+
+<div class="callout idea"><strong>SLAM 的数学本质：</strong>SLAM 把「建图需要位姿」和「定位需要地图」这两个互相依赖的问题，<strong>放在同一个联合概率框架里同时求解</strong>。不是先后做，而是把两者作为一个统一的优化问题，让位姿和地图互相约束、共同收敛。</div>
+
+<!-- ============================================================
+     CH6: 为什么要用概率
+     ============================================================ -->
+<h2 id="ch6">6. 为什么要用概率</h2>
+
+<p>进入数学部分之前，先回答一个看似哲学的问题：为什么 SLAM 必须用概率？为什么不能直接算出确定的值？</p>
+
+<h3>因为世界充满不确定性</h3>
+<p>SLAM 中的不确定性来自三个源头：</p>
+<div class="row">
+<div class="col card">
+<h4>传感器噪声</h4>
+<p>LiDAR 测 2.00m 不一定真的是 2.00m，可能实际是 2.02m 或 1.98m。每个测量都带有随机误差。</p>
+</div>
+<div class="col card">
+<h4>运动噪声</h4>
+<p>里程计说「前进了 0.50m」但真实移动可能是 0.47m（打滑）或 0.53m（轮径偏大）。</p>
+</div>
+<div class="col card">
+<h4>环境不确定性</h4>
+<p>地图本身是不确定的——「前方是墙」不是 100% 确定，而是「95% 概率是墙，5% 概率是传感器噪点」。</p>
+</div>
+</div>
+
+<h3>确定性 vs 概率性：一个思想实验</h3>
+<p>假设你在一个 1 米宽的长走廊里，闭着眼睛向前走。里程计说走了 10m。你知道自己在哪吗？</p>
+<ul>
+  <li><strong>确定性思维：</strong>「我在 (10, 0)」→ <span class="hl-r">这是错的，因为里程计有漂移</span></li>
+  <li><strong>概率性思维：</strong>「我在以 (10, 0) 为中心、方差 0.5m 的高斯分布中」→ <span class="hl-g">这才是对的</span></li>
+</ul>
+
+<p>概率不仅更诚实，而且<strong>更有用</strong>。当新传感器数据进来时（比如摸到墙在 y=0.5 的位置），你可以用贝叶斯公式把先验（里程计说你在 (10, 0)）和新观测（墙在 y=0.5）融合起来，得到更精确的后验估计。</p>
+
+<div class="callout tip"><strong>SLAM 的核心洞察：</strong>不确定性的<strong>量化和传播</strong>比确定性估计更重要。一个能精确知道自己「有多不确定」的系统，比一个给出错误确定值的系统要强得多。</div>
+
+<!-- ============================================================
+     CH7: 高斯分布与不确定性
+     ============================================================ -->
+<h2 id="ch7">7. 高斯分布：不确定性的通用语言</h2>
+
+<p>在 SLAM 中，几乎所有不确定性都用<strong>高斯分布</strong>（正态分布）表示。为什么？三个原因：</p>
+<ol>
+  <li><strong>中心极限定理：</strong>大量独立噪声的叠加趋近高斯分布——传感器噪声恰好满足这个条件</li>
+  <li><strong>计算友好：</strong>高斯分布只用两个参数描述（均值 μ 和方差 σ²），且多个高斯的运算（加减乘、条件化）仍产出高斯</li>
+  <li><strong>最大熵性质：</strong>在只知道均值和方差的情况下，高斯分布是「最不武断」的选择</li>
+</ol>
+
+<h3>一维高斯</h3>
+<div class="formula">p(x) = (1 / √(2πσ²)) × exp( -(x - μ)² / (2σ²) )</div>
+<p>μ（均值）= 最可能的值（钟形曲线的顶点）；σ（标准差）= 不确定性的宽度（σ 越小越确定）</p>
+
+<h3>多维高斯</h3>
+<p>机器人位姿是 3 维的 (x, y, θ)，需要用<strong>多元高斯分布</strong>：</p>
+<div class="formula">p(x) = (1 / √((2π)^k |Σ|)) × exp( -½ (x - μ)^T Σ^{-1} (x - μ) )</div>
+<ul>
+  <li><strong>μ</strong>（均值向量）：最可能的位姿，如 [1.0, 0.5, 0.3]</li>
+  <li><strong>Σ</strong>（协方差矩阵）：描述不确定性的形状和方向</li>
+</ul>
+
+<div class="diagram-box">
+  <canvas id="cv_ch7" width="760" height="320"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch7_step(0)" class="active">独立不确定性</button>
+    <button onclick="ch7_step(1)">正相关</button>
+    <button onclick="ch7_step(2)">负相关</button>
+  </div>
+  <div class="diagram-caption">图 4：二元高斯分布的不确定椭圆。左：x 和 y 独立（协方差 = 0）。中：x 和 y 正相关（你往东偏了，往往也往北偏）。右：负相关。</div>
+</div>
+
+<h3>协方差矩阵的意义</h3>
+<p>在 SLAM 中理解协方差矩阵 Σ 非常关键。比如机器人的位姿协方差可能长这样：</p>
+<pre>Σ = ┌                    ┐
+    │ 0.04   0.00  -0.01 │   ← x 方差 0.04（标准差 ±0.2m）
+    │ 0.00   0.01   0.00 │   ← y 方差 0.01（标准差 ±0.1m）
+    │ -0.01  0.00   0.02 │   ← θ 方差 0.02（标准差 ±0.14rad ≈ ±8°）
+    └                    ┘</pre>
+<p>负的非对角元素 (-0.01) 说明 x 和 θ 之间存在负相关——前进方向的误差和角度误差互相影响。这种相关性在 SLAM 中<strong>非常重要</strong>，因为误差会沿着相关路径传播。</p>
+
+<div class="callout idea"><strong>扩展到 SLAM：</strong>在 EKF-SLAM 中，状态向量包含机器人位姿 + 所有路标的位置，协方差矩阵维度可以高达数千维。矩阵中的每一个非零块都表示「这两个估计值如何一起漂移」。维护这个巨大的协方差矩阵正是 EKF-SLAM 计算复杂度的根源。</div>
+
+<!-- ============================================================
+     CH8: 运动模型
+     ============================================================ -->
+<h2 id="ch8">8. 运动模型 — 预测的艺术</h2>
+
+<p>运动模型（Motion Model）回答一个问题：<strong>给定上一时刻的位姿和当前运动指令，机器人现在最可能在哪？</strong></p>
+
+<h3>8.1 速度运动模型</h3>
+<p>输入：上一时刻位姿 x<sub>t-1</sub> = (x, y, θ) + 控制指令 u<sub>t</sub> = (v, ω)（线速度和角速度）<br>
+输出：当前位姿的概率分布 p(x<sub>t</sub> | x<sub>t-1</sub>, u<sub>t</sub>)</p>
+
+<p>在理想情况下（没有噪声），运动学公式为：</p>
+<div class="formula">x' = x  - (v/ω)·sinθ + (v/ω)·sin(θ + ω·Δt)
+y' = y  + (v/ω)·cosθ - (v/ω)·cos(θ + ω·Δt)
+θ' = θ  + ω·Δt
+
+（当 ω ≈ 0 时，退化为直线运动：x' = x + v·Δt·cosθ, y' = y + v·Δt·sinθ, θ' = θ）</div>
+
+<h3>8.2 噪声模型</h3>
+<p>现实中的运动有噪声。把噪声建模在<strong>控制指令本身</strong>上（而非结果上）：</p>
+<div class="formula">v̂ = v + ε_v    （ε_v ∼ N(0, α₁·v² + α₂·ω²)）
+ω̂ = ω + ε_ω    （ε_ω ∼ N(0, α₃·v² + α₄·ω²)）</div>
+
+<p>这里的 α₁ 到 α₄ 是需要标定的<strong>运动噪声参数</strong>。它们反映了机器人运动学模型的精度。</p>
+
+<h3>8.3 里程计运动模型（slam_toolbox 实际使用的）</h3>
+<p>slam_toolbox 不使用速度运动模型，而是直接从里程计数据中提取<strong>相对运动</strong>——因为 ROS 2 中里程计直接给出了 (Δx, Δy, Δθ) 的相对变换。运动模型简化为：</p>
+<div class="formula">x_t = x_{t-1} ⊕ δ_odom    （⊕ 表示 SE(2) 上的复合运算）</div>
+<p>其中 δ_odom 是从 /odom 话题中提取的两帧之间的相对变换。噪声被建模为 δ_odom 的不确定性。</p>
+
+<div class="callout info">运动模型本质上是在「猜」——它基于物理规律预测机器人到了哪。但由于噪声，这个猜测是一个<strong>概率分布</strong>，而非确定值。下一章的观测模型则负责「纠正」这个猜测。</div>
+
+<!-- ============================================================
+     CH9: 观测模型
+     ============================================================ -->
+<h2 id="ch9">9. 观测模型 — 感知的数学</h2>
+
+<p>观测模型（Observation Model）回答：<strong>给定机器人位姿和地图，传感器应该看到什么？</strong></p>
+
+<h3>9.1 LiDAR 的观测模型</h3>
+<p>给定位姿 x 和地图 m，激光束沿方向 φ 击中的预期位置通过<strong>射线投射（Ray Casting）</strong>计算：</p>
+<div class="formula">z_expected = raycast(m, x, φ)
+真实测量 z_actual 与 z_expected 的差 = 需要修正的量</div>
+
+<h3>9.2 似然域模型（Likelihood Field）</h3>
+<p>直接做射线投射很慢（每条射线都要在栅格地图中追踪），所以 slam_toolbox 使用的是<strong>似然域模型</strong>：</p>
+<ol>
+  <li>预计算一张「距离地图」——每个栅格存储该栅格到最近障碍物的距离</li>
+  <li>将激光终点投影到这张图上 → 查表得到距离 d</li>
+  <li>似然度 = 高斯分布在距离 d 处的取值 → 离障碍物越近，似然越高</li>
+</ol>
+
+<div class="formula">p(z | x, m) ∝ exp( -d² / (2σ²) )</div>
+<p>其中 d 是激光终点到最近障碍物的距离，σ 是激光噪声的标准差。</p>
+
+<h3>9.3 观测如何「纠正」位姿</h3>
+<p>运动模型说「你大概在位置 A」。观测模型说「如果你在位置 A，你看到的应该像 X；但实际上你看到的是 Y」。X 和 Y 的差异 = <strong>需要修正的量</strong>。这个「预测 vs 实际」的差异，就是 SLAM 优化的驱动力。</p>
+
+<div class="diagram-box">
+  <canvas id="cv_ch9" width="760" height="280"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch9_step(0)" class="active">运动预测</button>
+    <button onclick="ch9_step(1)">实际观测</button>
+    <button onclick="ch9_step(2)">误差修正</button>
+  </div>
+  <div class="diagram-caption">图 5：预测 vs 实际观测。运动模型预测机器人到了 A 点（红色虚线）。但实际激光扫描（红色点）与地图的匹配显示机器人在 A' 点（更近处）。误差（蓝色箭头）被用来修正位姿估计。</div>
+</div>
+
+<!-- ============================================================
+     CH10: 贝叶斯滤波
+     ============================================================ -->
+<h2 id="ch10">10. 贝叶斯滤波 — SLAM 的数学心脏</h2>
+
+<p>贝叶斯滤波是所有概率 SLAM 方法（EKF、FastSLAM、信息滤波）的<strong>共同数学基础</strong>。它用简洁的两步递归实现了从噪声数据中持续更新信念（belief）的目标。</p>
+
+<h3>10.1 基本设定</h3>
+<p>我们把 SLAM 的形式化如下：</p>
+<div class="table-wrap"><table>
+<tr><th>符号</th><th>含义</th><th>实际例子</th></tr>
+<tr><td>x<sub>t</sub></td><td>t 时刻的机器人位姿</td><td>(x=3.2m, y=1.5m, θ=0.78rad)</td></tr>
+<tr><td>m</td><td>地图</td><td>占据栅格地图（二维数组）</td></tr>
+<tr><td>u<sub>t</sub></td><td>t 时刻的运动指令</td><td>里程计增量 Δx=0.1m, Δθ=0.05rad</td></tr>
+<tr><td>z<sub>t</sub></td><td>t 时刻的传感器观测</td><td>360 个激光距离值</td></tr>
+</table></div>
+
+<h3>10.2 全 SLAM vs 在线 SLAM</h3>
+<div class="table-wrap"><table>
+<tr><th>类型</th><th>估计目标</th><th>用途</th></tr>
+<tr><td><strong>全 SLAM</strong> (Full SLAM)</td><td><code>p(x<sub>1</sub>...x<sub>T</sub>, m | z<sub>1</sub>...z<sub>T</sub>, u<sub>1</sub>...u<sub>T</sub>)</code><br>所有历史位姿 + 地图</td><td>离线批量建图、高精度后处理</td></tr>
+<tr><td><strong>在线 SLAM</strong> (Online SLAM)</td><td><code>p(x<sub>t</sub>, m | z<sub>1</sub>...z<sub>t</sub>, u<sub>1</sub>...u<sub>t</sub>)</code><br>仅当前位姿 + 地图</td><td>实时运行、机器人导航</td></tr>
+</table></div>
+
+<h3>10.3 贝叶斯递归两步曲</h3>
+
+<div class="card">
+<h4>第 1 步：预测 (Prediction)</h4>
+<p>根据上一时刻的信念 + 当前运动，预测当前位姿的<strong>先验分布</strong>：</p>
+<div class="formula">bel⁻(x_t, m) = ∫ p(x_t | x_{t-1}, u_t) · bel(x_{t-1}, m) · dx_{t-1}</div>
+<p>这一步<strong>增加不确定性</strong>——因为运动有噪声，你对位置的信念变得更模糊。</p>
+</div>
+
+<div class="card">
+<h4>第 2 步：更新 (Correction)</h4>
+<p>用新观测修正预测，得到<strong>后验分布</strong>：</p>
+<div class="formula">bel(x_t, m) = η · p(z_t | x_t, m) · bel⁻(x_t, m)</div>
+<p>这一步<strong>减少不确定性</strong>——传感器提供了新信息。η 是归一化常数。</p>
+</div>
+
+<div class="diagram-box">
+  <canvas id="cv_ch10" width="760" height="300"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch10_step(0)" class="active">初始信念</button>
+    <button onclick="ch10_step(1)">1. 预测（运动后）</button>
+    <button onclick="ch10_step(2)">2. 更新（观测后）</button>
+  </div>
+  <div class="diagram-caption">图 6：贝叶斯递归的可视化。初始信念（窄高斯，很确定）→ 运动后（宽高斯，不确定性增加）→ 观测后（中等宽度，比纯运动更确定）。这个预测-更新的循环每帧都在运行。</div>
+</div>
+
+<h3>10.4 从贝叶斯到具体算法</h3>
+<p>贝叶斯递推公式虽然理论优美，但积分在大多数情况下没有闭式解。不同的 SLAM 算法家族就是在<strong>不同的近似策略</strong>下求解贝叶斯递推：</p>
+<ul>
+  <li><strong>EKF-SLAM：</strong>假设所有分布是高斯，用一阶泰勒展开线性化 → 得到 Kalman 滤波公式（第 12 章）</li>
+  <li><strong>FastSLAM：</strong>用粒子集合近似任意分布 → 得到粒子滤波公式（第 13 章）</li>
+  <li><strong>GraphSLAM：</strong>用信息矩阵形式重写贝叶斯递推，转化为非线性最小二乘（第 14 章）</li>
+</ul>
+
+<div class="callout idea"><strong>理解贝叶斯递推，就理解了所有 SLAM 算法为什么长那样。</strong>EKF-SLAM 的高斯假设、FastSLAM 的粒子采样、GraphSLAM 的信息矩阵——都是对这个统一框架的不同近似实现。</div>
+
+<!-- ============================================================
+     CH11: 最小二乘 - 优化即一切
+     ============================================================ -->
+<h2 id="ch11">11. 最小二乘 — 优化即一切</h2>
+
+<p>现代 SLAM 的本质可以浓缩为一句话：<strong>把 SLAM 转化为一个大规模非线性最小二乘问题，然后用数值优化求解。</strong></p>
+
+<h3>11.1 从最大似然到最小二乘</h3>
+<p>在 SLAM 中，我们想找到使观测概率最大化的位姿和地图：</p>
+<div class="formula">x* = argmax  ∏ p(z_t | x_t, m)
+        x,m    t</div>
+<p>假设噪声是高斯分布：p(z | x, m) ∝ exp(-½||e(x)||²)，取负对数后最大化变成最小化：</p>
+<div class="formula">x* = argmin  Σ ||e_t(x_t, m)||²
+        x,m    t</div>
+<p>这就是一个<strong>非线性最小二乘</strong>问题。e_t 是误差函数（观测值与预测值的差异）。</p>
+
+<h3>11.2 高斯-牛顿法 (Gauss-Newton)</h3>
+<p>对误差函数在当前位置做一阶泰勒展开：</p>
+<div class="formula">e(x + Δx) ≈ e(x) + J · Δx</div>
+<p>其中 J = ∂e/∂x 是 Jacobian 矩阵。代入目标函数并令导数为 0：</p>
+<div class="formula">(J^T J) · Δx = -J^T · e(x)
+   H       Δx =    -b</div>
+<p>这就是<strong>正规方程</strong>（Normal Equation）。解出 Δx，更新 x ← x + Δx，重复直到收敛。</p>
+
+<h3>11.3 列文伯格-马夸尔特 (Levenberg-Marquardt, LM)</h3>
+<p>高斯-牛顿法在初始值较差时可能发散。LM 算法增加了一个阻尼项：</p>
+<div class="formula">(H + λ·I) · Δx = -b</div>
+<p>λ 是阻尼因子：λ 大 → 接近梯度下降（稳定但慢）；λ 小 → 接近高斯-牛顿（快但可能不稳定）。LM 动态调整 λ，兼顾速度和鲁棒性。<strong>slam_toolbox 默认使用 LM 算法。</strong></p>
+
+<h3>11.4 为什么 SLAM 中的 H 矩阵是稀疏的</h3>
+<p>这是图优化 SLAM 能高效运行的关键原因。在位姿图中，每个误差项 e<sub>ij</sub> 只涉及两个节点 i 和 j。因此 Jacobian J 中只有两个非零块。当构建 H = J^T J 时，H 只在 (i,i)、(i,j)、(j,i)、(j,j) 处有非零块。</p>
+<p>结果：一个有 10000 个节点的位姿图，H 是 30000 × 30000 的矩阵，但<strong>仅有约 10 万个非零元素</strong>（而非 9 亿个）。利用稀疏 Cholesky 分解，可以在几十毫秒内求解。</p>
+
+<div class="callout tip"><strong>图优化 SLAM 为何能取代 EKF-SLAM：</strong>正是因为利用了 H 的稀疏性。EKF-SLAM 维护的是稠密的协方差矩阵（O(N²) 内存和 O(N²) 时间），而图优化利用稀疏性做到了近 O(N) 的复杂度。</div>
+
+
+<!-- ============================================================
+     CH12: EKF-SLAM
+     ============================================================ -->
+<h2 id="ch12">12. EKF-SLAM — 卡尔曼滤波的荣光与局限</h2>
+
+<p>EKF-SLAM 是最早的实用 SLAM 算法（1990年代），奠定了概率 SLAM 的理论基础。虽然现在工业界基本不用了，但理解它对于理解 SLAM 的数学本质至关重要。</p>
+
+<h3>12.1 核心思想</h3>
+<p>把<strong>机器人位姿 + 所有路标位置</strong>放进一个巨大的状态向量中，用扩展卡尔曼滤波递归地更新这个状态的<strong>均值</strong>和<strong>协方差矩阵</strong>。</p>
+
+<div class="card">
+<h4>状态向量结构</h4>
+<div class="formula">μ = [x  y  θ  m₁,x  m₁,y  m₂,x  m₂,y  ...  mₙ,x  mₙ,y]^T</div>
+<p>维度 = 3（位姿） + 2N（N 个路标）。如果有 100 个路标，状态向量就是 203 维。</p>
+</div>
+
+<h3>12.2 预测步骤</h3>
+<p>当机器人运动时，只更新<strong>位姿部分</strong>的状态。运动模型（速度模型）为：</p>
+<div class="formula">x_new = x - (v/ω)·sinθ + (v/ω)·sin(θ + ω·Δt)
+y_new = y + (v/ω)·cosθ - (v/ω)·cos(θ + ω·Δt)
+θ_new = θ + ω·Δt</div>
+<p>Jacobian G 对位姿求导（3×3 矩阵），用于协方差传播：</p>
+<div class="formula">Σ_new = G · Σ · G^T + R    （R 是运动噪声协方差）</div>
+<p>因为运动不影响路标位置，所以预测步骤只更新 Σ 的位姿相关块——计算量不算大。</p>
+
+<h3>12.3 更新步骤</h3>
+<p>当观测到路标时，用观测方程计算期望观测值与实际观测值的差异（innovation ν）：</p>
+<div class="formula">ν = z - h(μ̄)    （h 是观测方程：位姿 + 路标位置 → 期望的极坐标观测）</div>
+<p>计算卡尔曼增益 K：</p>
+<div class="formula">K = Σ̄ · H^T · (H · Σ̄ · H^T + Q)^{-1}</div>
+<p>其中 H 是观测方程对状态向量的 Jacobian（2 × (3+2N) 矩阵），Q 是传感器噪声协方差。</p>
+<p>更新均值和协方差：</p>
+<div class="formula">μ = μ̄ + K · ν
+Σ = (I - K·H) · Σ̄</div>
+
+<h3>12.4 EKF-SLAM 的致命问题</h3>
+
+<div class="row">
+<div class="col card">
+<h4>计算复杂度 O(N²)</h4>
+<p>协方差矩阵 Σ 是 (3+2N)×(3+2N) 的。每次更新需要 O(N²) 时间。N=1000 时，Σ 有 4 百万个元素，更新一次耗时数十毫秒。N=10000 时，Σ 有 4 亿个元素，完全不现实。</p>
+</div>
+<div class="col card">
+<h4>线性化误差累积</h4>
+<p>EKF 假设系统是局部线性的。但 SLAM 的角度变量有很强的非线性（at rigonometric functions）。每次预测用当前估计点做线性化，误差逐渐累积。这叫 <strong>EKF 的不一致性（inconsistency）</strong>。</p>
+</div>
+<div class="col card">
+<h4>数据关联不可逆</h4>
+<p>EKF 假设观测和路标之间的对应关系是已知的。如果错误地把路标 A 的观测关联到了路标 B，协方差矩阵会把错误传播到所有变量。而且没有回头路可走——EKF 是前向滤波，不能「撤回」过去的错误关联。</p>
+</div>
+</div>
+
+<h3>12.5 信息形式：EIF-SLAM</h3>
+<p>EIF（Extended Information Filter）使用信息矩阵 Λ = Σ^(-1) 代替协方差。更新步骤变成简单的加法：</p>
+<div class="formula">Λ_new = Λ_old + H^T · Q^(-1) · H    （只需加法！）</div>
+<p>但预测步骤变复杂了。更重要的是，信息矩阵近似稀疏（远距离路标之间的信息接近零），这为图优化方法铺平了道路。</p>
+
+<div class="callout info"><strong>EKF-SLAM 的历史地位：</strong>它在 1990 年代末首次证明了「概率 SLAM 是可行的」。但它的 O(N²) 复杂度使其只能处理几十个路标的小场景。2000 年代中期，粒子滤波和图优化方法相继取而代之。</div>
+
+<!-- ============================================================
+     CH13: FastSLAM
+     ============================================================ -->
+<h2 id="ch13">13. FastSLAM — 粒子滤波的智慧</h2>
+
+<p>FastSLAM 利用了一个巧妙的数学分解，把 O(N²) 的 EKF-SLAM 降到了 O(M·log N)（M 是粒子数）。</p>
+
+<h3>13.1 核心洞察：条件独立</h3>
+<p>给定机器人的<strong>完整轨迹</strong>，不同路标之间的估计是<strong>条件独立</strong>的。也就是说：</p>
+<div class="formula">p(x_1...x_t, m_1, m_2 | z_1...z_t, u_1...u_t)
+  = p(x_1...x_t | z_1...z_t, u_1...u_t) × p(m_1 | x_1...x_t, z_1...z_t)
+                                            × p(m_2 | x_1...x_t, z_1...z_t)
+                                            × ...</div>
+<p>这被称为 <strong>Rao-Blackwellized 粒子滤波（RBPF）</strong>：</p>
+<ul>
+  <li>用<strong>粒子滤波器</strong>估计轨迹分布（每个粒子是一条可能的轨迹）</li>
+  <li>每个粒子内部，用<strong>K 个独立的 EKF</strong> 分别估计 K 个路标（每个路标 2×2 协方差矩阵）</li>
+</ul>
+
+<h3>13.2 FastSLAM 1.0 vs 2.0</h3>
+
+<div class="table-wrap"><table>
+<tr><th>版本</th><th>提议分布</th><th>优势</th><th>劣势</th></tr>
+<tr><td><strong>FastSLAM 1.0</strong></td><td>运动模型先验<br>p(x_t | x_{t-1}, u_t)</td><td>实现简单，采样快</td><td>忽略当前观测 → 权值方差大 → 需要大量粒子</td></tr>
+<tr><td><strong>FastSLAM 2.0</strong></td><td>运动模型 + 观测融合<br>p(x_t | x_{t-1}, u_t, z_t)</td><td>权值方差小，更少粒子</td><td>需要额外做一次 EKF 更新来构造提议分布</td></tr>
+</table></div>
+
+<div class="card">
+<h4>FastSLAM 2.0 的提议分布构造</h4>
+<p>不是从运动模型直接采样，而是先用 EKF 融合观测信息，得到一个更好的提议分布：</p>
+<ol>
+  <li>运动预测：用运动模型得到先验位姿估计 μ⁻ 和协方差 Σ⁻</li>
+  <li>观测融合：用观测 z_t 做 EKF 更新，得到后验位姿 μ⁺ 和 Σ⁺</li>
+  <li>从后验分布中采样：x_t^(k) ~ N(μ⁺, Σ⁺)</li>
+</ol>
+<p>由于使用了观测信息来「引导」采样，大多数粒子都落在高似然区域，权值方差大幅降低。</p>
+</div>
+
+<h3>13.3 重采样与粒子退化</h3>
+<p>随着时间推移，少数粒子获得极高权重，多数粒子权重趋近零（粒子退化）。策略：</p>
+<ul>
+  <li>计算有效样本数：N_eff = 1 / Σ w_k²</li>
+  <li>当 N_eff 低于阈值（如 M/2）时触发<strong>重采样</strong>：按权重比例复制高权重粒子、丢弃低权重粒子</li>
+  <li>重采样后所有权重重置为 1/M</li>
+</ul>
+
+<div class="callout warn"><strong>重采样的副作用：</strong>高权重粒子被过度复制，导致粒子多样性丧失。对于回环闭合场景，过去轨迹的粒子已经被「锁定」为错误的副本——这就是为什么纯粒子滤波 SLAM 在回环闭合方面远不如图优化方法。</div>
+
+<h3>13.4 GMapping：FastSLAM 的最著名实现</h3>
+<p>GMapping 是 ROS 1 时代最流行的 2D SLAM 方案，基于 FastSLAM 2.0 + 改进的提议分布 + 自适应重采样。但它：不支持 ROS 2 原生、没有回环检测模块、在大场景中粒子退化严重。<strong>slam_toolbox 是它的精神继承者</strong>，但改用图优化方法解决了 GMapping 的这些痛点。</p>
+
+<!-- ============================================================
+     CH14: GraphSLAM
+     ============================================================ -->
+<h2 id="ch14">14. GraphSLAM — 图优化的崛起</h2>
+
+<p>2000 年代末，随着稀疏线性代数库（CHOLMOD、CSparse）的成熟，图优化方法全面超越滤波方法，成为现代 SLAM 的事实标准。<strong>slam_toolbox 就是图优化 SLAM。</strong></p>
+
+<h3>14.1 图是什么</h3>
+<p>图 SLAM 把问题建模为一个图：</p>
+<ul>
+  <li><strong>节点（Node）：</strong>某个时刻的机器人位姿 x_t = (x, y, θ)</li>
+  <li><strong>边（Edge）：</strong>两个节点之间的<strong>相对变换约束</strong> T_ij = (Δx, Δy, Δθ)，表示「从节点 i 走到节点 j 应该经历怎样的变换」</li>
+</ul>
+
+<h3>14.2 边的来源</h3>
+<div class="table-wrap"><table>
+<tr><th>边类型</th><th>来源</th><th>可信度</th><th>频率</th></tr>
+<tr><td>里程计边</td><td>/odom 中的连续帧间变换</td><td>低（漂移大）</td><td>每帧都有</td></tr>
+<tr><td>扫描匹配边</td><td>相邻帧激光匹配的结果</td><td>中（厘米级）</td><td>关键帧之间</td></tr>
+<tr><td>回环边</td><td>回到已访问区域的匹配</td><td>高（标志性强）</td><td>偶尔</td></tr>
+</table></div>
+
+<div class="diagram-box">
+  <canvas id="cv_ch14" width="760" height="340"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch14_step(0)" class="active">1. 里程计图</button>
+    <button onclick="ch14_step(1)">2. 添加匹配边</button>
+    <button onclick="ch14_step(2)">3. 发现回环</button>
+    <button onclick="ch14_step(3)">4. 全局优化</button>
+  </div>
+  <div class="diagram-caption">图 7：图优化 SLAM 四步走。里程计链（灰）→ 扫描匹配边（绿）→ 回环边（红虚线）→ 优化后的全局配置（蓝）。注意回环边如何「拉正」了整条轨迹。</div>
+</div>
+
+<h3>14.3 误差函数与优化目标</h3>
+<p>每条边定义了一个期望的相对变换 T_ij。如果节点 i 和 j 的实际位姿差不等于 T_ij，就产生了误差：</p>
+<div class="formula">e_ij(x_i, x_j) = (x_j ⊖ x_i) ⊖ T_ij</div>
+<p>其中 ⊖ 是 SE(2) 流形上的减法。全图的优化目标为：</p>
+<div class="formula">x* = argmin  Σ  (e_ij)^T · Ω_ij · e_ij
+           x   所有边(i,j)</div>
+<p>Ω_ij 是信息矩阵（= 协方差的逆），反映该约束的可信度。可信度高的边权重更大。</p>
+
+<h3>14.4 用高斯-牛顿法求解</h3>
+<p>对误差函数线性化：e(x + Δx) ≈ e + J·Δx。代入目标函数：</p>
+<div class="formula">E = Σ (e_ij + J_ij·Δx)^T · Ω_ij · (e_ij + J_ij·Δx)
+  = const + 2·b^T·Δx + Δx^T·H·Δx</div>
+<p>其中：</p>
+<div class="formula">H = Σ J_ij^T · Ω_ij · J_ij      （Hessian，信息矩阵）
+b = Σ J_ij^T · Ω_ij · e_ij      （梯度）</div>
+<p>令导数为零：H·Δx = -b。求解这个稀疏线性系统得到 Δx，更新 x ← x + Δx，迭代至收敛。</p>
+
+<h3>14.5 SPA（Sparse Pose Adjustment）- slam_toolbox 后端</h3>
+<p>SPA 是专门为 2D SLAM 位姿图优化设计的算法：</p>
+<ul>
+  <li>利用 SE(2) 的特定代数结构提供闭式 Jacobian（无需 AutoDiff）</li>
+  <li>稀疏 Cholesky 分解（CSparse/CHOLMOD）高效求解 H·Δx = -b</li>
+  <li>增量式求解：新节点加入时仅更新受影响的局部子图</li>
+  <li>LM 阻尼保证收敛</li>
+</ul>
+<p>SPA 由 Konolige 等人在 2010 年提出，是 slam_toolbox 后端优化的核心。与通用 Ceres/g2o 求解器相比，SPA 利用 2D 几何结构做了大量优化，速度更快。</p>
+
+<!-- ============================================================
+     CH15: 三大家族对比
+     ============================================================ -->
+<h2 id="ch15">15. 三大家族横向对比</h2>
+
+<div class="table-wrap"><table>
+<tr><th>维度</th><th>EKF-SLAM</th><th>FastSLAM (粒子滤波)</th><th>GraphSLAM (图优化)</th></tr>
+<tr><td><strong>数学方法</strong></td><td>高斯假设 + 线性化</td><td>粒子近似 + Rao-Blackwellization</td><td>非线性最小二乘 + 稀疏代数</td></tr>
+<tr><td><strong>计算复杂度</strong></td><td>O(N²) 每次更新</td><td>O(M·log N) 每帧</td><td>O(N) 稀疏求解</td></tr>
+<tr><td><strong>精度</strong></td><td>中（线性化误差）</td><td>中高（粒子数决定）</td><td><span class="hl-g">高（全局优化）</span></td></tr>
+<tr><td><strong>回环处理</strong></td><td><span class="hl-r">差（不能回退修正）</span></td><td>中（粒子多样性丢失）</td><td><span class="hl-g">优秀（原生支持）</span></td></tr>
+<tr><td><strong>地图质量</strong></td><td>低（误差累积）</td><td>中（动态场景好）</td><td><span class="hl-g">高（全局一致）</span></td></tr>
+<tr><td><strong>初始值要求</strong></td><td>需要好初始值</td><td>能全局定位</td><td>需要里程计初值</td></tr>
+<tr><td><strong>实现难度</strong></td><td>低（公式明确）</td><td>中（重采样调参）</td><td>高（稀疏代数库）</td></tr>
+<tr><td><strong>适用场景</strong></td><td>小型、实时性要求高</td><td>中型、有全局定位需求</td><td><span class="hl-g">大型、精度要求高</span></td></tr>
+<tr><td><strong>ROS 2 代表</strong></td><td>—</td><td>—</td><td>slam_toolbox, Cartographer</td></tr>
+</table></div>
+
+<h3>15.1 为什么现代 SLAM 选择了图优化</h3>
+<p>三个关键转折点：</p>
+<ol>
+  <li><strong>2008 年，iSAM 论文：</strong>证明了图优化可以通过增量 QR 分解做到实时。此前图优化被认为「只能离线用」。</li>
+  <li><strong>2010 年，SPA 论文：</strong>专门针对 2D SLAM 优化，利用 SE(2) 特性大幅提速。</li>
+  <li><strong>2012 年，iSAM2 论文：</strong>引入 Bayes 树，实现了 O(log N) 的增量更新。</li>
+</ol>
+<p>三个里程碑使得图优化在精度和速度上全面超越滤波方法。今天，所有主流 SLAM 系统（slam_toolbox、Cartographer、ORB-SLAM3）都是图优化的不同变体。</p>
+
+<div class="callout tip">如果你只记得一件事的话：<strong>滤波 = 只关心当前状态</strong>（计算快但无法回退修正）。<strong>图优化 = 关心全部历史</strong>（计算量大但精度最高）。slam_toolbox 选择了图优化，但用异步架构解决了实时性问题。</div>
+
+<!-- ============================================================
+     CH16: 扫描匹配
+     ============================================================ -->
+<h2 id="ch16">16. 前端：扫描匹配 — 帧与帧的对齐</h2>
+
+<p>扫描匹配是 SLAM 前端最核心的操作。输入：两帧激光扫描（或一帧扫描 + 已有地图）+ 里程计初值。输出：一个更精确的相对位姿变换。</p>
+
+<h3>16.1 ICP：迭代最近点 <span class="tag tag-blue">最经典</span></h3>
+
+<p>ICP 的算法流程极其简洁：</p>
+<ol class="steps">
+  <li><strong>找对应点：</strong>对扫描 A 的每个点，在扫描 B 中找到最近的点作为对应</li>
+  <li><strong>算变换：</strong>用这些对应点对，通过 SVD 分解计算最优的旋转 R 和平移 t，使得对应点间的欧式距离平方和最小</li>
+  <li><strong>应用变换：</strong>把 A 用 (R, t) 变换到新位置</li>
+  <li><strong>重复：</strong>回到步骤 1，直到变换量小于阈值或达到最大迭代次数</li>
+</ol>
+
+<div class="diagram-box">
+  <canvas id="cv_ch16" width="760" height="300"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch16_step(0)" class="active">1. 初始两帧</button>
+    <button onclick="ch16_step(1)">2. 找最近点对</button>
+    <button onclick="ch16_step(2)">3. SVD 求最优变换</button>
+    <button onclick="ch16_step(3)">4. 收敛！</button>
+  </div>
+  <div class="diagram-caption">图 8：ICP 扫描匹配四步迭代。绿色 = 已在地图中的参考帧，蓝色 = 新扫描（用里程计初值放置），紫色连线 = 最近点对应。</div>
+</div>
+
+<h3>16.2 ICP 的四大变种</h3>
+<div class="table-wrap"><table>
+<tr><th>变种</th><th>误差度量</th><th>收敛速度</th><th>适用场景</th></tr>
+<tr><td>Point-to-Point ICP</td><td>点-点欧氏距离</td><td>慢（线性收敛）</td><td>稠密点云</td></tr>
+<tr><td>Point-to-Plane ICP</td><td>点到切面距离</td><td>快（二次收敛）</td><td>3D LiDAR、表面光滑</td></tr>
+<tr><td>PL-ICP</td><td>点到线段距离</td><td>快（二次收敛）</td><td>2D 室内（墙是线段）</td></tr>
+<tr><td>G-ICP</td><td>概率化的点-点距离</td><td>中</td><td>泛用（统一框架）</td></tr>
+</table></div>
+
+<div class="callout warn">ICP 的最大弱点：<strong>依赖初始值。</strong>如果里程计给的初始变换太差（比如旋转差了 30°），ICP 会收敛到局部最优而非全局最优。这就是为什么里程计必须「大方向对」——即使细节有误差。</div>
+
+<h3>16.3 Karto 相关性匹配：slam_toolbox 的选择</h3>
+
+<p>slam_toolbox 使用的是 <strong>Karto Scan Matcher</strong>，基于<strong>相关性匹配</strong>而非 ICP。工作原理：</p>
+<ol>
+  <li>以里程计初值为中心，构造一个搜索窗口（如 ±0.3m, ±0.3rad）</li>
+  <li>在搜索窗口内<strong>枚举所有候选位姿</strong>，对每个候选位姿计算「当前扫描与已有地图的重合度得分」</li>
+  <li>得分 = 激光点落在「占据栅格」上的数量。得分越高 = 匹配越好</li>
+  <li>先粗搜索（0.05m 分辨率），找到最高分区域 → 再细搜索（亚像素）精确定位</li>
+</ol>
+
+<div class="card">
+<h4>Karto vs ICP 对比</h4>
+<div class="table-wrap"><table>
+<tr><th>维度</th><th>Karto 相关性匹配</th><th>ICP</th></tr>
+<tr><td>原理</td><td>暴力搜索最优分（网格搜索）</td><td>迭代最近点对（梯度下降）</td></tr>
+<tr><td>初始值敏感度</td><td><span class="hl-g">较低</span>（搜索窗口内找到全局最优）</td><td><span class="hl-r">较高</span>（易陷入局部最优）</td></tr>
+<tr><td>计算量</td><td>取决于搜索窗口大小和分辨率</td><td>取决于迭代次数和点数</td></tr>
+<tr><td>2D 场景</td><td><span class="hl-g">专为 2D 设计，效果优异</span></td><td>通用，2D/3D 均可</td></tr>
+</table></div>
+</div>
+
+<h3>16.4 NDT（正态分布变换）</h3>
+<p>NDT 把点云划分为栅格，每个栅格内的点用<strong>正态分布</strong>（均值 + 协方差）近似。匹配时不是点对点，而是最大化「新扫描点落在对应栅格正态分布下的概率」。优点是不需要显式找对应点，缺点是依赖于栅格大小的选择。</p>
+
+<!-- ============================================================
+     CH17: 位姿图优化详解
+     ============================================================ -->
+<h2 id="ch17">17. 后端：位姿图优化 — 全局一致的保证</h2>
+
+<p>第 14 章给了 GraphSLAM 的概览。本章深入到 slam_toolbox 实际使用的方法细节。</p>
+
+<h3>17.1 求解器选择</h3>
+<div class="table-wrap"><table>
+<tr><th>库</th><th>开发者</th><th>特点</th><th>slam_toolbox</th></tr>
+<tr><td>Ceres Solver</td><td>Google</td><td>通用非线性最小二乘、AutoDiff、性能优异</td><td><span class="hl-g">默认</span></td></tr>
+<tr><td>g2o</td><td>Kummerle 等</td><td>SLAM 专用、图优化接口丰富</td><td>可选插件</td></tr>
+<tr><td>GTSAM</td><td>Georgia Tech</td><td>因子图 + iSAM2 增量、贝叶斯树</td><td>不支持</td></tr>
+</table></div>
+
+<h3>17.2 Ceres 线性求解器选择指南</h3>
+<pre data-lang="yaml"># slam_toolbox 中的 Ceres 配置
+solver_plugin: solver_plugins::CeresSolver
+
+# 线性求解器（最重要！）
+ceres_linear_solver: SPARSE_NORMAL_CHOLESKY   # 推荐：稀疏 Cholesky
+# 可选：DENSE_SCHUR（小图）、ITERATIVE_SCHUR（极大图）
+
+# 预处理子
+ceres_preconditioner: SCHUR_JACOBI
+# 可选：IDENTITY, JACOBI, CLUSTER_JACOBI, CLUSTER_TRIDIAGONAL
+
+# 信赖域策略
+ceres_trust_strategy: LEVENBERG_MARQUARDT   # LM：鲁棒；DOGLEG：快但不鲁棒
+
+# 收敛条件
+ceres_max_num_iterations: 50
+ceres_function_tolerance: 1e-6
+ceres_gradient_tolerance: 1e-10
+ceres_parameter_tolerance: 1e-8</pre>
+
+<h3>17.3 优化触发时机</h3>
+<p>slam_toolbox 不会每帧都跑全局优化——那样太慢了。而是按以下条件触发：</p>
+<div class="table-wrap"><table>
+<tr><th>触发条件</th><th>参数</th><th>默认</th></tr>
+<tr><td>距上次优化时间间隔</td><td><code>minimum_time_interval</code></td><td>0.5 秒</td></tr>
+<tr><td>优化频率上限</td><td><code>optimization_hz</code></td><td>2.0 Hz</td></tr>
+<tr><td>检测到回环约束</td><td>自动触发</td><td>—</td></tr>
+<tr><td>累积足够新节点</td><td>自动判断</td><td>—</td></tr>
+</table></div>
+
+<h3>17.4 Sync vs Async：优化的时机差异</h3>
+<div class="row">
+<div class="col card">
+<h4>Sync 模式</h4>
+<p>扫描匹配和优化在同一线程。<strong>优化时阻塞新扫描</strong>——可能丢帧。简单直接，适合小场景（<1000 节点）。</p>
+</div>
+<div class="col card">
+<h4>Async 模式 <span class="tag tag-green">推荐</span></h4>
+<p>扫描匹配和优化在<strong>不同线程</strong>。新扫描不断来，前端做局部匹配。后端优化异步执行。<strong>不丢帧</strong>，适合大场景。</p>
+</div>
+</div>
+
+<!-- ============================================================
+     CH18: 回环检测
+     ============================================================ -->
+<h2 id="ch18">18. 回环检测：SLAM 的灵魂</h2>
+
+<p><strong>没有回环检测的 SLAM = 高级里程计。</strong>回环检测是 SLAM 区分于纯里程计的最本质特征。</p>
+
+<h3>18.1 为什么回环这么重要</h3>
+<p>机器人绕房间走一圈回到起点。由于里程计漂移，估计的轨迹（红色）严重偏离真实轨迹（绿色），起点和终点对不上——误差可能高达数米。回环检测识别出「这个地方我来过」，在当前位置和起点之间添加约束边，优化时把所有误差重新分配，「拉正」整条轨迹。</p>
+
+<div class="diagram-box">
+  <canvas id="cv_ch18" width="760" height="340"></canvas>
+  <div class="diagram-controls">
+    <button onclick="ch18_step(0)" class="active">1. 开始建图</button>
+    <button onclick="ch18_step(1)">2. 漂移累积</button>
+    <button onclick="ch18_step(2)">3. 检测回环</button>
+    <button onclick="ch18_step(3)">4. 优化修正</button>
+  </div>
+  <div class="diagram-caption">图 9：回环检测与修正的四个阶段。绿色 = 真实轨迹，红色虚线 = 里程计估计。回环检测在步骤 3 发现「回到了起点附近」，步骤 4 优化后轨迹被拉正。</div>
+</div>
+
+<h3>18.2 回环检测四步流程</h3>
+<ol class="steps">
+  <li><strong>候选搜索：</strong>在关键帧数据库中搜索与当前帧相似的历史帧。slam_toolbox 支持局部搜索（当前位姿附近 N 米内）和全局搜索</li>
+  <li><strong>相似度计算：</strong>用扫描匹配得分（当前扫描与候选位置处的地图重合度）作为相似度量。得分 > 阈值 = 回环候选</li>
+  <li><strong>几何验证：</strong>候选不等于真回环！需要跑一次更精细的扫描匹配来确认。匹配上且误差在合理范围 → 真回环</li>
+  <li><strong>添加约束边：</strong>在当前节点和历史节点之间添加一条回环约束边，送入后端优化</li>
+</ol>
+
+<h3>18.3 slam_toolbox 回环参数</h3>
+<pre data-lang="yaml">do_loop_closing: true                # 是否启用回环检测
+loop_closure_max_scans: 10           # 每次回环检查考虑的扫描帧数
+loop_closure_search_radius: 2.0      # 局部搜索半径（米）
+loop_closure_min_response: 0.3       # 粗匹配最低得分（0-1）
+loop_closure_min_response_fine: 0.4  # 精细验证最低得分（0-1）</pre>
+
+<div class="callout tip"><strong>建图时最重要的是走出去再走回来。</strong>让机器人回到起点附近、在已经建图的区域多走几次。这能触发回环检测，极大提升地图一致性。没有回环的建图 = 白建。</div>
+
+<h3>18.4 全局回环方法（拓展）</h3>
+<p>slam_toolbox 用的是「扫描到地图」的回环检测。在学术界和工业界还有更高级的方法：</p>
+<ul>
+  <li><strong>Scan Context（Kim, 2018）：</strong>将 3D 点云编码为 2D 矩阵描述子，对旋转不变。用于 LiDAR 位置识别</li>
+  <li><strong>DBoW2（Gálvez-López, 2012）：</strong>视觉词袋模型，把图像表示为视觉单词的直方图。ORB-SLAM3 使用</li>
+  <li><strong>Branch-and-Bound（Hess, 2016）：</strong>Cartographer 使用的，保证找到全局最优匹配的分支定界搜索</li>
+</ul>
+
+<!-- ============================================================
+     CH19: 占据栅格地图
+     ============================================================ -->
+<h2 id="ch19">19. 占据栅格地图：SLAM 的输出</h2>
+
+<p>SLAM 的结果不仅是一串位姿，还有一张<strong>占据栅格地图（Occupancy Grid Map）</strong>。</p>
+
+<h3>19.1 栅格的三态</h3>
+<div class="row">
+<div class="col card">
+<h4>占据 <span class="tag tag-red">100</span></h4>
+<p>"这里有障碍物"<br>地图上标记为黑色/深色<br><strong>不能走</strong></p>
+</div>
+<div class="col card">
+<h4>空闲 <span class="tag tag-green">0</span></h4>
+<p>"这里没有障碍"<br>地图上标记为白色/浅色<br><strong>可以走</strong></p>
+</div>
+<div class="col card">
+<h4>未知 <span class="tag" style="background:rgba(106,106,122,0.12);color:#6a6a7a">-1</span></h4>
+<p>"还没探测过"<br>地图上标记为灰色<br><strong>不知道</strong></p>
+</div>
+</div>
+
+<h3>19.2 概率更新公式</h3>
+<p>每个栅格存储的不是「是/否」而是<strong>占据概率的后验对数几率（log-odds）</strong>：</p>
+<div class="formula">l_t = log( p(occ | z_1...z_t) / p(free | z_1...z_t) )</div>
+<p>新观测进来时，用加法更新：</p>
+<div class="formula">l_t = l_{t-1} + log( p(z | occ) / p(z | free) ) - l_0</div>
+<p>其中 l_0 是先验对数几率（如果初始不知道，通常 l_0 = 0，即 p=0.5）。</p>
+<p>用对数几率的好处：</p>
+<ul>
+  <li>更新是加法（而非乘法和归一化），数值稳定</li>
+  <li>不会因为大量观测而溢出</li>
+  <li>可以方便地转换为概率：p = 1 / (1 + exp(-l))</li>
+</ul>
+
+<h3>19.3 从激光扫描到栅格更新</h3>
+<p>对于每一束激光（从机器人位姿出发，沿角度 φ，距离 d）：</p>
+<ul>
+  <li>激光穿过的所有栅格 → 标记为<strong>空闲</strong>（用 Bresenham 算法找到所有沿线栅格）</li>
+  <li>激光末端（障碍物）的栅格 → 标记为<strong>占据</strong></li>
+</ul>
+
+<div class="diagram-box">
+  <canvas id="cv_ch19" width="760" height="320"></canvas>
+  <div class="diagram-caption">图 10：占据栅格地图的更新过程。激光束穿过的栅格变为白色（空闲），端点变为黑色（占据），其余保持灰色（未知）。</div>
+</div>
+
+<h3>19.4 地图输出格式</h3>
+<div class="table-wrap"><table>
+<tr><th>格式</th><th>文件</th><th>用途</th></tr>
+<tr><td>Nav2 标准格式</td><td>.pgm（图片）+ .yaml（元数据）</td><td>Nav2 导航加载</td></tr>
+<tr><td>slam_toolbox 序列化</td><td>.posegraph + .data</td><td>保存/恢复 SLAM 全部状态（继续建图）</td></tr>
+</table></div>
+<pre data-lang="yaml"># my_map.yaml 示例
+image: my_map.pgm
+mode: trinary
+resolution: 0.05         # 米/像素
+origin: [-12.5, -12.5, 0.0]
+negate: 0
+occupied_thresh: 0.65    # > 0.65 → 占据
+free_thresh: 0.20        # < 0.20 → 空闲</pre>
+
+<!-- ============================================================
+     CH20: 系统架构全景
+     ============================================================ -->
+<h2 id="ch20">20. SLAM 系统架构全景</h2>
+
+<p>把前面所有章节串起来，一个完整的现代 SLAM 系统（包括 slam_toolbox）的架构如下：</p>
+
+<pre data-lang="text">
+                      ┌──────────────────────────────┐
+  /scan (LiDAR) ────→│       数据预处理              │
+                      │  · 去畸变（motion distortion）│
+                      │  · 降采样 / 滤波             │
+                      └──────────┬───────────────────┘
+                                 ↓
+  /odom ────────────→┌──────────────────────────────┐
+                     │    前端：扫描匹配             │
+                      │  · Karto 相关性匹配 (slam_tb) │
+                      │  · ICP / NDT (其他方案)      │
+                      │  输出：相对变换 + 协方差      │
+                      └──────────┬───────────────────┘
+                                 ↓
+                      ┌──────────────────────────────┐
+                      │       位姿图管理              │
+                      │  · 添加新节点（关键帧判断）   │
+                      │  · 添加约束边（里程计+匹配）  │
+                      │  · 维护节点和边的数据结构    │
+                      └──────────┬───────────────────┘
+                     ┌───────────┴───────────┐
+                     ↓                       ↓
+         ┌──────────────────┐    ┌──────────────────────┐
+         │  回环检测         │    │  后端：位姿图优化     │
+         │  · 候选搜索       │    │  · SPA / Ceres / g2o │
+         │  · 相似度评分     │    │  · 稀疏 Cholesky     │
+         │  · 几何验证       │    │  · LM 信赖域         │
+         │  → 添加回环边 ────┘    │  → 全局最优位姿      │
+         └──────────────────┘    └──────────┬───────────┘
+                                            ↓
+                                 ┌──────────────────────┐
+                                 │   地图生成与发布       │
+                                 │  · 栅格 map 更新      │
+                                 │  · /map 话题发布      │
+                                 │  · map → odom TF     │
+                                 └──────────┬───────────┘
+                                            ↓
+                               ┌────────────────────────┐
+                               │  RViz2 显示 / Nav2 导航 │
+                               └────────────────────────┘
+</pre>
+
+<div class="callout tip">至此，SLAM 的理论部分全部讲完。理解了这 20 章，你已经具备了阅读任何 SLAM 论文和源码的理论基础。接下来的 10 章专门讲 slam_toolbox 的实战——如何把这些理论变成真正能用的代码。</div>
+
+<!-- ============================================================
+     CH21: slam_toolbox 概述
+     ============================================================ -->
+<h2 id="ch21">21. slam_toolbox 概述与技术栈</h2>
+
+<h3>21.1 是什么</h3>
+<p><strong>slam_toolbox</strong> 是 ROS 2 导航框架（Nav2）的官方推荐 2D 激光 SLAM 方案，由 Nav2 核心维护者 <strong>Steve Macenski</strong> 开发并维护（GitHub: stevemacenski/slam_toolbox）。它是 GMapping 的精神继承者，但用图优化替代了粒子滤波，并原生支持 ROS 2 的 Lifecycle Node 和 pluginlib 架构。</p>
+
+<h3>21.2 技术栈全景</h3>
+<div class="row">
+<div class="col card">
+<h4>前端</h4>
+<ul>
+  <li><strong>扫描匹配：</strong>Karto SDK (open_karto)，基于相关性匹配</li>
+  <li><strong>关键帧选择：</strong>基于移动距离和角度阈值</li>
+  <li><strong>数据关联：</strong>帧-地图匹配（scan-to-map）</li>
+</ul>
+</div>
+<div class="col card">
+<h4>后端</h4>
+<ul>
+  <li><strong>优化算法：</strong>SPA (Sparse Pose Adjustment)</li>
+  <li><strong>求解器：</strong>Ceres Solver（默认），可选 g2o</li>
+  <li><strong>稀疏代数：</strong>CSparse / CHOLMOD</li>
+  <li><strong>信赖域：</strong>Levenberg-Marquardt</li>
+</ul>
+</div>
+<div class="col card">
+<h4>基础设施</h4>
+<ul>
+  <li><strong>语言：</strong>C++17</li>
+  <li><strong>ROS 2 接口：</strong>Lifecycle Node + pluginlib</li>
+  <li><strong>地图格式：</strong>OccupancyGrid（栅格地图）</li>
+  <li><strong>序列化：</strong>boost::serialization</li>
+</ul>
+</div>
+</div>
+
+<h3>21.3 核心特性</h3>
+<div class="row">
+<div class="col">
+<ul>
+  <li><span class="hl-g">&#10003;</span> ROS 2 原生支持（Lifecycle Node）</li>
+  <li><span class="hl-g">&#10003;</span> 异步建图，不丢激光帧</li>
+  <li><span class="hl-g">&#10003;</span> 离线批量建图（处理 rosbag）</li>
+  <li><span class="hl-g">&#10003;</span> 终身建图（Lifelong mapping）：环境变化时增量更新</li>
+  <li><span class="hl-g">&#10003;</span> 纯定位模式：替代 AMCL</li>
+</ul>
+</div>
+<div class="col">
+<ul>
+  <li><span class="hl-g">&#10003;</span> RViz2 交互式插件：手动重定位、地图编辑</li>
+  <li><span class="hl-g">&#10003;</span> 插件架构：求解器可换（Ceres/g2o）</li>
+  <li><span class="hl-g">&#10003;</span> 多地图合并</li>
+  <li><span class="hl-g">&#10003;</span> 保存/恢复完整建图状态（位姿图 + 地图）</li>
+</ul>
+</div>
+</div>
+
+<h3>21.4 源码结构速览</h3>
+<pre data-lang="text">slam_toolbox/
+├── lib/karto_sdk/              # Karto 扫描匹配器（嵌入式修改版）
+│   ├── include/open_karto/
+│   │   ├── Mapper.h            # 核心映射器接口
+│   │   └── ScanMatcher.h       # 扫描匹配器接口
+│   └── src/
+│       ├── Mapper.cpp
+│       └── ScanMatcher.cpp
+├── include/slam_toolbox/
+│   ├── slam_toolbox_common.hpp  # 公共基类（所有模式共享）
+│   ├── slam_toolbox_async.hpp   # Async 模式
+│   ├── slam_toolbox_sync.hpp    # Sync 模式
+│   ├── slam_toolbox_lifelong.hpp # Lifelong 模式
+│   ├── karto.hpp                # Karto 的 ROS2 封装
+│   ├── pose_graph.hpp           # 位姿图管理
+│   ├── loop_closure_assistant.hpp # 回环检测
+│   └── solver_plugins/          # 求解器插件接口
+│       ├── ceres_solver.hpp
+│       └── g2o_solver.hpp
+├── src/                         # 各节点实现
+├── config/                      # 默认配置文件（5 个 YAML）
+├── launch/                      # Launch 文件（5 个 Python）
+└── solver_plugins.xml           # 插件注册</pre>
+
+<p><strong>关键文件导读：</strong></p>
+<ul>
+  <li><code>lib/karto_sdk/src/ScanMatcher.cpp</code> — 相关性扫描匹配的 C++ 实现（约 800 行）</li>
+  <li><code>src/slam_toolbox_common.cpp</code> — 所有模式共享的公共逻辑（约 3000 行）</li>
+  <li><code>src/solver_plugins/ceres_solver.cpp</code> — Ceres 位姿图优化实现</li>
+</ul>
+
+<!-- ============================================================
+     CH22: 五种运行模式
+     ============================================================ -->
+<h2 id="ch22">22. 五种运行模式详解</h2>
+
+<div class="table-wrap"><table>
+<tr><th>模式</th><th>Launch 文件</th><th>节点类型</th><th>场景</th></tr>
+<tr><td>Online Sync</td><td><code>online_sync_launch.py</code></td><td><code>sync_slam_toolbox_node</code></td><td>小场景实时建图</td></tr>
+<tr><td>Online Async <span class="tag tag-green">推荐</span></td><td><code>online_async_launch.py</code></td><td><code>async_slam_toolbox_node</code></td><td>大部分场景实时建图</td></tr>
+<tr><td>Offline</td><td><code>offline_launch.py</code></td><td><code>sync_slam_toolbox_node</code></td><td>rosbag 批量建图</td></tr>
+<tr><td>Lifelong</td><td><code>lifelong_launch.py</code></td><td><code>lifelong_slam_toolbox_node</code></td><td>长期运行增量更新</td></tr>
+<tr><td>Localization</td><td><code>localization_launch.py</code></td><td><code>localization_slam_toolbox_node</code></td><td>加载已有地图纯定位</td></tr>
+</table></div>
+
+<h3>22.1 Online Sync：简单直接</h3>
+<p>每收到一帧激光扫描，<strong>同步处理</strong>：扫描匹配 → 更新位姿图 → 更新地图。处理完才接收下一帧。</p>
+<ul>
+  <li><span class="hl-g">优点：</span>实时性好，地图更新即所见即所得</li>
+  <li><span class="hl-r">缺点：</span>大场景全局优化耗时长，可能丢帧</li>
+  <li><span class="hl-o">适用：</span>小场景（< 500 m²）</li>
+</ul>
+
+<h3>22.2 Online Async：工业级标准 <span class="tag tag-green">99% 场景用这个</span></h3>
+<p>扫描匹配和全局优化在<strong>不同线程中异步运行</strong>：</p>
+<ul>
+  <li>匹配线程：持续接收激光帧，做局部扫描匹配，更新局部地图</li>
+  <li>优化线程：在后台异步执行全局位姿图优化，优化完成后更新全局地图</li>
+</ul>
+<p>两个线程共享位姿图数据结构（通过互斥锁同步）。</p>
+<ul>
+  <li><span class="hl-g">优点：</span>不丢帧，全局优化不阻塞实时匹配</li>
+  <li><span class="hl-r">缺点：</span>地图更新有延迟（通常 <1 秒）</li>
+  <li><span class="hl-o">适用：</span>大场景、高帧率 LiDAR</li>
+</ul>
+
+<h3>22.3 离线模式 (Offline)</h3>
+<p>输入 rosbag 文件，<strong>批量处理</strong>所有数据。核心价值：可以对同一个 bag <strong>多次运行、调参、对比</strong>，产出最优地图。</p>
+<pre data-lang="bash">ros2 launch slam_toolbox offline_launch.py</pre>
+<p>在 <code>mapper_params_offline.yaml</code> 中指定 bag 文件路径：</p>
+<pre data-lang="yaml"># mapper_params_offline.yaml
+slam_toolbox:
+  ros__parameters:
+    map_file_name: /path/to/my_bag   # bag 文件路径（不含 .db3 扩展名）</pre>
+
+<h3>22.4 终身建图 (Lifelong)</h3>
+<p>不是「一次性建图 → 保存 → 再也不改」。而是<strong>持续运行、持续更新</strong>。环境变了（家具移动了、门开了关了），地图自动更新。</p>
+<p>关键机制：</p>
+<ul>
+  <li>加载已有地图（/deserialize_map）</li>
+  <li>正常建图运行（接收新激光帧）</li>
+  <li>当发现旧地图与当前扫描不一致 → 标记旧节点为「需更新」</li>
+  <li>下次优化时移除旧节点，用新数据替代</li>
+  <li>周期性序列化保存（/serialize_map）</li>
+</ul>
+
+<h3>22.5 纯定位模式 (Localization) — 替代 AMCL</h3>
+<p>加载已有地图后，<strong>不更新地图</strong>，仅输出机器人当前在地图中的位姿。</p>
+<pre data-lang="bash">ros2 launch slam_toolbox localization_launch.py \
+  map_file_name:=/home/user/maps/my_map</pre>
+
+<div class="table-wrap"><table>
+<tr><th>维度</th><th>AMCL（粒子滤波）</th><th>slam_toolbox Localization</th></tr>
+<tr><td>原理</td><td>粒子滤波 + 似然域模型</td><td>扫描匹配（与建图同款匹配器）</td></tr>
+<tr><td>精度</td><td>中（依赖粒子数量）</td><td><span class="hl-g">高</span></td></tr>
+<tr><td>全局定位</td><td><span class="hl-g">优秀</span>（不知道位置也能收敛）</td><td>需初始值（需从 dock 或已知位置启动）</td></tr>
+<tr><td>计算量</td><td>中</td><td><span class="hl-g">低</span>（无粒子维护）</td></tr>
+</table></div>
+
+<div class="callout tip"><strong>选型建议：</strong>如果机器人始终从已知位置启动（dock 充电桩），用 slam_toolbox Localization 精度更高。如果需要机器人「在任何位置启动后自己找位置」（kidnapped robot 问题），用 AMCL。</div>
+
+<!-- ============================================================
+     CH23: 配置参数完全指南
+     ============================================================ -->
+<h2 id="ch23">23. 配置文件完全指南</h2>
+
+<p>slam_toolbox 的所有配置在一个 YAML 文件中。下面按功能分组逐条详解。</p>
+
+<h3>23.1 坐标系与话题（优先级最高）</h3>
+<pre data-lang="yaml">slam_toolbox:
+  ros__parameters:
+    # --- 坐标系 ---
+    map_frame: map              # SLAM 输出的全局坐标系名
+    odom_frame: odom            # 里程计坐标系名（必须与你的 TF 树一致！）
+    base_frame: base_footprint  # 机器人基座帧名
+    scan_topic: /scan           # 激光雷达话题名
+
+    # --- 仿真/真实 ---
+    use_sim_time: true          # Gazebo 仿真用 true，真机用 false</pre>
+
+<div class="callout err"><strong>最常见的配置错误：</strong><code>base_frame</code>、<code>odom_frame</code> 与 TF 树中的实际帧名不匹配。<strong>差一个字母就报错。</strong>用 <code>ros2 run tf2_tools view_frames</code> 导出 TF 树逐帧核对。</div>
+
+<h3>23.2 地图参数</h3>
+<pre data-lang="yaml">    # --- 地图 ---
+    resolution: 0.05                # 米/格（0.01=极精细, 0.05=推荐, 0.1=省内存）
+    max_laser_range: 12.0           # 超过此距离的激光数据丢弃（米）
+    minimum_range: 0.15             # 小于此距离的激光数据丢弃（去除机器人自身）
+    map_update_interval: 1.0        # /map 话题发布间隔（秒）
+    map_start_pose: [0.0, 0.0, 0.0] # 地图原点在 map 坐标系中的位姿
+    map_start_at_dock: true         # true=机器人起始位姿作为地图原点</pre>
+
+<h3>23.3 扫描匹配参数</h3>
+<pre data-lang="yaml">    # --- 扫描匹配（Karto 相关性匹配器）---
+    use_scan_matching: true
+    minimum_scan_score: 0.3         # 最低匹配置信度（0-1）。低于此值丢弃该帧
+    use_scan_barycenter: true       # 用质心加速匹配（推荐开启）
+    correlation_search_space_resolution: 0.05  # 搜索分辨率（米）
+    correlation_search_space_dimension: 0.3    # 搜索窗口大小（米/弧度）
+    scan_matching_max_iterations: 100           # 精细匹配最大迭代次数</pre>
+
+<p>调参指南：</p>
+<ul>
+  <li>地图模糊/重影 → 提高 <code>minimum_scan_score</code> 到 0.4，减小 <code>correlation_search_space_resolution</code> 到 0.025</li>
+  <li>匹配太慢 → 减小 <code>correlation_search_space_dimension</code> 到 0.2，增大 <code>correlation_search_space_resolution</code> 到 0.1</li>
+</ul>
+
+<h3>23.4 回环参数</h3>
+<pre data-lang="yaml">    # --- 回环检测 ---
+    do_loop_closing: true
+    loop_closure_max_scans: 10         # 每次回环检查考虑的扫描帧数
+    loop_closure_search_radius: 2.0    # 局部搜索半径（米）
+    loop_closure_min_response: 0.3     # 粗匹配最低得分（0-1）
+    loop_closure_min_response_fine: 0.4  # 精细验证最低得分（0-1）</pre>
+
+<h3>23.5 优化器参数</h3>
+<pre data-lang="yaml">    # --- 后端优化 ---
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_max_num_iterations: 50
+    ceres_function_tolerance: 1e-6
+    ceres_gradient_tolerance: 1e-10
+    ceres_parameter_tolerance: 1e-8
+    minimum_time_interval: 0.5         # 两次优化最小间隔（秒）
+    optimization_hz: 2.0               # 优化频率上限（Hz）</pre>
+
+<div class="callout tip"><strong>调参优先顺序：</strong>1) 坐标系和话题 → 2) 地图分辨率 → 3) 回环参数 → 4) 扫描匹配参数 → 5) 优化器参数。不要一上来就改优化器。</div>
+
+<h3>23.6 完整配置文件模板</h3>
+<pre data-lang="yaml"># mapper_params_online_async.yaml — 完整模板
+slam_toolbox:
+  ros__parameters:
+    # 坐标系
+    map_frame: map
+    odom_frame: odom
+    base_frame: base_footprint
+    scan_topic: /scan
+    use_sim_time: true
+
+    # 插件
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_max_num_iterations: 50
+    ceres_function_tolerance: 1.0e-6
+    ceres_gradient_tolerance: 1.0e-10
+    ceres_parameter_tolerance: 1.0e-8
+
+    # 地图
+    mode: mapping
+    resolution: 0.05
+    max_laser_range: 12.0
+    minimum_range: 0.15
+    map_update_interval: 1.0
+    map_start_pose: [0.0, 0.0, 0.0]
+    map_start_at_dock: true
+
+    # 扫描匹配
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_scan_score: 0.3
+    correlation_search_space_resolution: 0.05
+    correlation_search_space_dimension: 0.3
+    scan_matching_max_iterations: 100
+
+    # 回环
+    do_loop_closing: true
+    loop_closure_max_scans: 10
+    loop_closure_search_radius: 2.0
+    loop_closure_min_response: 0.3
+    loop_closure_min_response_fine: 0.4
+
+    # 优化
+    minimum_time_interval: 0.5
+    optimization_hz: 2.0
+
+    # 调试
+    debug_logging: false
+    throttle_scans: 1</pre>
+
+<!-- ============================================================
+     CH24: ROS2 集成
+     ============================================================ -->
+<h2 id="ch24">24. ROS2 集成详解</h2>
+
+<h3>24.1 话题接口全览</h3>
+<div class="table-wrap"><table>
+<tr><th>方向</th><th>话题/服务</th><th>消息类型</th><th>必需</th></tr>
+<tr><td><strong>输入</strong></td><td><code>/scan</code></td><td><code>sensor_msgs/LaserScan</code></td><td><span class="hl-r">必需</span></td></tr>
+<tr><td><strong>输入</strong></td><td><code>/odom</code></td><td><code>nav_msgs/Odometry</code></td><td>强烈推荐</td></tr>
+<tr><td><strong>输入</strong></td><td>TF 变换树</td><td><code>tf2_msgs/TFMessage</code></td><td><span class="hl-r">必需</span></td></tr>
+<tr><td><strong>输出</strong></td><td><code>/map</code></td><td><code>nav_msgs/OccupancyGrid</code></td><td>核心输出</td></tr>
+<tr><td><strong>输出</strong></td><td><code>/map_metadata</code></td><td><code>nav_msgs/MapMetaData</code></td><td>自动发布</td></tr>
+<tr><td><strong>输出</strong></td><td><code>map → odom</code></td><td>TF 广播</td><td>核心输出</td></tr>
+</table></div>
+
+<h3>24.2 TF 树关系（最重要！）</h3>
+<p>正常运行时，TF 树必须满足如下链路（单根树，不能有闭环）：</p>
+<pre data-lang="text">map → odom → base_footprint → base_link → laser_link
+  ↑          ↑                  ↑
+  SLAM 发布   里程计发布          robot_state_publisher 发布</pre>
+
+<p>验证命令：</p>
+<pre data-lang="bash"># 生成 PDF TF 树
+ros2 run tf2_tools view_frames
+
+# 查看 map→base_link 实时变换
+ros2 run tf2_ros tf2_echo map base_link
+
+# 查看 odom→base_link 实时变换
+ros2 run tf2_ros tf2_echo odom base_link</pre>
+
+<div class="callout err"><strong>TF 链断裂的常见原因：</strong>
+<ol>
+  <li>里程计没有发布 odom→base_footprint 的 TF</li>
+  <li>robot_state_publisher 没有发布 base_link→laser_link 的静态 TF</li>
+  <li>帧名不匹配（URDF 里叫 <code>laser</code>，YAML 里写了 <code>laser_link</code>）</li>
+</ol></div>
+
+<h3>24.3 服务接口</h3>
+<div class="table-wrap"><table>
+<tr><th>服务</th><th>功能</th><th>使用场景</th></tr>
+<tr><td><code>/serialize_map</code></td><td>保存当前地图和位姿图</td><td>终止建图、存档</td></tr>
+<tr><td><code>/deserialize_map</code></td><td>加载保存的地图和位姿图</td><td>恢复建图、启动定位</td></tr>
+<tr><td><code>/clear_map</code></td><td>清空当前地图</td><td>重新建图</td></tr>
+<tr><td><code>/pause_new_measurements</code></td><td>暂停接收新扫描</td><td>调试、手动干预</td></tr>
+<tr><td><code>/resume_new_measurements</code></td><td>恢复接收新扫描</td><td>恢复运行</td></tr>
+<tr><td><code>/save_map</code></td><td>调用 map_saver 保存 .pgm + .yaml</td><td>导出 Nav2 格式地图</td></tr>
+</table></div>
+
+<h3>24.4 地图保存的两种方式</h3>
+<p><strong>方式一（推荐）：保留建图状态 — slam_toolbox 序列化</strong></p>
+<pre data-lang="bash"># 保存位姿图 + 栅格地图
+ros2 service call /serialize_map slam_toolbox/srv/SerializePoseGraph \
+  "{filename: '/home/user/maps/my_map'}"
+# 生成 my_map.posegraph + my_map.data
+# 下次用 /deserialize_map 加载，可以继续建图</pre>
+
+<p><strong>方式二：Nav2 导航用 — 标准地图格式</strong></p>
+<pre data-lang="bash"># 在 slam_toolbox 运行期间
+ros2 run nav2_map_server map_saver_cli -f ~/my_map
+# 生成 my_map.pgm + my_map.yaml
+# Nav2 导航栈需要这种格式</pre>
+
+<h3>24.5 Launch 文件编写</h3>
+<pre data-lang="python"># slam_launch.py
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+import os
+from ament_index_python.packages import get_package_share_directory
+
+def generate_launch_description():
+    params_file = LaunchConfiguration('params_file')
+    return LaunchDescription([
+        DeclareLaunchArgument('params_file',
+            default_value=os.path.join(
+                get_package_share_directory('my_robot'),
+                'config', 'mapper_params_online_async.yaml'),
+            description='SLAM config file path'),
+        Node(
+            package='slam_toolbox',
+            executable='async_slam_toolbox_node',
+            name='slam_toolbox',
+            output='screen',
+            parameters=[params_file],
+            remappings=[('scan', '/scan')]),  # 如果激光话题名不同，映射到这里
+    ])</pre>
+
+<!-- ============================================================
+     CH25: Nav2 对接全流程
+     ============================================================ -->
+<h2 id="ch25">25. Nav2 对接全流程 — 从建图到导航</h2>
+
+<p>这是最实用的一章。以下是完整的 slam_toolbox + Nav2 工作流。</p>
+
+<h3>25.1 完整流程（6 步）</h3>
+<ol class="steps">
+  <li><strong>启动机器人：</strong>LiDAR + 里程计 + TF 正常发布，所有传感器话题有数据</li>
+  <li><strong>启动 SLAM：</strong>用 Online Async 模式开始建图</li>
+  <li><strong>遥控建图：</strong>键盘遥控机器人走遍所有区域，<strong>必须包含回环路径</strong></li>
+  <li><strong>保存地图：</strong>用 map_saver_cli 保存为 .pgm + .yaml</li>
+  <li><strong>启动导航：</strong>Nav2 launch 加载地图，配合 AMCL 或 slam_toolbox Localization 模式定位</li>
+  <li><strong>设置目标：</strong>RViz2 中点击目标位置，机器人自动规划路径 + 导航</li>
+</ol>
+
+<h3>25.2 完整命令序列</h3>
+<pre data-lang="bash"># ──── 终端 1：启动机器人 bringup ────
+ros2 launch my_robot bringup.launch.py
+
+# ──── 终端 2：检查传感器 ────
+ros2 topic hz /scan     # 应该有稳定频率（如 10Hz）
+ros2 topic hz /odom     # 应该有稳定频率（如 30Hz）
+ros2 topic echo /scan --once | head -5   # 确认有数据
+
+# ──── 终端 3：启动 SLAM ────
+ros2 launch slam_toolbox online_async_launch.py \
+  slam_params_file:=/path/to/mapper_params_online_async.yaml
+
+# ──── 终端 4：键盘遥控 ────
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+# 建议速度：0.2 m/s 以下，别太快！
+
+# ──── 终端 5：RViz2 可视化 ────
+rviz2
+# 添加：Map(/map), LaserScan(/scan), TF, RobotModel
+
+# ──── 建图完成后，终端 6：保存地图 ────
+ros2 run nav2_map_server map_saver_cli -f ~/my_map
+
+# ──── 停止 SLAM 节点，终端 7：启动导航 ────
+ros2 launch nav2_bringup navigation_launch.py \
+  map:=/home/user/my_map.yaml \
+  params_file:=/path/to/nav2_params.yaml
+
+# ──── 在 RViz2 中点击「2D Goal Pose」按钮，在地图上点目标位置 ────</pre>
+
+<h3>25.3 建图关键注意事项</h3>
+<div class="callout warn">
+<p><strong>建图三大铁律：</strong></p>
+<ol>
+  <li><strong>走回环路径！</strong>不要让机器人只走一遍——回到起点附近、在已有区域多走几次。这能触发回环检测，是地图质量的<strong>决定性因素</strong></li>
+  <li><strong>速度别太快！</strong>建议 0.2-0.3 m/s。太快会导致扫描畸变（一帧扫描期间机器人移动了太多），匹配失败</li>
+  <li><strong>多角度扫描同一区域！</strong>玻璃墙、镜面、细柱子——这些从单一角度难以正确建模，需要从多个方向扫描</li>
+</ol>
+</div>
+
+<h3>25.4 地图加载导航的两种方案</h3>
+<div class="row">
+<div class="col card">
+<h4>方案 A：AMCL 定位 + Nav2 Planner</h4>
+<pre data-lang="bash">ros2 launch nav2_bringup navigation_launch.py \
+  map:=/home/user/my_map.yaml</pre>
+<p>经典组合，适合大多数场景。AMCL 支持全局定位（任意起点启动）。</p>
+</div>
+<div class="col card">
+<h4>方案 B：slam_toolbox Localization + Nav2 Planner</h4>
+<pre data-lang="bash">ros2 launch slam_toolbox localization_launch.py \
+  map_file_name:=/home/user/my_map
+ros2 launch nav2_bringup navigation_launch.py \
+  map:=/home/user/my_map.yaml</pre>
+<p>用 slam_toolbox 替代 AMCL 做定位，适合从已知起点启动的任务。定位精度高于 AMCL。</p>
+</div>
+</div>
+
+<!-- ============================================================
+     CH26: 性能调优
+     ============================================================ -->
+<h2 id="ch26">26. 性能调优</h2>
+
+<h3>26.1 分辨率：精度和性能的跷跷板</h3>
+<div class="table-wrap"><table>
+<tr><th>分辨率 (m/格)</th><th>1000m² 内存占用</th><th>精度</th><th>推荐场景</th></tr>
+<tr><td>0.01</td><td>~100 MB</td><td>极高</td><td>精密室内（实验室级）</td></tr>
+<tr><td><span class="hl-g">0.05</span></td><td>~4 MB</td><td>高</td><td><span class="hl-g">默认推荐</span></td></tr>
+<tr><td>0.1</td><td>~1 MB</td><td>中</td><td>大仓库、室外</td></tr>
+<tr><td>0.2</td><td>~0.25 MB</td><td>低</td><td>超大面积、嵌入式平台</td></tr>
+</table></div>
+
+<h3>26.2 激光范围调优</h3>
+<pre>max_laser_range: 12.0   # 室内推荐 12m，室外可设 25-30m</pre>
+<ul>
+<li>更大的范围 → 每帧扫描覆盖更多区域 → 需要的节点更少 → 优化更快</li>
+<li>但更远的激光点精度差 → <strong>可能降低匹配质量</strong>。玻璃和镜面反射区域尤其严重</li>
+<li>嵌入式平台（Raspberry Pi）：建议 8m</li>
+</ul>
+
+<h3>26.3 扫描匹配参数调优</h3>
+<div class="table-wrap"><table>
+<tr><th>问题现象</th><th>调整方向</th><th>参数</th></tr>
+<tr><td>地图模糊/重影/分层</td><td>提高匹配严格度</td><td><code>minimum_scan_score</code> ↑ (0.4)<br><code>correlation_search_space_resolution</code> ↓ (0.025)</td></tr>
+<tr><td>匹配太慢/CPU 吃满</td><td>降低匹配精度</td><td><code>correlation_search_space_dimension</code> ↓ (0.2)<br><code>correlation_search_space_resolution</code> ↑ (0.1)<br><code>use_scan_barycenter: true</code></td></tr>
+<tr><td>转弯时地图断裂</td><td>增大搜索窗口</td><td><code>correlation_search_space_dimension</code> ↑ (0.5)<br><code>scan_matching_max_iterations</code> ↑ (150)</td></tr>
+</table></div>
+
+<h3>26.4 优化频率调优</h3>
+<div class="row">
+<div class="col card">
+<h4>CPU 充裕（PC）</h4>
+<pre>optimization_hz: 5.0
+minimum_time_interval: 0.2</pre>
+<p>高频优化，全局一致性更好，实时地图更新更及时。</p>
+</div>
+<div class="col card">
+<h4>CPU 紧张（嵌入式）</h4>
+<pre>optimization_hz: 1.0
+minimum_time_interval: 1.0</pre>
+<p>低频优化，牺牲地图实时性换取系统稳定性。</p>
+</div>
+</div>
+
+<h3>26.5 嵌入式平台专项调优 (Raspberry Pi 4 / Jetson Nano)</h3>
+<pre># 低配平台完整参数集
+resolution: 0.1                      # 粗分辨率省内存
+max_laser_range: 8.0                 # 减少扫描数据量
+map_update_interval: 3.0             # 降低地图发布频率
+optimization_hz: 1.0                 # 降低优化频率
+minimum_time_interval: 1.0
+correlation_search_space_dimension: 0.2  # 缩小搜索窗口
+loop_closure_search_radius: 1.0      # 缩小回环搜索范围
+ceres_linear_solver: SPARSE_NORMAL_CHOLESKY  # 稀疏求解器省内存
+scan_matching_max_iterations: 50     # 减少迭代</pre>
+
+<div class="callout tip"><strong>嵌入式平台最佳实践：</strong>用 PC 负责建图（Offline 模式跑 rosbag），嵌入式只做 Localization 定位。建图和定位分离，各取所需。</div>
+
+<h3>26.6 大规模场景（>10000m²）策略</h3>
+<ul>
+<li>使用 Async 模式，避免全局优化阻塞扫描匹配</li>
+<li>降低分辨率到 0.1</li>
+<li>建图完成后立即 save 并切换到 Localization 模式，避免位姿图无限增长</li>
+<li>考虑分区建图：用 <code>map_merge</code> 包合并多张地图</li>
+<li>如果内存仍然不足：用 <code>ros2 bag record</code> 录制数据 → 在 PC 上用 Offline 模式批量处理</li>
+</ul>
+
+<!-- ============================================================
+     CH27: 故障排查手册
+     ============================================================ -->
+<h2 id="ch27">27. 故障排查手册</h2>
+
+<h3>27.1 地图模糊 / 分层 / 重影 <span class="tag tag-red">最常见问题</span></h3>
+<div class="callout err">
+<p><strong>根因：</strong>里程计漂移严重，或回环检测没有成功触发。机器人「以为」自己走过的路径和真实路径偏差太大，导致同一堵墙被画到了不同的位置。</p>
+<p><strong>排查步骤：</strong></p>
+<ol>
+<li>检查里程计精度：让机器人直走 1 米，看 <code>/odom</code> 记录的距离是否接近 1 米。如果不准，校准轮径（<code>wheel_radius_multiplier</code>）</li>
+<li>检查回环是否触发：看终端日志是否有 "Loop closure detected" 字样。如果没有，机器人可能没有回到过已建图区域</li>
+<li>降低 <code>loop_closure_search_radius</code> 到 1.0，降低 <code>loop_closure_min_response</code> 到 0.2，让回环更容易触发</li>
+<li><strong>最重要的：多走回环路径！</strong>不要让机器人只走一遍——回到起点、在已有区域反复走</li>
+<li>如果里程计实在太差：用 <code>robot_localization</code> 包融合 IMU 数据来改善</li>
+</ol>
+</div>
+
+<h3>27.2 「No laser scan received」</h3>
+<div class="callout warn">
+<p><strong>根因：</strong>激光话题不匹配、激光没有发布数据、或 TF 树不完整。</p>
+<p><strong>逐项检查：</strong></p>
+<ol>
+<li><code>ros2 topic echo /scan</code> — 有数据吗？帧率正常吗（应该 ≥ 5Hz）？</li>
+<li><code>ros2 topic info /scan</code> — 消息类型是 <code>sensor_msgs/msg/LaserScan</code> 吗？</li>
+<li>配置文件中的 <code>scan_topic</code> 参数与实际话题名一致吗？</li>
+<li><code>ros2 run tf2_tools view_frames</code> — 导出 TF 树 PDF，检查链是否从 odom 到 laser 完整</li>
+<li><code>ros2 run tf2_ros tf2_echo odom base_link</code> — odom→base_link 变换存在并正常发布吗？</li>
+<li>仿真模式下：<code>use_sim_time</code> 设为 <code>true</code> 了吗？Gazebo 在运行吗？</li>
+</ol>
+</div>
+
+<h3>27.3 地图不更新或更新极慢</h3>
+<div class="callout warn">
+<p><strong>可能原因及解决：</strong></p>
+<ul>
+<li>位姿图变得太大 → 使用 Async 模式（<code>online_async_launch.py</code>）</li>
+<li>分辨率太高 → 降低到 0.1</li>
+<li>全局优化耗时过长 → 降低 <code>optimization_hz</code> 到 1.0</li>
+<li>激光范围太大 → 减小 <code>max_laser_range</code> 到 8.0</li>
+<li>检查 <code>/map</code> 话题是否在发布：<code>ros2 topic hz /map</code></li>
+</ul>
+</div>
+
+<h3>27.4 地图保存后 Nav2 加载报错</h3>
+<div class="callout err">
+<p><strong>常见原因：</strong></p>
+<ul>
+<li><code>.yaml</code> 中的 <code>image:</code> 路径错了 — 必须使用<strong>绝对路径</strong>或正确的相对路径</li>
+<li>保存方式用混了：<code>/serialize_map</code> 存的是 .posegraph + .data 格式，Nav2 的 <code>map_server</code> 需要 .pgm + .yaml 格式。建图完成后要用 <code>map_saver_cli</code> 保存</li>
+<li><code>free_thresh: 0.25</code> 和 <code>occupied_thresh: 0.65</code> 必须与 map_server 期望匹配</li>
+<li><code>negate: 0</code> 对于 slam_toolbox 生成的地图通常是 0（不反转颜色）</li>
+</ul>
+</div>
+
+<h3>27.5 回环检测误匹配（错误的回环）</h3>
+<div class="callout warn">
+<p><strong>现象：</strong>地图突然被「拉歪」——本不是一个地方的两个区域被强行拼到一起。这比没有回环还要糟糕。</p>
+<p><strong>解决：</strong></p>
+<ul>
+<li>提高 <code>loop_closure_min_response</code>（如 0.4 或 0.5）——只有匹配得分很高的才认定是回环</li>
+<li>提高 <code>loop_closure_min_response_fine</code> ——精细验证门槛也要提高</li>
+<li>减小 <code>loop_closure_search_radius</code> ——只在更近的范围内搜索回环候选</li>
+<li>在长走廊等视觉高度相似的区域，上述参数应该更保守</li>
+</ul>
+</div>
+
+<h3>27.6 TF 帧名不匹配 <span class="tag tag-red">配置错误榜首</span></h3>
+<div class="callout err">
+<p><strong>现象：</strong>slam_toolbox 启动后立即报错或地图位置完全不对。</p>
+<p><strong>诊断：</strong></p>
+<pre data-lang="bash"># 查看 TF 树中实际使用的帧名
+ros2 run tf2_tools view_frames
+# 对比 YAML 配置文件中的设置
+# map_frame / odom_frame / base_frame 三者必须与 TF 树完全一致</pre>
+<p>常见错误：YAML 写 <code>base_frame: base_link</code> 但 TF 树中是 <code>base_footprint</code>（反之亦然）。差一个字符就失败——TF 帧名是大小写敏感的。</p>
+</div>
+
+<h3>27.7 诊断命令速查</h3>
+<pre data-lang="bash"># 快速诊断一条龙
+ros2 topic hz /scan          # 激光频率是否正常？
+ros2 topic hz /odom          # 里程计频率是否正常？
+ros2 topic echo /scan --once | head -20   # 激光有数据吗？
+ros2 run tf2_ros tf2_echo map odom        # SLAM 输出的 TF 存在吗？
+ros2 topic echo /map_metadata             # 地图分辨率、尺寸对吗？
+ros2 topic hz /map                        # 地图在更新吗？
+ros2 doctor --report                      # ROS2 系统健康检查
+
+# 录制 bag 用于离线分析
+ros2 bag record /scan /odom /tf /tf_static /map</pre>
+
+<!-- ============================================================
+     CH28: 与其他方案对比
+     ============================================================ -->
+<h2 id="ch28">28. 与其他 SLAM 方案对比</h2>
+
+<h3>28.1 2D 激光 SLAM 四强对比</h3>
+<div class="table-wrap"><table>
+<tr><th>特性</th><th>slam_toolbox</th><th>Cartographer</th><th>GMapping</th><th>Hector SLAM</th></tr>
+<tr><td>算法</td><td>图优化 (SPA)</td><td>子图 + 分支定界</td><td>粒子滤波 (RBPF)</td><td>扫描匹配多分辨率</td></tr>
+<tr><td>ROS 2 原生支持</td><td><span class="hl-g">是（官方推荐）</span></td><td><span class="hl-g">是</span></td><td><span class="hl-r">仅 ROS 1</span></td><td><span class="hl-r">仅 ROS 1</span></td></tr>
+<tr><td>回环检测</td><td><span class="hl-g">好</span></td><td><span class="hl-g">优秀</span>（全局搜索）</td><td>需要独立模块</td><td><span class="hl-r">无</span></td></tr>
+<tr><td>地图质量</td><td>优</td><td><span class="hl-g">最优</span></td><td>良好</td><td>中</td></tr>
+<tr><td>CPU 消耗</td><td>中低</td><td><span class="hl-r">高</span>（2-4倍）</td><td>低</td><td>低</td></tr>
+<tr><td>内存消耗</td><td>中 (~200MB)</td><td><span class="hl-r">高</span> (~1GB+)</td><td>低</td><td>低</td></tr>
+<tr><td>配置难度</td><td>中 (10-20 参数)</td><td><span class="hl-r">高</span> (100+ 参数)</td><td>低</td><td>低</td></tr>
+<tr><td>里程计依赖</td><td>推荐但非必需</td><td>推荐</td><td>必需</td><td><span class="hl-g">不需要</span></td></tr>
+<tr><td>大场景</td><td>良好</td><td>优秀</td><td>差（粒子退化）</td><td>差（漂移严重）</td></tr>
+<tr><td>离线建图</td><td><span class="hl-g">原生支持</span></td><td>通过 rosbag</td><td>无</td><td>无</td></tr>
+<tr><td>终身建图</td><td><span class="hl-g">原生支持</span></td><td>不支持</td><td>不支持</td><td>不支持</td></tr>
+<tr><td>Nav2 集成</td><td><span class="hl-g">官方推荐</span></td><td>社区维护</td><td>不支持</td><td>不支持</td></tr>
+<tr><td>适用场景</td><td><span class="hl-g">ROS2 通用首选</span></td><td>高精度商业需求</td><td>ROS1 遗留项目</td><td>无人机/无里程计</td></tr>
+</table></div>
+
+<h3>28.2 选型决策树</h3>
+<div class="card">
+<ul>
+<li>你是 ROS 2 用户 → <span class="hl-g">选 slam_toolbox</span>，覆盖 99% 场景</li>
+<li>你需要亚厘米级精度（商业仓储 AGV）→ 选 <span class="hl-o">Cartographer</span>，但接受高 CPU/内存消耗和复杂配置</li>
+<li>你在 ROS 1 旧系统上 → 选 <span class="hl">GMapping</span>（只能这样）</li>
+<li>你没有里程计（如无人机）→ 选 <span class="hl-p">Hector SLAM</span>（唯一选择）</li>
+<li>你需要长期运行并持续更新地图 → <span class="hl-g">只有 slam_toolbox 支持（Lifelong 模式）</span></li>
+</ul>
+</div>
+
+<h3>28.3 3D 激光和视觉 SLAM 概览</h3>
+<div class="table-wrap"><table>
+<tr><th>方案</th><th>传感器</th><th>代表算法</th><th>适用场景</th></tr>
+<tr><td>3D LiDAR SLAM</td><td>3D/多线激光雷达</td><td>LOAM, LeGO-LOAM, FAST-LIO2</td><td>自动驾驶、无人机、室外大场景</td></tr>
+<tr><td>视觉 SLAM</td><td>单目/双目/RGB-D 相机</td><td>ORB-SLAM3, DSO</td><td>AR/VR、室内机器人（低成本方案）</td></tr>
+<tr><td>视觉惯性 SLAM</td><td>相机 + IMU</td><td>VINS-Fusion, ORB-SLAM3-IMU</td><td>无人机、手机 AR</td></tr>
+<tr><td>激光惯性 SLAM</td><td>LiDAR + IMU</td><td>LIO-SAM, FAST-LIO2</td><td>自动驾驶、高速移动场景</td></tr>
+</table></div>
+<p>这些方案需要 6 自由度位姿估计，面向的场景比 2D 室内机器人复杂一个数量级。如果你的应用是室内 2D 导航，slam_toolbox 已经完全够用。</p>
+
+<h3>28.4 slam_toolbox vs Cartographer 深度对比</h3>
+<div class="row">
+<div class="col card">
+<h4>slam_toolbox 更适合你，如果：</h4>
+<ul>
+<li>你刚接触 ROS2 和 SLAM</li>
+<li>你的机器人是差速驱动（最常见类型）</li>
+<li>你需要在嵌入式平台上运行</li>
+<li>你需要终身建图（环境经常变化）</li>
+<li>你想要简单可靠的默认配置，不想折腾</li>
+</ul>
+</div>
+<div class="col card">
+<h4>Cartographer 更适合你，如果：</h4>
+<ul>
+<li>你对地图精度要求极高（商业展示级）</li>
+<li>你的场景特别大（数万平米）且结构复杂</li>
+<li>你有充足的 CPU 和内存预算</li>
+<li>你愿意花时间调优 100+ 个参数</li>
+<li>你需要 3D SLAM（Cartographer 也支持 3D）</li>
+</ul>
+</div>
+</div>
+
+<!-- ============================================================
+     CH29: 学习路径总结
+     ============================================================ -->
+<h2 id="ch29">29. 学习路径总结</h2>
+
+<h3>阶段一：理解原理（本文前半部分）</h3>
+<p>目标：形成对 SLAM 的<strong>直觉理解</strong>，能回答「为什么 SLAM 必须是概率的？」「为什么回环检测是决定性因素？」这类问题。</p>
+<ul>
+<li>阅读第 1-7 章（SLAM 是什么、为什么难、概率基础）</li>
+<li>阅读第 10-14 章（贝叶斯滤波、三大算法家族）</li>
+<li>阅读第 16-20 章（现代 SLAM 架构拆解）</li>
+</ul>
+
+<h3>阶段二：动手实践（Gazebo 仿真）</h3>
+<p>目标：用 slam_toolbox 在仿真中建出一张能用于导航的地图。</p>
+<ol>
+<li>启动 Gazebo 仿真环境（一个有墙有障碍物的世界）</li>
+<li>启动 slam_toolbox Online Async 模式</li>
+<li>用键盘遥控机器人，低速走遍整个空间<strong>（务必走回环路径！）</strong></li>
+<li>在 RViz2 中观察地图的实时构建过程，理解每个参数的作用</li>
+<li>用 <code>map_saver_cli</code> 保存地图</li>
+<li>关闭 SLAM，用 Nav2 加载地图进行导航测试，验证地图质量</li>
+</ol>
+
+<h3>阶段三：读源码（理解原理的实现）</h3>
+<p>目标：理解 slam_toolbox 内部各模块是如何协同工作的。</p>
+<ul>
+<li><code>lib/karto_sdk/src/ScanMatcher.cpp</code> — 相关性扫描匹配的核心实现</li>
+<li><code>src/pose_graph.cpp</code> — 位姿图的数据结构和优化触发逻辑</li>
+<li><code>src/solver_plugins/ceres_solver.cpp</code> — 如何把位姿图转化为 Ceres 优化问题</li>
+<li><code>src/loop_closure_assistant.cpp</code> — 回环检测的策略和验证逻辑</li>
+</ul>
+
+<h3>阶段四：真实机器人部署</h3>
+<p>目标：在自己搭建的真实机器人上跑通建图→导航全流程。</p>
+<ul>
+<li>校准里程计（轮径标定，走 1m 对比 /odom 输出）</li>
+<li>如需要，配置 <code>robot_localization</code> 融合 IMU 提升里程计精度</li>
+<li>在真实环境中建图，注意地面材质（打滑）、光照、玻璃等因素的影响</li>
+<li>用 Lifelong 模式持续维护地图，适应环境变化</li>
+</ul>
+
+<h3>阶段五：进阶方向</h3>
+<div class="row">
+<div class="col card">
+<h4>SLAM 理论进阶</h4>
+<ul>
+<li>读《Probabilistic Robotics》第 10-13 章（SLAM 经典教材）</li>
+<li>读 SPA 原始论文（Konolige et al., 2010）</li>
+<li>读 g2o 论文（Kummerle et al., 2011）</li>
+<li>了解 iSAM2 和 Bayes 树（Kaess et al., 2012）</li>
+<li>学习 SE(2)/SE(3) 李群李代数</li>
+</ul>
+</div>
+<div class="col card">
+<h4>工程进阶</h4>
+<ul>
+<li>尝试 Cartographer 对比建图效果</li>
+<li>学习 3D LiDAR SLAM（LOAM、FAST-LIO2）</li>
+<li>学习视觉 SLAM（ORB-SLAM3）</li>
+<li>了解多机器人协作 SLAM</li>
+<li>了解语义 SLAM（融合物体识别信息）</li>
+</ul>
+</div>
+</div>
+
+<div class="callout tip"><strong>最重要的建议再说一遍：SLAM 是实践性极强的领域。</strong>只看理论不跑代码，理解永远停留在表面。先从 Gazebo 仿真跑通建图到导航的全流程（2-3 小时），再回头理解原理，效率最高。</div>
+
+<!-- ============================================================
+     CH30: 附录
+     ============================================================ -->
+<h2 id="ch30">30. 附录：公式速查与术语表</h2>
+
+<h3>30.1 核心公式速查</h3>
+<div class="table-wrap"><table>
+<tr><th>名称</th><th>公式</th><th>在 SLAM 中的角色</th></tr>
+<tr><td>贝叶斯定理</td><td><code>p(x|z) ∝ p(z|x)·p(x)</code></td><td>融合先验（运动）和似然（观测）</td></tr>
+<tr><td>全概率公式</td><td><code>p(x_t) = ∫ p(x_t|x_{t-1})·p(x_{t-1})·dx_{t-1}</code></td><td>预测步骤：运动传播不确定性</td></tr>
+<tr><td>高斯分布</td><td><code>N(x; μ, Σ) ∝ exp(-½(x-μ)^T Σ^{-1} (x-μ))</code></td><td>不确定性的标准表达</td></tr>
+<tr><td>非线性最小二乘</td><td><code>x* = argmin Σ ||e_i(x)||²</code></td><td>SLAM 优化的最终数学形式</td></tr>
+<tr><td>高斯-牛顿正规方程</td><td><code>J^T J · Δx = -J^T · e</code></td><td>迭代求解的线性系统</td></tr>
+<tr><td>LM 正规方程</td><td><code>(J^T J + λI) · Δx = -J^T · e</code></td><td>带阻尼的高斯-牛顿（更鲁棒）</td></tr>
+<tr><td>差速里程计公式</td><td><code>Δs=(d_L+d_R)/2,  Δθ=(d_R-d_L)/B</code></td><td>从轮子编码器推算位姿变化 (B=轮距)</td></tr>
+<tr><td>ICP 目标函数</td><td><code>min Σ ||R·p_i + t − q_j||²</code></td><td>两帧点云的最优对齐</td></tr>
+<tr><td>占据栅格 log-odds</td><td><code>l_t = l_{t-1} + log(p/(1-p))</code></td><td>栅格占据概率的数值稳定更新</td></tr>
+<tr><td>似然域得分</td><td><code>p(z|x,m) ∝ exp(-d²/(2σ²))</code></td><td>激光终点到最近障碍物距离 d 的高斯似然</td></tr>
+</table></div>
+
+<h3>30.2 术语表</h3>
+<div class="table-wrap"><table>
+<tr><th>术语</th><th>全称</th><th>含义</th></tr>
+<tr><td><strong>SLAM</strong></td><td>Simultaneous Localization and Mapping</td><td>同时定位与建图</td></tr>
+<tr><td><strong>EKF</strong></td><td>Extended Kalman Filter</td><td>扩展卡尔曼滤波，处理非线性系统</td></tr>
+<tr><td><strong>RBPF</strong></td><td>Rao-Blackwellized Particle Filter</td><td>Rao-Blackwellized 粒子滤波，FastSLAM 基础</td></tr>
+<tr><td><strong>ICP</strong></td><td>Iterative Closest Point</td><td>迭代最近点，经典扫描匹配算法</td></tr>
+<tr><td><strong>NDT</strong></td><td>Normal Distributions Transform</td><td>正态分布变换，另一种扫描匹配方法</td></tr>
+<tr><td><strong>SPA</strong></td><td>Sparse Pose Adjustment</td><td>稀疏位姿调整，slam_toolbox 使用的优化算法</td></tr>
+<tr><td><strong>LiDAR</strong></td><td>Light Detection and Ranging</td><td>激光雷达</td></tr>
+<tr><td><strong>IMU</strong></td><td>Inertial Measurement Unit</td><td>惯性测量单元（加速度计+陀螺仪）</td></tr>
+<tr><td><strong>Odometry</strong></td><td>-</td><td>里程计，从运动传感器推算位姿变化</td></tr>
+<tr><td><strong>SE(2)</strong></td><td>Special Euclidean Group in 2D</td><td>2D 刚体变换群 (x, y, θ)</td></tr>
+<tr><td><strong>SE(3)</strong></td><td>Special Euclidean Group in 3D</td><td>3D 刚体变换群 (x, y, z, roll, pitch, yaw)</td></tr>
+<tr><td><strong>Loop Closure</strong></td><td>-</td><td>回环检测/闭合，识别曾经来过的位置</td></tr>
+<tr><td><strong>Pose Graph</strong></td><td>-</td><td>位姿图：节点=位姿，边=相对变换约束</td></tr>
+<tr><td><strong>Keyframe</strong></td><td>-</td><td>关键帧，被选入位姿图的代表性帧</td></tr>
+<tr><td><strong>Occupancy Grid</strong></td><td>-</td><td>占据栅格地图，每格标记为占据/空闲/未知</td></tr>
+<tr><td><strong>Belief</strong></td><td>-</td><td>信念，概率机器人学中对状态的当前认知</td></tr>
+<tr><td><strong>Prior/Posterior</strong></td><td>-</td><td>先验/后验，观测之前/之后的信念</td></tr>
+<tr><td><strong>Likelihood</strong></td><td>-</td><td>似然，给定状态时观测的概率</td></tr>
+<tr><td><strong>Landmark</strong></td><td>-</td><td>路标/地标，环境中可识别的特征点</td></tr>
+<tr><td><strong>Gauge Freedom</strong></td><td>-</td><td>规范自由度，SLAM 中绝对位姿不可观的问题</td></tr>
+<tr><td><strong>Bundle Adjustment</strong></td><td>-</td><td>光束平差，视觉 SLAM 中的全局优化</td></tr>
+<tr><td><strong>Factor Graph</strong></td><td>-</td><td>因子图，图优化的通用抽象表示</td></tr>
+<tr><td><strong>Information Matrix</strong></td><td>-</td><td>信息矩阵 Σ^{-1}，信息形式的协方差逆</td></tr>
+</table></div>
+
+<h3>30.3 推荐资源</h3>
+<div class="row">
+<div class="col card">
+<h4>书籍</h4>
+<ul>
+<li>《Probabilistic Robotics》- Thrun, Burgard, Fox（<strong>SLAM 圣经</strong>）</li>
+<li>《State Estimation for Robotics》- Barfoot（李群李代数视角）</li>
+<li>《视觉SLAM十四讲》- 高翔（中文入门首选，侧重视觉 SLAM）</li>
+</ul>
+</div>
+<div class="col card">
+<h4>在线资源</h4>
+<ul>
+<li>slam_toolbox GitHub: <code>github.com/SteveMacenski/slam_toolbox</code></li>
+<li>Nav2 官方文档: <code>navigation.ros.org</code></li>
+<li>ROS 2 官方教程: <code>docs.ros.org/en/humble</code></li>
+<li>Ceres Solver 文档: <code>ceres-solver.org</code></li>
+<li>g2o 框架: <code>github.com/RainerKuemmerle/g2o</code></li>
+</ul>
+</div>
+</div>
+
+<div class="callout tip"><strong>恭喜你读到这里！</strong>如果你从头到尾读完了这份 30 章的指南，你已经比 95% 的 ROS 用户更深入理解 SLAM 了。现在去做两件事：(1) 打开 Gazebo，实际跑一次 slam_toolbox 建图到导航的完整流程；(2) 回来复读第 10-14 章，你会发现「啊，原来当时没完全懂的地方现在豁然开朗了」。理论和实践交替，是最高效的学习方法。</div>
+
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT: INTERACTIVE CANVAS DIAGRAMS
+     ============================================================ -->
+<script>
+/* ============================================================
+   Utility Functions
+   ============================================================ */
+function $(id){return document.getElementById(id)}
+function ctx(id){const c=$(id);if(!c)return null;c.width=c.parentElement.clientWidth;return c.getContext('2d')}
+function hex(r,g,b){return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function rgba(r,g,b,a){return `rgba(${r},${g},${b},${a})`}
+
+const COL={
+  bg:'#0e0e22',wall:'#2a2a40',wallLight:'#353560',
+  hit:'#e85555',robot:'#5b9cf5',robotFill:'rgba(91,156,245,0.15)',
+  path:'rgba(91,156,245,0.5)',pathDash:'rgba(232,148,64,0.5)',
+  text:'#b8b8cc',textDim:'#707088',textBright:'#e4e4f8',
+  green:'#3cc97a',orange:'#e89440',purple:'#a78bfa',red:'#e85555',
+  mapKnown:'rgba(60,201,122,0.3)',mapUnknown:'rgba(112,112,136,0.15)',
+  ellipse:'rgba(232,148,64,0.3)',correct:'#3cc97a',error:'#e85555'
+}
+
+/* Draw a simple robot on canvas */
+function drawRobot(g,x,y,theta,color,size){
+  g.save();g.translate(x,y);g.rotate(theta)
+  const s=size||8
+  g.fillStyle=color;g.beginPath();g.arc(0,0,s,0,Math.PI*2);g.fill()
+  g.strokeStyle=color;g.lineWidth=2;g.beginPath()
+  g.moveTo(0,0);g.lineTo(s*1.6,0);g.stroke()
+  g.fillStyle=color;g.beginPath();g.arc(s*1.6,0,2,0,Math.PI*2);g.fill()
+  g.restore()
+}
+
+/* ============================================================
+   CH2: 蒙眼探房间 (4 steps)
+   ============================================================ */
+function ch2_draw(step){
+  const c=$('cv_ch2'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.clearRect(0,0,w,h)
+  g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  // Real room (left panel)
+  const rx=40,ry=30,rw=290,rh=260
+  g.strokeStyle=COL.wall;g.lineWidth=2;g.strokeRect(rx,ry,rw,rh)
+  // Inner walls in real room
+  g.lineWidth=1;g.strokeStyle='#353560'
+  g.beginPath();g.moveTo(rx+160,ry);g.lineTo(rx+160,ry+120);g.stroke()
+  g.beginPath();g.moveTo(rx+100,ry+160);g.lineTo(rx+260,ry+160);g.stroke()
+  // Robot positions in room
+  const positions=[[rx+60,ry+80,0],[rx+60,ry+80,0],[rx+180,ry+90,0.3],[rx+180,ry+90,0.3]]
+  const pos=positions[step]
+  drawRobot(g,pos[0],pos[1],pos[2],'#e85555',7)
+  if(step>=1){
+    g.strokeStyle='rgba(60,201,122,0.3)';g.lineWidth=1.5;g.setLineDash([5,5])
+    g.beginPath();g.arc(pos[0],pos[1],50,0,Math.PI*2);g.stroke()
+    g.setLineDash([])
+    g.fillStyle='#3cc97a';g.font='10px sans-serif'
+    g.fillText('伸手摸到墙',pos[0]+55,pos[1]-5)
+  }
+  if(step>=2){
+    g.strokeStyle='rgba(232,148,64,0.4)';g.lineWidth=1.5;g.setLineDash([3,6])
+    g.beginPath();g.moveTo(rx+60,ry+80);g.lineTo(rx+180,ry+90);g.stroke()
+    g.setLineDash([])
+    g.fillStyle='#e89440';g.font='10px sans-serif'
+    g.fillText('走了几步',rx+105,ry+65)
+  }
+  g.fillStyle='#707088';g.font='bold 11px sans-serif';g.fillText('真实房间',rx+10,ry-10)
+
+  // Mental map (right panel)
+  const mx=370,my=30,mw=330,mh=260
+  g.strokeStyle='#1a1a30';g.lineWidth=1;g.setLineDash([4,4])
+  g.strokeRect(mx,my,mw,mh);g.setLineDash([])
+  g.fillStyle='#707088';g.font='bold 11px sans-serif';g.fillText('脑中的地图',mx+10,my-10)
+  // Robot in mind map
+  const mpos=[[mx+50,my+80,0],[mx+50,my+80,0],[mx+155,my+85,0.3],[mx+155,my+85,0.3]]
+  const mp=mpos[step]
+  drawRobot(g,mp[0],mp[1],mp[2],COL.robot,6)
+  // Explored segments
+  if(step>=1){
+    g.strokeStyle='#3cc97a';g.lineWidth=3
+    g.beginPath();g.moveTo(mx+50,my+50);g.lineTo(mx+50,my+150);g.stroke()
+    g.fillStyle=COL.mapKnown;g.fillRect(mx+47,my+50,6,100)
+    g.fillStyle='#3cc97a';g.font='9px sans-serif'
+    g.fillText('这段墙',mx+55,my+45)
+    g.fillText('我摸过了',mx+55,my+58)
+  }
+  if(step>=3){
+    g.strokeStyle='#3cc97a';g.lineWidth=3
+    g.beginPath();g.moveTo(mx+50,my+150);g.lineTo(mx+220,my+150);g.stroke()
+    g.fillStyle=COL.mapKnown;g.fillRect(mx+50,my+147,170,6)
+    // Show drift
+    g.fillStyle='#e85555';g.font='9px sans-serif'
+    g.fillText('?? 本该接到 (50,150) 但偏了!',mx+100,my+105)
+    g.strokeStyle='#e85555';g.lineWidth=1;g.setLineDash([3,3])
+    g.beginPath();g.moveTo(mx+155,my+85);g.lineTo(mx+50,my+150);g.stroke()
+    g.setLineDash([])
+  }
+  $('ch2_label').textContent='第 '+(step+1)+' 步'
+}
+function ch2_step(s){
+  ch2_draw(s)
+  const btns=document.querySelectorAll('#cv_ch2').item(0).parentElement.querySelectorAll('button')
+  btns.forEach((b,i)=>{b.classList.toggle('active',i===s)})
+}
+
+/* ============================================================
+   CH3: LiDAR 扫描示意图
+   ============================================================ */
+(function(){
+  const c=$('cv_ch3'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  const cx=180,cy=h/2
+  // Outer room walls
+  g.strokeStyle='#2a2a40';g.lineWidth=2
+  g.strokeRect(30,20,w-280,h-40)
+  // Inner wall
+  g.lineWidth=1;g.strokeStyle='#353560'
+  g.beginPath();g.moveTo(cx-30,cy-100);g.lineTo(cx-30,cy+40);g.stroke()
+  // Robot
+  drawRobot(g,cx,cy,0,'#5b9cf5',8)
+  // Scan rays
+  for(let a=0;a<360;a+=10){
+    const rad=a*Math.PI/180
+    let maxR=120
+    const ex0=cx+Math.cos(rad)*maxR,ey0=cy+Math.sin(rad)*maxR
+    const ex=Math.max(30,Math.min(w-280,ex0)),ey=Math.max(20,Math.min(h-20,ey0))
+    maxR=Math.sqrt((ex-cx)**2+(ey-cy)**2)
+    g.strokeStyle='rgba(56,189,248,0.12)';g.lineWidth=0.5
+    g.beginPath();g.moveTo(cx,cy);g.lineTo(ex,ey);g.stroke()
+    g.fillStyle='#e85555';g.beginPath();g.arc(ex,ey,2.2,0,Math.PI*2);g.fill()
+  }
+  // Range viz on right
+  const vx=440,vy=30,vw=130,vh=h-60
+  g.strokeStyle='#1a1a30';g.lineWidth=1;g.strokeRect(vx,vy,vw,vh)
+  g.fillStyle='#707088';g.font='10px sans-serif';g.fillText('距离数组 (360点)',vx+10,vy-5)
+  // Range plot
+  g.strokeStyle='#3cc97a';g.lineWidth=2;g.setLineDash([2,3])
+  g.beginPath()
+  for(let i=0;i<360;i+=2){
+    const rad=i*Math.PI/180
+    let maxR=120
+    const ex0=cx+Math.cos(rad)*maxR,ey0=cy+Math.sin(rad)*maxR
+    const ex=Math.max(30,Math.min(w-280,ex0)),ey=Math.max(20,Math.min(h-20,ey0))
+    maxR=Math.sqrt((ex-cx)**2+(ey-cy)**2)
+    const px=vx+5+(i/360)*(vw-10),py=vy+vh-5-(maxR/120)*(vh-10)
+    if(i===0)g.moveTo(px,py);else g.lineTo(px,py)
+  }
+  g.stroke();g.setLineDash([])
+})();
+
+/* ============================================================
+   CH5: 鸡与蛋死锁图
+   ============================================================ */
+(function(){
+  const c=$('cv_ch5'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  // Box: Mapping
+  const lx=60,ly=40,lw=200,lh=140
+  g.fillStyle='rgba(60,201,122,0.04)';g.strokeStyle='#3cc97a';g.lineWidth=2
+  g.beginPath();g.roundRect(lx,ly,lw,lh,10);g.fill();g.stroke()
+  g.fillStyle='#3cc97a';g.font='bold 14px sans-serif';g.fillText('建图 Mapping',lx+25,ly+35)
+  g.fillStyle='#707088';g.font='11px sans-serif'
+  g.fillText('把多帧扫描拼成一张地图',lx+15,ly+65)
+  g.fillText('→ 必须知道每帧的位姿',lx+15,ly+88)
+  g.fillText('(x, y, θ)',lx+15,ly+110)
+  drawRobot(g,lx+lw/2,ly+125,0,'#3cc97a',5)
+
+  // Box: Localization
+  const rx=400,ry=40,rw=200,rh=140
+  g.fillStyle='rgba(232,85,85,0.04)';g.strokeStyle='#e85555';g.lineWidth=2
+  g.beginPath();g.roundRect(rx,ry,rw,rh,10);g.fill();g.stroke()
+  g.fillStyle='#e85555';g.font='bold 14px sans-serif';g.fillText('定位 Localization',rx+12,ry+35)
+  g.fillStyle='#707088';g.font='11px sans-serif'
+  g.fillText('确定自己在地图中的位置',rx+15,ry+65)
+  g.fillText('→ 必须有地图做参照',rx+15,ry+88)
+  g.strokeStyle='#e85555';g.lineWidth=1;g.setLineDash([3,3])
+  g.strokeRect(rx+rw/2-20,ry+100,40,30);g.setLineDash([])
+  g.fillStyle='#e85555';g.font='9px sans-serif';g.fillText('地图?',rx+rw/2-25,ry+125)
+
+  // Interlocking arrows
+  g.strokeStyle='#e85555';g.lineWidth=2.5;g.setLineDash([7,4])
+  // Top: SLAM needs pose
+  g.beginPath();g.moveTo(rx,ly+25);g.lineTo(lx+lw,ry+25)
+  const as=8
+  g.moveTo(lx+lw-as,ry+25-as);g.lineTo(lx+lw,ry+25);g.lineTo(lx+lw-as,ry+25+as)
+  g.stroke()
+  // Bottom: Mapping needs map
+  g.beginPath();g.moveTo(lx+lw,ly+lh-25);g.lineTo(rx,ry+rh-25)
+  g.moveTo(rx+as,ry+rh-25-as);g.lineTo(rx,ry+rh-25);g.lineTo(rx+as,ry+rh-25+as)
+  g.stroke()
+  g.setLineDash([])
+
+  // Labels
+  g.fillStyle='#e85555';g.font='bold 11px sans-serif'
+  g.fillText('需要地图做参照',290,30)
+  g.fillText('需要每帧的位姿',290,ry+rh+3)
+  g.fillText('→ 死锁！',290,h/2+10)
+  g.fillStyle='#707088';g.font='10px sans-serif'
+  g.fillText('两个问题互相依赖，谁也不能先被单独解决',200,h/2+35)
+})();
+
+/* ============================================================
+   CH7: 高斯分布不确定椭圆 (3 states)
+   ============================================================ */
+let ch7_state=0
+function ch7_step(s){ch7_state=s;ch7_draw()
+  const btns=document.querySelectorAll('#cv_ch7').item(0).parentElement.querySelectorAll('button')
+  btns.forEach((b,i)=>{b.classList.toggle('active',i===s)})
+}
+function ch7_draw(){
+  const c=$('cv_ch7'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.clearRect(0,0,w,h);g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  const covs=[[[1,0],[0,1]],[[1,0.7],[0.7,1]],[[1,-0.7],[-0.7,1]]]
+  const labels=['x与y独立 (cov=0)','x与y正相关 (cov>0)','x与y负相关 (cov<0)']
+  const descs=['x偏差和y偏差互不影响','往东偏了，往往也往北偏','往东偏了，往往往南偏']
+  for(let p=0;p<3;p++){
+    const gx=90+p*260,gy=h/2
+    const cvd=covs[p],isActive=p===ch7_state
+    // Random samples
+    for(let i=0;i<500;i++){
+      const a=Math.random()*Math.PI*2,r=Math.random()*55
+      let u=Math.cos(a)*r,v=Math.sin(a)*r
+      const s1=cvd[0][0]*u+cvd[0][1]*v,s2=cvd[1][0]*u+cvd[1][1]*v
+      const d=Math.sqrt(s1*s1+s2*s2)
+      const alpha=Math.max(0,(isActive?0.18:0.06)-d/55*(isActive?0.15:0.05))
+      g.fillStyle=`rgba(${isActive?'91,156,245':'112,112,136'},${alpha})`
+      g.fillRect(gx+s1-1.5,gy+s2-1.5,3,3)
+    }
+    // Ellipse
+    const a=cvd[0][0],b=cvd[0][1],cc=cvd[1][1]
+    const tr=a+cc,dt=a*cc-b*b,sq=Math.sqrt(Math.max(0,tr*tr-4*dt))
+    const l1=(tr+sq)/2,l2=Math.max(0.1,(tr-sq)/2)
+    const sx=Math.sqrt(l1)*35,sy=Math.sqrt(l2)*35
+    const angle=Math.abs(b)<1e-6?0:Math.atan2(l1-a,b)
+    g.strokeStyle=isActive?'#3cc97a':'#353560';g.lineWidth=isActive?2.5:1.5
+    g.beginPath();g.ellipse(gx,gy,sx,sy,angle,0,Math.PI*2);g.stroke()
+    // Major/minor axes
+    g.lineWidth=1;g.setLineDash([3,3])
+    g.strokeStyle=isActive?'rgba(60,201,122,0.5)':'rgba(53,53,96,0.4)'
+    g.beginPath();g.moveTo(gx-Math.cos(angle)*sx,gy-Math.sin(angle)*sx)
+    g.lineTo(gx+Math.cos(angle)*sx,gy+Math.sin(angle)*sx);g.stroke()
+    g.beginPath();g.moveTo(gx+Math.sin(angle)*sy,gy-Math.cos(angle)*sy)
+    g.lineTo(gx-Math.sin(angle)*sy,gy+Math.cos(angle)*sy);g.stroke()
+    g.setLineDash([])
+    // Center
+    g.fillStyle=isActive?'#5b9cf5':'#707088'
+    g.beginPath();g.arc(gx,gy,4,0,Math.PI*2);g.fill()
+    // Label
+    g.fillStyle=isActive?COL.textBright:COL.textDim;g.font='bold 10px sans-serif'
+    g.fillText(labels[p],gx-55,gy+sy+18)
+    g.fillStyle=isActive?'#3cc97a':COL.textDim;g.font='9px sans-serif'
+    g.fillText(descs[p],gx-55,gy+sy+33)
+  }
+}
+
+/* ============================================================
+   CH9: 运动预测 vs 实际观测 (3 steps)
+   ============================================================ */
+let ch9_state=0
+function ch9_step(s){ch9_state=s;ch9_draw()
+  const btns=document.querySelectorAll('#cv_ch9').item(0).parentElement.querySelectorAll('button')
+  btns.forEach((b,i)=>{b.classList.toggle('active',i===s)})
+}
+function ch9_draw(){
+  const c=$('cv_ch9'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.clearRect(0,0,w,h);g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  // Room boundary
+  g.strokeStyle='#2a2a40';g.lineWidth=2;g.strokeRect(20,20,w-40,h-40)
+  g.lineWidth=1;g.strokeStyle='#353560'
+  g.beginPath();g.moveTo(w/2+20,20);g.lineTo(w/2+20,120);g.stroke()
+  g.beginPath();g.moveTo(100,h/2+80);g.lineTo(w-100,h/2+80);g.stroke()
+  // Previous position
+  const prevX=100,prevY=h*0.4
+  drawRobot(g,prevX,prevY,0,'#707088',6)
+  g.fillStyle='#707088';g.font='10px sans-serif';g.fillText('上一时刻',prevX+15,prevY+5)
+  // Predicted position
+  const predX=240,predY=prevY+15
+  g.setLineDash([5,3]);g.strokeStyle='rgba(232,148,64,0.4)';g.lineWidth=1.5
+  g.beginPath();g.moveTo(prevX,prevY);g.lineTo(predX,predY);g.stroke()
+  g.setLineDash([])
+  drawRobot(g,predX,predY,0.12,'#e89440',7)
+  g.fillStyle='#e89440';g.font='10px sans-serif';g.fillText('里程计预测位姿',predX-25,predY-16)
+  // Uncertainty ellipse
+  if(ch9_state>=0){
+    g.strokeStyle='rgba(232,148,64,0.25)';g.lineWidth=1.5
+    g.beginPath();g.ellipse(predX,predY,48,22,0.1,0,Math.PI*2);g.stroke()
+    g.fillStyle='rgba(232,148,64,0.25)';g.font='9px sans-serif';g.fillText('不确定性区域',predX+30,predY-30)
+  }
+  // True position from scan matching
+  const trueX=280,trueY=predY-8
+  if(ch9_state>=1){
+    drawRobot(g,trueX,trueY,0.06,'#e85555',7)
+    g.fillStyle='#e85555';g.font='10px sans-serif';g.fillText('真实位姿',trueX+16,trueY-18)
+    g.fillText('(扫描匹配结果)',trueX+16,trueY-4)
+    for(let a=0;a<360;a+=20){
+      const rad=a*Math.PI/180
+      let mr=35
+      const ex0=trueX+Math.cos(rad)*mr,ey0=trueY+Math.sin(rad)*mr
+      const ex=Math.max(22,Math.min(w-22,ex0)),ey=Math.max(22,Math.min(h-22,ey0))
+      mr=Math.sqrt((ex-trueX)**2+(ey-trueY)**2)
+      g.strokeStyle='rgba(232,85,85,0.12)';g.lineWidth=0.5
+      g.beginPath();g.moveTo(trueX,trueY);g.lineTo(ex,ey);g.stroke()
+      g.fillStyle='#e85555';g.beginPath();g.arc(ex,ey,2,0,Math.PI*2);g.fill()
+    }
+  }
+  // Error arrow
+  if(ch9_state>=2){
+    const dx=trueX-predX,dy=trueY-predY
+    g.strokeStyle='#3cc97a';g.lineWidth=3
+    g.beginPath();g.moveTo(predX,predY);g.lineTo(trueX,trueY)
+    const ang=Math.atan2(dy,dx),as=10
+    g.moveTo(trueX-as*Math.cos(ang-Math.PI/5.5),trueY-as*Math.sin(ang-Math.PI/5.5))
+    g.lineTo(trueX,trueY)
+    g.lineTo(trueX-as*Math.cos(ang+Math.PI/5.5),trueY-as*Math.sin(ang+Math.PI/5.5))
+    g.stroke()
+    g.fillStyle='#3cc97a';g.font='bold 11px sans-serif'
+    g.fillText('误差 = 修正量',predX+20,predY-40)
+  }
+}
+
+/* ============================================================
+   CH10: 贝叶斯递归可视化 (3 steps)
+   ============================================================ */
+let ch10_state=0
+function ch10_step(s){ch10_state=s;ch10_draw()
+  const btns=document.querySelectorAll('#cv_ch10').item(0).parentElement.querySelectorAll('button')
+  btns.forEach((b,i)=>{b.classList.toggle('active',i===s)})
+}
+function ch10_draw(){
+  const c=$('cv_ch10'),w=c.width,h=c.height,g=c.getContext('2d')
+  g.clearRect(0,0,w,h);g.fillStyle=COL.bg;g.fillRect(0,0,w,h)
+  const s=ch10_state
+  const params=[
+    {mu:w/2,sigma:22,color:'rgba(91,156,245,0.4)',label:'初始信念：对位置很确定'},
+    {mu:w/2+5,sigma:65,color:'rgba(232,148,64,0.25)',label:'预测后：运动引入不确定性，分布变宽'},
+    {mu:w/2-10,sigma:38,color:'rgba(60,201,122,0.32)',label:'更新后：观测信息纠正预测，比纯运动更确定'}
+  ]
+  const p=params[s]
+  // Gaussian fill
+  for(let x=p.mu-150;x<p.mu+150;x+=2){
+    const z=(x-p.mu)/p.sigma,val=Math.exp(-z*z/2)/(p.sigma*Math.sqrt(2*Math.PI))
+    g.fillStyle=p.color
+    g.fillRect(x,h/2-val*p.sigma*140,2,val*p.sigma*140)
+  }
+  // Axis line
+  g.strokeStyle='#353560';g.lineWidth=1
+  g.beginPath();g.moveTo(40,h/2+50);g.lineTo(w-40,h/2+50);g.stroke()
+  g.fillStyle='#707088';g.font='10px sans-serif';g.fillText('位置 x →',w-65,h/2+42)
+  // Mean line
+  g.strokeStyle=p.color.replace(/[\d.]+\)$/,'0.8)');g.lineWidth=2;g.setLineDash([4,3])
+  g.beginPath();g.moveTo(p.mu,h/2-55);g.lineTo(p.mu,h/2+50);g.stroke()
+  g.setLineDash([])
+  // Label
+  g.fillStyle=COL.textBright;g.font='bold 12px sans-serif';g.fillText(p.label,50,35)
+  g.fillStyle='#707088';g.font='11px sans-serif'
+  g.fillText(`μ≈${(p.mu/25).toFixed(1)}  σ≈${(p.sigma/10).toFixed(1)}`,50,h-20)
+}
+
+/* ============================================================
+   Active nav highlighting
+   ============================================================ */
+(function(){
+  const sections=document.querySelectorAll('h2[id]')
+  const navLinks=document.querySelectorAll('nav a')
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navLinks.forEach(l=>l.classList.remove('active'))
+        const link=document.querySelector(`nav a[href="#${e.target.id}"]`)
+        if(link)link.classList.add('active')
+      }
+    })
+  },{rootMargin:'-15% 0px -75% 0px'})
+  sections.forEach(s=>observer.observe(s))
+})();
+
+/* ============================================================
+   INIT: Draw all initial diagram states
+   ============================================================ */
+ch2_draw(0)
+ch7_draw()
+ch9_draw()
+ch10_draw()
+</script>
+
+</body>
+</html>

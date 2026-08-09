@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3a4a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4a5a;
+}
+
+/* Canvas grid */
+.canvas-grid {
+  background-size: 30px 30px;
+  background-image:
+    linear-gradient(rgba(45, 58, 74, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 58, 74, 0.15) 1px, transparent 1px);
+}
+
+/* Node glow effect */
+.node-glow:hover {
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+}
+
+/* Connection line animation */
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.connection-dash {
+  animation: dashFlow 1s linear infinite;
+}

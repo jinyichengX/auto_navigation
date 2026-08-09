@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机器人自主导航：从示教到具身智能</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.7; }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+header { text-align: center; padding: 60px 20px 40px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 2px solid #334155; }
+header h1 { font-size: 2.2em; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+header p { color: #94a3b8; font-size: 1.1em; }
+.section { margin: 50px 0; }
+.section-title { font-size: 1.6em; color: #38bdf8; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid #1e3a5f; display: flex; align-items: center; gap: 12px; }
+.section-subtitle { color: #94a3b8; margin-bottom: 24px; }
+
+/* TABS */
+.tabs { display: flex; gap: 2px; background: #1e293b; border-radius: 12px 12px 0 0; overflow: hidden; margin-bottom: 0; }
+.tab-btn { flex: 1; padding: 14px 16px; background: #1e293b; color: #94a3b8; border: none; cursor: pointer; font-size: 0.95em; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.tab-btn:hover { color: #e2e8f0; background: #2d3a52; }
+.tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; background: #263348; }
+.tab-content { display: none; background: #1e293b; padding: 30px; border-radius: 0 0 12px 12px; }
+.tab-content.active { display: block; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #38bdf8, #818cf8, #c084fc); }
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before { content: ''; position: absolute; left: -32px; top: 8px; width: 16px; height: 16px; background: #38bdf8; border-radius: 50%; border: 3px solid #1e293b; }
+.timeline-item:nth-child(2)::before { background: #818cf8; }
+.timeline-item:nth-child(3)::before { background: #c084fc; }
+.timeline-item:nth-child(4)::before { background: #f472b6; }
+.timeline-year { color: #38bdf8; font-weight: bold; font-size: 0.9em; }
+.timeline-item:nth-child(2) .timeline-year { color: #818cf8; }
+.timeline-item:nth-child(3) .timeline-year { color: #c084fc; }
+.timeline-item:nth-child(4) .timeline-year { color: #f472b6; }
+.timeline-item h3 { font-size: 1.15em; margin: 4px 0 6px; }
+.timeline-item p { color: #94a3b8; font-size: 0.92em; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.card { background: #1e293b; border-radius: 12px; padding: 24px; border: 1px solid #334155; transition: transform 0.2s, border-color 0.2s; }
+.card:hover { transform: translateY(-2px); border-color: #38bdf8; }
+.card-icon { font-size: 1.8em; margin-bottom: 12px; }
+.card h3 { font-size: 1.1em; margin-bottom: 8px; color: #f1f5f9; }
+.card p { color: #94a3b8; font-size: 0.9em; }
+.card .tag { display: inline-block; background: #1e3a5f; color: #38bdf8; padding: 2px 10px; border-radius: 20px; font-size: 0.8em; margin-top: 10px; }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #334155; }
+th { background: #2d3a52; color: #38bdf8; font-weight: 600; }
+tr:hover td { background: #263348; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.8em; }
+.badge-green { background: #064e3b; color: #34d399; }
+.badge-yellow { background: #78350f; color: #fbbf24; }
+.badge-red { background: #7f1d1d; color: #f87171; }
+.badge-blue { background: #1e3a5f; color: #38bdf8; }
+
+/* ALGO COMPARISON SECTION */
+.algo-card { background: #263348; border-radius: 10px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #38bdf8; }
+.algo-card.dwa { border-left-color: #34d399; }
+.algo-card.teb { border-left-color: #818cf8; }
+.algo-card.mppi { border-left-color: #f472b6; }
+.algo-card.rpp { border-left-color: #fbbf24; }
+.algo-card.apf { border-left-color: #38bdf8; }
+.algo-card.vfh { border-left-color: #c084fc; }
+.algo-name { font-size: 1.2em; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.algo-era { font-size: 0.75em; color: #94a3b8; font-weight: normal; }
+
+/* FLOW DIAGRAM */
+.flow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; padding: 20px 0; }
+.flow-box { background: linear-gradient(135deg, #1e3a5f, #2d3a52); border: 1px solid #334155; border-radius: 10px; padding: 14px 20px; text-align: center; font-size: 0.9em; min-width: 100px; }
+.flow-box.highlight { border-color: #38bdf8; background: linear-gradient(135deg, #1e3b2f, #263348); }
+.flow-arrow { color: #38bdf8; font-size: 1.3em; }
+
+/* GENERATION INDICATOR */
+.gen-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+.gen1 { background: #7f1d1d33; color: #f87171; border: 1px solid #7f1d1d; }
+.gen2 { background: #78350f33; color: #fbbf24; border: 1px solid #78350f; }
+.gen3 { background: #1e3a5f33; color: #38bdf8; border: 1px solid #1e3a5f; }
+.gen4 { background: #4a1d6b33; color: #c084fc; border: 1px solid #4a1d6b; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .tabs { flex-direction: column; }
+  .tab-btn { border-left: 3px solid transparent; border-bottom: none; }
+  .tab-btn.active { border-left-color: #38bdf8; border-bottom: none; }
+  .timeline { padding-left: 30px; }
+}
+
+/* INFO NOTE */
+.note { background: #1e3a5f33; border: 1px solid #1e3a5f; border-radius: 10px; padding: 16px 20px; margin: 20px 0; }
+.note strong { color: #38bdf8; }
+.note p { color: #94a3b8; font-size: 0.9em; margin-top: 4px; }
+
+/* LEGEND */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #94a3b8; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+.legend-dot.red { background: #f87171; }
+.legend-dot.yellow { background: #fbbf24; }
+.legend-dot.blue { background: #38bdf8; }
+.legend-dot.purple { background: #c084fc; }
+
+/* STATS BAR */
+.stats-bar { display: flex; flex-wrap: wrap; gap: 16px; margin: 24px 0; }
+.stat-item { flex: 1; min-width: 150px; background: #1e293b; border-radius: 10px; padding: 16px; text-align: center; border: 1px solid #334155; }
+.stat-value { font-size: 1.6em; font-weight: 700; color: #38bdf8; }
+.stat-label { font-size: 0.8em; color: #94a3b8; margin-top: 4px; }
+
+footer { text-align: center; padding: 40px 20px; color: #475569; font-size: 0.85em; border-top: 1px solid #334155; margin-top: 60px; }
+footer a { color: #38bdf8; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>机器人自主导航技术全景</h1>
+  <p>从示教预编程到具身智能的完整演进 | 面向 Nav2 学习者的前置知识体系</p>
+</header>
+
+<div class="container">
+
+<!-- ==================== 导航发展史 ==================== -->
+<div class="section">
+  <h2 class="section-title">1 导航发展史：四个时代</h2>
+  <p class="section-subtitle">每代都在减少人类干预、提升自主度</p>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot red"></div> 第一代：示教/预编程</div>
+    <div class="legend-item"><div class="legend-dot yellow"></div> 第二代：局部感知+规划</div>
+    <div class="legend-item"><div class="legend-dot blue"></div> 第三代：多传感融合+行为树（Nav2 所在代）</div>
+    <div class="legend-item"><div class="legend-dot purple"></div> 第四代：学习型自主</div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1960s – 1980s</div>
+      <h3><span class="gen-badge gen1">第一代</span> 示教 / 预编程时代 · 自主度 0%</h3>
+      <p>
+        <strong>代表系统：</strong>Shakey (1966–1972)、早期 AGV<br>
+        <strong>核心技术：</strong>磁条导航、轨道导航、预编程坐标点<br>
+        <strong>特点：</strong>完全依赖物理标识（磁条/导轨/二维码），走固定路线。无环境感知、无避障、无动态调整能力。路径变更需要重新改造现场环境。<br>
+        <strong>经典算法：</strong>无规划算法，纯开环控制<br>
+        <strong>产业状态：</strong>日本大福、德马泰克等 AGV 巨头垄断，中国 100% 进口依赖
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1990s – 2000s</div>
+      <h3><span class="gen-badge gen2">第二代</span> 局部感知 + 规划时代 · 自主度 ≈ 30%</h3>
+      <p>
+        <strong>代表系统：</strong>早期激光 SLAM 机器人<br>
+        <strong>核心技术：</strong>2D 激光/超声波感知、栅格地图、A* / Dijkstra 全局规划<br>
+        <strong>特点：</strong>有建图、定位、路径规划、简单避障能力。逻辑是「感知 → 规划 → 执行」三段式。但规则、代价、策略全是人工设定。<br>
+        <strong>经典算法：</strong>Bug 系列、人工势场法 (APF)、矢量场直方图 (VFH)、A*、Dijkstra<br>
+        <strong>产业状态：</strong>GMapping/HectorSLAM 开源，ORB-SLAM 奠定视觉 SLAM 基础
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">2010s – 2020s</div>
+      <h3><span class="gen-badge gen3">第三代</span> 多传感器融合 + 行为树 · 自主度 ≈ 60-70% <span style="color:#38bdf8;font-size:0.8em;margin-left:8px;">← 你正在学的 Nav2</span></h3>
+      <p>
+        <strong>代表系统：</strong>ROS/ROS2 Nav2、AMR、服务机器人<br>
+        <strong>核心技术：</strong>LiDAR + 相机 + IMU + 轮速计多传感器融合、SLAM、全局/局部双层规划、行为树决策、恢复机制<br>
+        <strong>特点：</strong>规则内全自动、无人干预，行为树由人预先定义所有分支和优先级。规则外的场景完全不会处理。<br>
+        <strong>经典算法：</strong>DWA/DWB、TEB、MPPI、RPP、Cartographer、行为树 (BehaviorTree.CPP)<br>
+        <strong>Nav2 定位：</strong>第三代巅峰 — <em>高级自动化 ≠ 真正自主</em>
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">2025 – 未来</div>
+      <h3><span class="gen-badge gen4">第四代</span> 学习型自主时代 · 自主度 → 80-100%</h3>
+      <p>
+        <strong>代表系统：</strong>端到端 VLA 模型、强化学习导航、LLM 驱动机器人<br>
+        <strong>核心技术：</strong>强化学习 (RL)、模仿学习、世界模型、语义 SLAM、大模型 + 具身智能、端到端神经网络<br>
+        <strong>特点：</strong>不靠固定规则/行为树，从经验中学习策略，能应对从未见过的场景。具备理解、推理、决策、创造新行为的能力。<br>
+        <strong>代表工作：</strong>UniAD、DreamerNav、华为 ADS、小鹏 XNGP、NavGPT<br>
+        <strong>产业状态：</strong>2025 年中国从跟随者跃升全球领跑者
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 核心概念 ==================== -->
+<div class="section">
+  <h2 class="section-title">2 导航三大核心问题</h2>
+  <p class="section-subtitle">任何移动机器人都必须回答这三个问题</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">📍</div>
+      <h3>Where am I? — 定位 (Localization)</h3>
+      <p>通过传感器数据估计机器人在环境中的位置和姿态。从早期磁条/二维码定点定位，到激光/视觉 SLAM，再到现在的多传感器融合 + 深度学习状态估计。</p>
+      <span class="tag">AMCL · EKF · SLAM · 语义定位</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺️</div>
+      <h3>What's around me? — 建图 (Mapping)</h3>
+      <p>构建环境的空间表示。从 2D 栅格地图到 3D 点云、语义地图、神经辐射场 (NeRF) 隐式建图。SLAM 同时解决定位和建图两个耦合问题。</p>
+      <span class="tag">Occupancy Grid · PointCloud · NeRF · 3D GS</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧭</div>
+      <h3>How do I get there? — 规划与控制</h3>
+      <p>从全局路径规划到局部避障/轨迹跟踪。传统方法依赖人工设计的代价函数和规则，现代方法引入强化学习和端到端神经网络。</p>
+      <span class="tag">A* · DWA · TEB · MPPI · RL Planning</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 传统导航算法 ==================== -->
+<div class="section">
+  <h2 class="section-title">3 传统导航算法谱系</h2>
+  <p class="section-subtitle">从最简单的 Bug 算法到现代局部规划器，理解每条算法解决了什么问题</p>
+
+  <!-- Bug 系列 -->
+  <div class="algo-card" style="border-left-color: #f87171;">
+    <div class="algo-name">🐛 Bug 系列算法 <span class="algo-era">1987–1996 | Lumelsky</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>核心思想：</strong>机器人只知道目标方向，撞到障碍物就沿着边界走，绕过障碍后继续朝目标前进。<br>
+      <strong>Bug 0：</strong>沿直线走向目标，遇障碍顺时针绕行，遇到可直行的点就离开。最简单但也最蠢——可能无限绕圈。<br>
+      <strong>Bug 1：</strong>遇障碍后完整绕一圈，找到离目标最近的点再离开。绕路多但不会卡死。<br>
+      <strong>Bug 2：</strong>遇障碍后沿着障碍边界走，直到重新遇到「起点到目标的连线」上更近目标的位置再离开。<br>
+      <strong>局限：</strong>只依赖触觉/近距离传感器，路径远非最优，仅适合简单/无先验地图场景。
+    </p>
+  </div>
+
+  <!-- APF -->
+  <div class="algo-card apf">
+    <div class="algo-name">🧲 人工势场法 (Artificial Potential Field) <span class="algo-era">1986 | Khatib</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>核心思想：</strong>目标产生吸引力（全局最小值），障碍物产生排斥力（局部最大值），机器人沿合力方向运动。<br>
+      <strong>优点：</strong>计算简单、轨迹平滑、适合实时控制。<br>
+      <strong>致命缺陷：</strong>容易陷入局部极小值（引力和斥力抵消，机器人不动）；在狭窄通道中会震荡；目标附近有障碍物时永远无法到达 (GNRON 问题)。<br>
+      <strong>改进方向：</strong>虚拟障碍物法、谐波势场、旋转势场等逃脱策略。
+    </p>
+  </div>
+
+  <!-- VFH -->
+  <div class="algo-card vfh">
+    <div class="algo-name">📊 矢量场直方图 (Vector Field Histogram) <span class="algo-era">1991 | Borenstein & Koren</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>核心思想：</strong>将机器人周围环境做成一个极坐标直方图——每个角度扇区累积该方向上的障碍物密度，找出低密度的「谷」作为可通行方向。<br>
+      <strong>VFH 演进：</strong>VFH → VFH+（考虑机器人宽度）→ VFH*（结合 A* 全局引导）<br>
+      <strong>优点：</strong>克服了 APF 的局部极小值问题，计算效率高。<br>
+      <strong>注意：</strong>Nav2 生态中有开源 VFH Controller 插件，可作为 DWB 的替代品。
+    </p>
+  </div>
+
+  <!-- 全局规划器 -->
+  <h3 style="color:#38bdf8;margin:28px 0 16px;">全局路径规划器</h3>
+  <table>
+    <tr><th>算法</th><th>年份</th><th>类型</th><th>核心思想</th><th>最优性</th><th>Nav2 支持</th></tr>
+    <tr>
+      <td><strong>Dijkstra</strong></td><td>1959</td><td>图搜索</td><td>从起点出发向所有方向均匀扩展，找到到达每个节点的最短路径</td><td><span class="badge badge-green">全局最优</span></td><td><span class="badge badge-blue">内置</span></td>
+    </tr>
+    <tr>
+      <td><strong>A*</strong></td><td>1968</td><td>启发式图搜索</td><td>Dijkstra + 启发函数（到目标的估计距离），优先搜索更可能通向目标的方向</td><td><span class="badge badge-green">全局最优</span></td><td><span class="badge badge-blue">内置</span></td>
+    </tr>
+    <tr>
+      <td><strong>RRT</strong></td><td>2001</td><td>采样</td><td>在状态空间中随机采样点，向采样点生长树，适合高维空间（机械臂等）</td><td><span class="badge badge-yellow">概率完备</span></td><td><span class="badge badge-red">需插件</span></td>
+    </tr>
+    <tr>
+      <td><strong>RRT*</strong></td><td>2011</td><td>采样+优化</td><td>RRT 的改进版，边生长边优化，渐进收敛到最优路径</td><td><span class="badge badge-green">渐近最优</span></td><td><span class="badge badge-yellow">第三方</span></td>
+    </tr>
+    <tr>
+      <td><strong>Smac Planner</strong></td><td>2020</td><td>混合状态 A*</td><td>Nav2 新一代默认规划器，支持非完整约束（Ackermann/差速），在 SE2 状态空间搜索</td><td><span class="badge badge-green">近似最优</span></td><td><span class="badge badge-blue">内置(默认)</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== 现代局部规划器对比 ==================== -->
+<div class="section">
+  <h2 class="section-title">4 现代局部规划器 (Nav2 Controller) 深度对比</h2>
+  <p class="section-subtitle">这就是 Nav2 controller_server 里的核心选型</p>
+
+  <div class="algo-card dwa">
+    <div class="algo-name">⚡ DWB / DWA — 动态窗口法 <span class="algo-era">1997 | Fox, Burgard & Thrun | Nav2 默认</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>一句话：</strong>在机器人能做到的速度范围内采样几百组 (v,ω)，前向模拟短轨迹，多维度打分选最优。<br>
+      <strong>流程：</strong>速度窗口构建 → 采样 (v,ω) → 前向模拟 0.5-2s 轨迹 → Critic 多维度打分（朝向/障碍/速度/路径贴合）→ 最优 cmd_vel。<br>
+      <strong>优点：</strong>极快（嵌入式可跑 20-50Hz）、稳定可靠、调参友好。<br>
+      <strong>缺点：</strong>短视（只看 1-2s）、窄通道可能小幅摆动、动态障碍预测差。<br>
+      <strong>适用：</strong>室内差速驱动机器人首选，也是你 fishbot 的最佳起点。
+    </p>
+  </div>
+
+  <div class="algo-card teb">
+    <div class="algo-name">🎗️ TEB — 定时弹性带 <span class="algo-era">2012 | R&ouml;smann | Nav2 插件</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>一句话：</strong>把全局路径看作橡皮筋，在障碍、运动学、时间约束下用图优化「拉」光滑、拉出最短时间。<br>
+      <strong>优化目标：</strong>轨迹光滑（加加速度小）+ 避障 + 满足非完整约束 + 时间最优（最快通过）。用 g2o 图优化求解。<br>
+      <strong>优点：</strong>轨迹超级平滑几乎无顿挫、窄通道/门/走廊表现极强。<br>
+      <strong>缺点：</strong>算力中等偏上、依赖全局路径质量、人多动态环境可能震荡发散。<br>
+      <strong>适用：</strong>Ackermann 车型（汽车）、需要极平滑轨迹的场景、窄通道环境。
+    </p>
+  </div>
+
+  <div class="algo-card mppi">
+    <div class="algo-name">🧠 MPPI — 模型预测路径积分 <span class="algo-era">2016 | Nav2 新一代主力</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>一句话：</strong>批量生成带噪声的轨迹，反复迭代加权择优，是 Nav2 中最强的动态环境控制器。<br>
+      <strong>原理：</strong>以上一帧最优控制为基准 → 加高斯噪声生成几百条轨迹 → 前向模拟 → 按多维度打分 → 高分轨迹加权平均 → 迭代收敛。<br>
+      <strong>优点：</strong>动态环境无敌（人群、移车、突发障碍远超 DWA/TEB）、适应复杂动力学（轮式/阿克曼/足式都强）。<br>
+      <strong>缺点：</strong>调参复杂、随机采样有轻微抖动、算力较高（但现代 CPU 可 100Hz+）。<br>
+      <strong>适用：</strong>高动态环境、复杂动力学平台、追求最强避障能力时。
+    </p>
+  </div>
+
+  <div class="algo-card rpp">
+    <div class="algo-name">🎯 RPP — 正则纯追踪 <span class="algo-era">Nav2 内置</span></div>
+    <p style="color:#94a3b8;margin-top:8px;">
+      <strong>一句话：</strong>盯着全局路径上的前视点纯追踪，加限速/限加速度保平稳，最简单最稳但避障弱。<br>
+      <strong>原理：</strong>全局路径上找前视点 → 计算转向角让机器人朝前视点走 → 根据曲率限速和限加速度。<br>
+      <strong>优点：</strong>极简、极稳、几乎不用调参。<br>
+      <strong>缺点：</strong>完全不主动避障，只能依赖 costmap 挡住危险区域。<br>
+      <strong>适用：</strong>已知静态环境、要求极高稳定性的场景。
+    </p>
+  </div>
+
+  <h3 style="color:#38bdf8;margin:28px 0 16px;">选型速查表</h3>
+  <table>
+    <tr><th>维度</th><th>DWB/DWA</th><th>TEB</th><th>MPPI</th><th>RPP</th></tr>
+    <tr><td>算力</td><td><span class="badge badge-green">极低</span></td><td><span class="badge badge-yellow">中等</span></td><td><span class="badge badge-yellow">中等偏高</span></td><td><span class="badge badge-green">极低</span></td></tr>
+    <tr><td>轨迹平滑度</td><td>中</td><td><span class="badge badge-green">极高</span></td><td>中偏高</td><td>高</td></tr>
+    <tr><td>动态避障</td><td><span class="badge badge-yellow">一般</span></td><td><span class="badge badge-yellow">一般</span></td><td><span class="badge badge-green">最强</span></td><td><span class="badge badge-red">弱</span></td></tr>
+    <tr><td>窄通道</td><td><span class="badge badge-yellow">一般</span></td><td><span class="badge badge-green">极强</span></td><td>强</td><td>中</td></tr>
+    <tr><td>Ackermann 支持</td><td>中</td><td><span class="badge badge-green">好</span></td><td><span class="badge badge-green">好</span></td><td><span class="badge badge-red">不支持</span></td></tr>
+    <tr><td>调参难度</td><td><span class="badge badge-green">低</span></td><td><span class="badge badge-yellow">中</span></td><td><span class="badge badge-red">高</span></td><td><span class="badge badge-green">极低</span></td></tr>
+    <tr><td>fishbot 推荐</td><td><span class="badge badge-green">首选</span></td><td>可选</td><td>进阶</td><td>备选</td></tr>
+  </table>
+</div>
+
+<!-- ==================== Nav2 架构 ==================== -->
+<div class="section">
+  <h2 class="section-title">5 Nav2 架构全景</h2>
+  <p class="section-subtitle">理解你即将使用的每个组件及其在导航管线中的位置</p>
+
+  <div class="flow" style="font-size:0.85em;">
+    <div class="flow-box">🧭 传感器<br><small>LiDAR / 相机 / IMU / 轮速计</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🗺️ SLAM / Map Server<br><small>建图或加载预建地图</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">📍 AMCL<br><small>蒙特卡洛定位</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box highlight">🧠 Behavior Tree<br><small>行为树决策引擎</small></div>
+  </div>
+  <div class="flow" style="font-size:0.85em;margin-top:0;">
+    <div class="flow-box highlight">🧠 BT</div>
+    <div class="flow-arrow">↙ ↘</div>
+    <div class="flow-box">🗺️ Global Planner<br><small>Smac / A* / NavFn</small></div>
+    <div class="flow-box">🚗 Local Controller<br><small>DWB / TEB / MPPI / RPP</small></div>
+  </div>
+  <div class="flow" style="font-size:0.85em;margin-top:0;">
+    <div class="flow-box">Global Planner</div>
+    <div class="flow-arrow">↘</div>
+    <div class="flow-box highlight">📊 Costmaps<br><small>Global + Local 双层代价地图</small></div>
+    <div class="flow-arrow">↙</div>
+    <div class="flow-box">Local Controller</div>
+  </div>
+  <div class="flow" style="font-size:0.85em;margin-top:0;">
+    <div class="flow-box highlight">📊 Costmaps + 规划结果</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">⚙️ cmd_vel<br><small>速度指令</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🤖 ros2_control<br><small>你的 fishbot 控制器</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🦾 电机执行</div>
+  </div>
+
+  <div class="note">
+    <strong>关键理解：</strong>Nav2 不是单一算法，而是一套完整的导航框架。行为树是顶层决策引擎，负责编排 Global Planner、Local Controller、Recovery（恢复行为）等组件的调用逻辑。你之前学的 ros2_control 是 Nav2 输出 cmd_vel 的最终执行层。
+  </div>
+
+  <h3 style="color:#38bdf8;margin:24px 0 12px;">Nav2 核心组件清单</h3>
+  <table>
+    <tr><th>组件</th><th>功能</th><th>关键技术</th></tr>
+    <tr><td>Map Server</td><td>加载/提供静态地图</td><td>OccupancyGrid, pgm/yaml</td></tr>
+    <tr><td>AMCL</td><td>蒙特卡洛定位（粒子滤波）</td><td>Adaptive Monte Carlo Localization</td></tr>
+    <tr><td>Global Costmap</td><td>全局代价地图（基于静态地图）</td><td>Static Layer + Inflation Layer</td></tr>
+    <tr><td>Local Costmap</td><td>局部代价地图（机器人周围滚动窗口）</td><td>Obstacle Layer + Inflation Layer + Voxel Layer</td></tr>
+    <tr><td>Global Planner</td><td>计算 A→B 的全局路径</td><td>Smac Planner (默认) / A* / NavFn</td></tr>
+    <tr><td>Local Controller</td><td>沿全局路径避障并输出 cmd_vel</td><td>DWB (默认) / TEB / MPPI / RPP</td></tr>
+    <tr><td>Behavior Tree</td><td>顶层决策编排</td><td>BehaviorTree.CPP, XML 配置</td></tr>
+    <tr><td>Recovery</td><td>卡住时的恢复行为</td><td>Spin / Back Up / Clear Costmap</td></tr>
+    <tr><td>Waypoint Follower</td><td>多点导航</td><td>顺序/循环路径点追踪</td></tr>
+    <tr><td>Smoother</td><td>全局路径平滑</td><td>Simple Smoother / Constrained Smoother</td></tr>
+  </table>
+</div>
+
+<!-- ==================== 全局规划算法对比 ==================== -->
+<div class="section">
+  <h2 class="section-title">6 路径规划算法全景对比</h2>
+  <p class="section-subtitle">从传统图搜索到现代采样/优化方法</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event, 'tab-trad')">传统 (图搜索)</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-sample')">采样方法</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-modern')">现代 AI</button>
+  </div>
+
+  <div id="tab-trad" class="tab-content active">
+    <div class="algo-card" style="border-left-color: #38bdf8;">
+      <div class="algo-name">Dijkstra 算法 <span class="algo-era">1959 | Edsger Dijkstra</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        从起点出发，向所有方向均匀扩展，直到找到目标。保证找到全局最短路径，但计算量大——像水面波纹均匀扩散。在 Nav2 中对应 NavFn Planner。
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #34d399;">
+      <div class="algo-name">A* 算法 <span class="algo-era">1968 | Hart, Nilsson & Raphael</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        Dijkstra + 启发函数 h(n)。f(n) = g(n) + h(n)，g(n) 是已走路程，h(n) 是到目标的估计距离。优先探索「看起来最近」的方向，大幅减少搜索空间。<strong>h(n) 永远不高估真实距离时可保证最优。</strong>
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #818cf8;">
+      <div class="algo-name">Theta* <span class="algo-era">2007</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        A* 的改进版——允许任意角度路径，不限于网格边。解决了 A* 路径「阶梯状」的问题，路径更短更自然。
+      </p>
+    </div>
+  </div>
+
+  <div id="tab-sample" class="tab-content">
+    <div class="algo-card" style="border-left-color: #fbbf24;">
+      <div class="algo-name">RRT (Rapidly-exploring Random Tree) <span class="algo-era">2001 | LaValle</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        在状态空间中随机采样点，向采样方向扩展树。不需要离散化空间，适合高维空间（6-DOF 机械臂等）。概率完备——只要路径存在，采样足够多就能找到，但不保证最优。
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #f59e0b;">
+      <div class="algo-name">RRT* <span class="algo-era">2011 | Karaman & Frazzoli</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        RRT + 边生长边优化。对每个新节点检查附近节点是否有更短路径，渐进收敛到全局最优。代价是计算量增加。
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #38bdf8;">
+      <div class="algo-name">PRM (Probabilistic Roadmap) <span class="algo-era">1996</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        先在空间中随机采样生成路标图，再用图搜索找路径。适合多次查询——一次建图，多次规划。静态环境效率高。
+      </p>
+    </div>
+  </div>
+
+  <div id="tab-modern" class="tab-content">
+    <div class="algo-card" style="border-left-color: #c084fc;">
+      <div class="algo-name">Smac Planner (Nav2 默认) <span class="algo-era">2020 | Steve Macenski</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        结合混合状态 A* 和非线性优化。在 SE2 空间（x, y, θ）搜索，天然支持非完整约束（差速/Ackermann 不能侧移）。Nav2 新一代默认全局规划器，比传统 A* 路径更平滑、更可执行。
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #f472b6;">
+      <div class="algo-name">强化学习路径规划 <span class="algo-era">2020+</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        用深度 RL（PPO/SAC）训练策略网络直接输出动作或路径。端到端从传感器到控制，不依赖人工规则。代表：DreamerNav 用世界模型在 Isaac Sim 中训练，实机 zero-shot 部署。
+      </p>
+    </div>
+    <div class="algo-card" style="border-left-color: #ec4899;">
+      <div class="algo-name">LLM + 导航 <span class="algo-era">2024+</span></div>
+      <p style="color:#94a3b8;margin-top:8px;">
+        大语言模型提供常识推理和高层任务规划。自然语言指令如「去会议室拿水杯」→ LLM 分解为空间子任务 → 传统 Nav2 执行底层导航。代表：NavGPT 零样本导航、LLM + 行为树混合架构。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 当前趋势 ==================== -->
+<div class="section">
+  <h2 class="section-title">7 2025 年导航技术前沿趋势</h2>
+  <p class="section-subtitle">从 Nav2 学完之后，你应该知道的前沿方向</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>端到端 VLA 模型</h3>
+      <p>视觉-语言-动作 (Vision-Language-Action) 模型统一感知、规划、控制。小鹏 XNGP / 华为 ADS 已在量产车上实现端到端导航。从「模块化管线」到「一个神经网络干所有事」。</p>
+      <span class="tag">UniAD · VLA · 端到端</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h3>大模型 + 具身智能</h3>
+      <p>LLM/VLM 提供常识推理、语义理解和任务分解。机器人不再执行「A点→B点」，而是理解「去会议室拿水杯」这种自然语言任务。</p>
+      <span class="tag">LLM · VLM · NavGPT · RT-2</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h3>语义 + 认知导航</h3>
+      <p>从纯几何导航（点、线、障碍物、坐标）升级到语义导航（这是门/椅子/人/通道/危险区）。理解常识——人要避让、门可以开、窄路要慢。</p>
+      <span class="tag">Semantic SLAM · Scene Graph</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🦾</div>
+      <h3>人形机器人导航</h3>
+      <p>从轮式差速机器人扩展到双足/四足机器人。需要处理高度动态的足部落点规划、全身平衡控制与导航的耦合。</p>
+      <span class="tag">Humanoid · Quadruped · WBC</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🪐</div>
+      <h3>NeRF / 3D Gaussian Splatting</h3>
+      <p>用神经辐射场或 3D 高斯泼溅替代传统栅格地图。实现照片级场景重建，支持新视角合成和隐式定位。</p>
+      <span class="tag">NeRF · 3DGS · Implicit Map</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🐝</div>
+      <h3>多机器人协同导航</h3>
+      <p>去中心化多机器人自主避让和任务分配。不再依赖中央调度，像蜂群一样自适应组织。</p>
+      <span class="tag">Swarm · Multi-agent · D-CTC</span>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value">2015→2025</div>
+      <div class="stat-label">定位精度从 ±50mm → &lt;1cm</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">100%→0%</div>
+      <div class="stat-label">中国从 SLAM 依赖进口到全球领跑</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">&gt;99.9%</div>
+      <div class="stat-label">2025 年重定位成功率</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">毫秒级</div>
+      <div class="stat-label">端到端推理延迟</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 推荐阅读 ==================== -->
+<div class="section">
+  <h2 class="section-title">8 推荐阅读清单</h2>
+  <p class="section-subtitle">如果这个页面还不够满足你的好奇心</p>
+
+  <table>
+    <tr><th>文章/资源</th><th>类型</th><th>链接</th></tr>
+    <tr>
+      <td>从 SLAM 到 VLN：探索智能导航的演进与融合</td>
+      <td><span class="badge badge-blue">中文文章</span></td>
+      <td><a href="https://adg.csdn.net/695236375b9f5f31781b32fb.html" target="_blank" style="color:#38bdf8;">CSDN 开发者社区</a></td>
+    </tr>
+    <tr>
+      <td>机器人自主导航的发展历史与未来趋势</td>
+      <td><span class="badge badge-blue">中文文章</span></td>
+      <td><a href="https://blog.csdn.net/HiWangWenBing/article/details/161126614" target="_blank" style="color:#38bdf8;">CSDN Blog</a></td>
+    </tr>
+    <tr>
+      <td>NAV2 局部轨迹规划层算法对比</td>
+      <td><span class="badge badge-blue">中文文章</span></td>
+      <td><a href="https://blog.csdn.net/HiWangWenBing/article/details/161147485" target="_blank" style="color:#38bdf8;">CSDN Blog</a></td>
+    </tr>
+    <tr>
+      <td>自主导航十年演进 (2015–2025)</td>
+      <td><span class="badge badge-blue">中文综述</span></td>
+      <td><a href="https://damodev.csdn.net/6963b87a6554f1331aa14611.html" target="_blank" style="color:#38bdf8;">DAMO 开发者矩阵</a></td>
+    </tr>
+    <tr>
+      <td>机器人定位技术十年演进 (2015–2025)</td>
+      <td><span class="badge badge-blue">中文综述</span></td>
+      <td><a href="https://damodev.csdn.net/69990c8654b52172bc5cbd8e.html" target="_blank" style="color:#38bdf8;">DAMO 开发者矩阵</a></td>
+    </tr>
+    <tr>
+      <td>A Comprehensive Review on Autonomous Navigation</td>
+      <td><span class="badge badge-green">ACM Survey</span></td>
+      <td><a href="https://dl.acm.org/doi/10.1145/3727642" target="_blank" style="color:#38bdf8;">ACM Computing Surveys 2025</a></td>
+    </tr>
+    <tr>
+      <td>Robot Navigation (AI Wiki)</td>
+      <td><span class="badge badge-yellow">百科</span></td>
+      <td><a href="https://aiwiki.ai/wiki/robot_navigation" target="_blank" style="color:#38bdf8;">aiwiki.ai</a></td>
+    </tr>
+    <tr>
+      <td>ROS-Based Navigation and Obstacle Avoidance</td>
+      <td><span class="badge badge-green">期刊论文</span></td>
+      <td><a href="https://www.mdpi.com/1424-8220/25/14/4306" target="_blank" style="color:#38bdf8;">Sensors 2025</a></td>
+    </tr>
+    <tr>
+      <td>IA712 Mobile Robotics: Navigation (Lecture)</td>
+      <td><span class="badge badge-yellow">课程讲义</span></td>
+      <td><a href="https://yzrobot.github.io/IA712/2025/IA712_CM10.pdf" target="_blank" style="color:#38bdf8;">ENSTA Paris</a></td>
+    </tr>
+    <tr>
+      <td>VFH Controller for Nav2 (开源实现)</td>
+      <td><span class="badge badge-blue">开源代码</span></td>
+      <td><a href="https://github.com/KroNton/vfh-motion-planner" target="_blank" style="color:#38bdf8;">GitHub</a></td>
+    </tr>
+    <tr>
+      <td>Nav2 官方文档</td>
+      <td><span class="badge badge-blue">官方文档</span></td>
+      <td><a href="https://docs.nav2.org/" target="_blank" style="color:#38bdf8;">docs.nav2.org</a></td>
+    </tr>
+  </table>
+</div>
+
+<div class="note" style="margin-top:30px;">
+  <strong>学习建议：</strong>
+  建议按这个顺序阅读——先看本页面建立全局认知 → 再看「自主导航十年演进」了解产业格局 → 看「Nav2 局部规划器对比」深入算法细节 → 最后配合 Nav2 官方文档动手实践。这样既有宏观视野，又能落地实操。
+</div>
+
+</div>
+
+<footer>
+  <p>构建于 2026 年 · 面向 <a href="https://docs.nav2.org/" target="_blank">Nav2</a> 学习者的前置知识体系</p>
+  <p style="margin-top:8px;font-size:0.8em;">部分数据来源：ACM Computing Surveys, IEEE Access, CSDN, aiwiki.ai</p>
+</footer>
+
+<script>
+function switchTab(event, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>
