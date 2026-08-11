@@ -27,6 +27,13 @@ button.secondary:hover { background: #1a3a6e; }
 .legend { position: absolute; bottom: 16px; left: 16px; font-size: 11px; color: #888; display: flex; gap: 14px; }
 .legend span { display: flex; align-items: center; gap: 4px; }
 .legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.faq-item { border-bottom: 1px solid #0f3460; }
+.faq-q { padding: 10px 0; cursor: pointer; font-size: 13px; color: #ccc; user-select: none; }
+.faq-q:hover { color: #e94560; }
+.faq-q::before { content: '▶ '; font-size: 10px; margin-right: 4px; }
+.faq-q.open::before { content: '▼ '; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; font-size: 12px; color: #999; line-height: 1.7; }
+.faq-a.open { max-height: 1000px; padding-bottom: 12px; }
 </style>
 </head>
 <body>
@@ -64,6 +71,24 @@ button.secondary:hover { background: #1a3a6e; }
 
   <h2>TFMessage JSON</h2>
   <div class="json-preview" id="jsonPreview"></div>
+
+  <h2>常见问题</h2>
+  <div class="faq-item">
+    <div class="faq-q open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">odom 不是里程表数字吗？为什么是坐标系？</div>
+    <div class="faq-a open">ROS 中的 odom 是 odometry 的缩写，不只是「跑了多少公里」。<br><br>汽车的里程表只累计距离，丢了方向信息。但机器人的里程计需要知道「走了多远 + 朝向哪里」—— 它通过对轮子转了多少圈（编码器数据）不断积分，算出机器人当前的 (x, y, yaw)。<br><br>所以 odom → base_footprint 变换 = 机器人相对开机起点的位置和朝向。这是一个完整位姿，不是单独一个数字。<br><br>odom 坐标系原点 = 开机那一刻机器人的位置，机器人动，这个变换就跟着变。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">map → odom 是什么？为什么需要它？</div>
+    <div class="faq-a">odom → base_footprint 是靠轮子编码器算出来的，会随时间累积误差（打滑、不平路面 → 漂移）。<br><br>AMCL 用激光雷达扫描 + 已知地图来修正这个漂移，修正量就是 map → odom 变换。<br><br>所以 map → base_footprint = map → odom + odom → base_footprint 才是机器人在世界中的真实位姿。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">变换中的旋转是相对于哪个轴？</div>
+    <div class="faq-a">ROS 坐标系标准：<br>• X 轴 = 机器人前方<br>• Y 轴 = 机器人左侧<br>• Z 轴 = 上方<br><br>Roll = 绕 X 轴旋转（侧翻）<br>Pitch = 绕 Y 轴旋转（俯仰）<br>Yaw = 绕 Z 轴旋转（转向，地面机器人最常用）</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">父坐标系变动，子坐标系会跟着动吗？</div>
+    <div class="faq-a">会。TF 树中任何坐标系都是相对于父坐标系定义的。<br><br>例如 map → odom → base_footprint → laser_sensor：<br>• 机器人移动 → odom→base_footprint 变化 → laser_sensor 在 map 中的位置自动更新<br>• AMCL 修正 → map→odom 变化 → 整条链全部跟着动<br><br>这就是 rviz 中机器人模型能实时跟随移动的原因。</div>
+  </div>
 </div>
 
 <div class="canvas-wrap">
