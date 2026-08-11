@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TF 变换模拟器</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Consolas','Menlo','Courier New',monospace; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
+.panel { width: 380px; padding: 20px; background: #16213e; border-right: 2px solid #0f3460; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.panel h2 { font-size: 18px; color: #e94560; border-bottom: 1px solid #0f3460; padding-bottom: 8px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 12px; color: #a0a0b0; }
+input,select { background: #0f3460; border: 1px solid #1a1a4e; color: #e0e0e0; padding: 6px 10px; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
+input:focus { border-color: #e94560; }
+input[type="number"] { width: 100%; }
+.vec-group { display: flex; gap: 8px; }
+.vec-group .field { flex: 1; }
+.vec-group label { text-align: center; }
+.canvas-wrap { flex: 1; position: relative; }
+.json-preview { background: #0f3460; border-radius: 6px; padding: 12px; font-size: 12px; white-space: pre-wrap; word-break: break-all; max-height: 180px; overflow-y: auto; color: #7ec699; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+button { background: #e94560; color: #fff; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 13px; }
+button:hover { background: #cf3a52; }
+button.secondary { background: #0f3460; }
+button.secondary:hover { background: #1a3a6e; }
+.legend { position: absolute; bottom: 16px; left: 16px; font-size: 11px; color: #888; display: flex; gap: 14px; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>TF Transform 参数</h2>
+  <div class="field"><label>header.frame_id (父坐标系)</label><input type="text" id="frameId" value="map"></div>
+  <div class="field"><label>child_frame_id (子坐标系)</label><input type="text" id="childFrameId" value="base_link"></div>
+
+  <h2>平移 Translation</h2>
+  <div class="vec-group">
+    <div class="field"><label>x (m)</label><input type="number" id="tx" value="2" step="0.1"></div>
+    <div class="field"><label>y (m)</label><input type="number" id="ty" value="1" step="0.1"></div>
+    <div class="field"><label>z (m)</label><input type="number" id="tz" value="0.5" step="0.1"></div>
+  </div>
+
+  <h2>旋转 Rotation (四元数)</h2>
+  <div class="vec-group">
+    <div class="field"><label>qx</label><input type="number" id="qx" value="0" step="0.01"></div>
+    <div class="field"><label>qy</label><input type="number" id="qy" value="0" step="0.01"></div>
+    <div class="field"><label>qz</label><input type="number" id="qz" value="0" step="0.01"></div>
+    <div class="field"><label>qw</label><input type="number" id="qw" value="1" step="0.01"></div>
+  </div>
+
+  <h2>欧拉角 (可互转)</h2>
+  <div class="vec-group">
+    <div class="field"><label>Roll (°)</label><input type="number" id="roll" value="0" step="1"></div>
+    <div class="field"><label>Pitch (°)</label><input type="number" id="pitch" value="0" step="1"></div>
+    <div class="field"><label>Yaw (°)</label><input type="number" id="yaw" value="30" step="1"></div>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="syncFromEuler()">欧拉角 → 四元数</button>
+    <button class="secondary" onclick="resetToDefault()">重置</button>
+  </div>
+
+  <h2>TFMessage JSON</h2>
+  <div class="json-preview" id="jsonPreview"></div>
+</div>
+
+<div class="canvas-wrap">
+  <div class="legend">
+    <span><span class="dot" style="background:#ff4444"></span> X</span>
+    <span><span class="dot" style="background:#44ff44"></span> Y</span>
+    <span><span class="dot" style="background:#4488ff"></span> Z</span>
+    <span><span class="dot" style="background:#fff"></span> Parent frame</span>
+    <span><span class="dot" style="background:#e94560"></span> Child frame</span>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+// --- scene setup ---
+const wrap = document.querySelector('.canvas-wrap');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+
+const camera = new THREE.PerspectiveCamera(50, 2, 0.1, 100);
+camera.position.set(6, 4, 6);
+camera.lookAt(1, 0.5, 0.25);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+wrap.appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.top = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+wrap.appendChild(labelRenderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(1, 0.5, 0.25);
+controls.update();
+
+// --- lights ---
+scene.add(new THREE.AmbientLight(0x404060, 2));
+const dir = new THREE.DirectionalLight(0xffffff, 2);
+dir.position.set(5, 10, 5);
+scene.add(dir);
+
+// --- grid ---
+const grid = new THREE.GridHelper(10, 20, 0x2a2a4a, 0x1e1e3a);
+scene.add(grid);
+
+// --- objects ---
+const parentGroup = new THREE.Group();
+const childGroup = new THREE.Group();
+scene.add(parentGroup);
+scene.add(childGroup);
+
+// axis arrows
+function createAxisArrow(color, dirVec) {
+  const group = new THREE.Group();
+  const arrow = new THREE.ArrowHelper(new THREE.Vector3(dirVec[0], dirVec[1], dirVec[2]).normalize(), new THREE.Vector3(0,0,0), 1.2, color, 0.15, 0.08);
+  group.add(arrow);
+  return group;
+}
+
+function createFrame(color, label) {
+  const group = new THREE.Group();
+  const axes = [
+    { name: 'X', c: 0xff4444, d: [1,0,0] },
+    { name: 'Y', c: 0x44ff44, d: [0,1,0] },
+    { name: 'Z', c: 0x4488ff, d: [0,0,1] },
+  ];
+  axes.forEach(a => {
+    const arrow = createAxisArrow(a.c, a.d);
+    group.add(arrow);
+  });
+  // origin sphere
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.5 }));
+  group.add(sphere);
+  return group;
+}
+
+function createLabel(text, color) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  div.style.color = color;
+  div.style.fontFamily = 'Consolas, monospace';
+  div.style.fontSize = '14px';
+  div.style.fontWeight = 'bold';
+  div.style.textShadow = '0 0 6px #000';
+  return new CSS2DObject(div);
+}
+
+const parentFrame = createFrame(0xffffff, 'parent');
+const childFrame = createFrame(0xe94560, 'child');
+parentGroup.add(parentFrame);
+childGroup.add(childFrame);
+
+// axis labels (using CSS2D) placed at axis tips
+function addAxisLabels(group, prefix) {
+  const positions = [
+    { pos: [1.35, 0, 0], label: prefix+'.X', c: '#ff4444' },
+    { pos: [0, 1.35, 0], label: prefix+'.Y', c: '#44ff44' },
+    { pos: [0, 0, 1.35], label: prefix+'.Z', c: '#4488ff' },
+  ];
+  positions.forEach(p => {
+    const lbl = createLabel(p.label, p.c);
+    lbl.position.set(p.pos[0], p.pos[1], p.pos[2]);
+    group.add(lbl);
+  });
+}
+
+// frame name labels
+function addFrameLabel(group, text, color, yOffset) {
+  const lbl = createLabel(text, color);
+  lbl.position.set(0, yOffset, 0);
+  group.add(lbl);
+}
+
+addAxisLabels(parentGroup, 'map');
+addAxisLabels(childGroup, 'base_link');
+addFrameLabel(parentGroup, 'map', '#ffffff', -0.25);
+addFrameLabel(childGroup, 'base_link', '#e94560', -0.25);
+
+// --- inputs ---
+const inputs = {
+  frameId: document.getElementById('frameId'),
+  childFrameId: document.getElementById('childFrameId'),
+  tx: document.getElementById('tx'), ty: document.getElementById('ty'), tz: document.getElementById('tz'),
+  qx: document.getElementById('qx'), qy: document.getElementById('qy'), qz: document.getElementById('qz'), qw: document.getElementById('qw'),
+  roll: document.getElementById('roll'), pitch: document.getElementById('pitch'), yaw: document.getElementById('yaw'),
+};
+
+window.getValues = () => ({
+  frame_id: inputs.frameId.value,
+  child_frame_id: inputs.childFrameId.value,
+  tx: parseFloat(inputs.tx.value) || 0,
+  ty: parseFloat(inputs.ty.value) || 0,
+  tz: parseFloat(inputs.tz.value) || 0,
+  qx: parseFloat(inputs.qx.value) || 0,
+  qy: parseFloat(inputs.qy.value) || 0,
+  qz: parseFloat(inputs.qz.value) || 0,
+  qw: parseFloat(inputs.qw.value) || 1,
+});
+
+function eulerToQuat(rollDeg, pitchDeg, yawDeg) {
+  const roll = rollDeg * Math.PI / 180;
+  const pitch = pitchDeg * Math.PI / 180;
+  const yaw = yawDeg * Math.PI / 180;
+  const cr = Math.cos(roll * 0.5), sr = Math.sin(roll * 0.5);
+  const cp = Math.cos(pitch * 0.5), sp = Math.sin(pitch * 0.5);
+  const cy = Math.cos(yaw * 0.5), sy = Math.sin(yaw * 0.5);
+  return {
+    qx: sr * cp * cy - cr * sp * sy,
+    qy: cr * sp * cy + sr * cp * sy,
+    qz: cr * cp * sy - sr * sp * cy,
+    qw: cr * cp * cy + sr * sp * sy,
+  };
+}
+
+function quatToEuler(qx, qy, qz, qw) {
+  const sinr_cosp = 2 * (qw * qx + qy * qz);
+  const cosr_cosp = 1 - 2 * (qx * qx + qy * qy);
+  const roll = Math.atan2(sinr_cosp, cosr_cosp);
+  const sinp = 2 * (qw * qy - qz * qx);
+  let pitch = Math.abs(sinp) >= 1 ? Math.sign(sinp) * Math.PI / 2 : Math.asin(sinp);
+  const siny_cosp = 2 * (qw * qz + qx * qy);
+  const cosy_cosp = 1 - 2 * (qy * qy + qz * qz);
+  const yaw = Math.atan2(siny_cosp, cosy_cosp);
+  return { roll: roll * 180 / Math.PI, pitch: pitch * 180 / Math.PI, yaw: yaw * 180 / Math.PI };
+}
+
+window.syncFromEuler = () => {
+  const r = parseFloat(inputs.roll.value) || 0;
+  const p = parseFloat(inputs.pitch.value) || 0;
+  const y = parseFloat(inputs.yaw.value) || 0;
+  const q = eulerToQuat(r, p, y);
+  inputs.qx.value = q.qx.toFixed(4);
+  inputs.qy.value = q.qy.toFixed(4);
+  inputs.qz.value = q.qz.toFixed(4);
+  inputs.qw.value = q.qw.toFixed(4);
+  update3D();
+};
+
+window.resetToDefault = () => {
+  inputs.frameId.value = 'map'; inputs.childFrameId.value = 'base_link';
+  inputs.tx.value = '2'; inputs.ty.value = '1'; inputs.tz.value = '0.5';
+  inputs.qx.value = '0'; inputs.qy.value = '0'; inputs.qz.value = '0'; inputs.qw.value = '1';
+  inputs.roll.value = '0'; inputs.pitch.value = '0'; inputs.yaw.value = '30';
+  window.syncFromEuler();
+};
+
+function syncFromQuat() {
+  const v = window.getValues();
+  const e = quatToEuler(v.qx, v.qy, v.qz, v.qw);
+  inputs.roll.value = e.roll.toFixed(2);
+  inputs.pitch.value = e.pitch.toFixed(2);
+  inputs.yaw.value = e.yaw.toFixed(2);
+}
+
+function updateLabels() {
+  const v = window.getValues();
+  // Remove old CSS2D labels
+  [parentGroup, childGroup].forEach(g => {
+    const toRemove = g.children.filter(c => c.isCSS2DObject);
+    toRemove.forEach(c => g.remove(c));
+  });
+  addAxisLabels(parentGroup, v.frame_id);
+  addFrameLabel(parentGroup, v.frame_id, '#ffffff', -0.25);
+  addAxisLabels(childGroup, v.child_frame_id);
+  addFrameLabel(childGroup, v.child_frame_id, '#e94560', -0.25);
+}
+
+function updateJSON() {
+  const v = window.getValues();
+  document.getElementById('jsonPreview').textContent = JSON.stringify({
+    header: { stamp: { sec: 0, nanosec: 0 }, frame_id: v.frame_id },
+    child_frame_id: v.child_frame_id,
+    transform: { translation: { x: v.tx, y: v.ty, z: v.tz }, rotation: { x: v.qx, y: v.qy, z: v.qz, w: v.qw } },
+  }, null, 2);
+}
+
+function update3D() {
+  syncFromQuat();
+  updateJSON();
+  updateLabels();
+  const v = window.getValues();
+  childGroup.position.set(v.tx, v.tz, -v.ty);
+  // ROS convention: x-forward, y-left, z-up → Three.js: x-right, y-up, z-forward
+  // ROS(x,y,z) => Three.js(x, z, -y)
+  const rosQ = new THREE.Quaternion(v.qx, v.qy, v.qz, v.qw);
+  // Swizzle: ROS coords → Three.js coords for quaternion
+  const q3 = new THREE.Quaternion(rosQ.x, rosQ.z, -rosQ.y, rosQ.w);
+  childGroup.quaternion.copy(q3);
+}
+
+// --- resize ---
+function resize() {
+  const w = wrap.clientWidth;
+  const h = wrap.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+  labelRenderer.setSize(w, h);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// --- input listeners ---
+Object.values(inputs).forEach(el => {
+  el.addEventListener('input', update3D);
+  el.addEventListener('change', update3D);
+});
+
+// --- render loop ---
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+
+update3D();
+animate();
+</script>
+</body>
+</html>

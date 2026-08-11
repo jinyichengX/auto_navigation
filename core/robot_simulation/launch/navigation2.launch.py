@@ -55,4 +55,14 @@ def generate_launch_description():
             parameters=[{'use_sim_time': use_sim_time}],
             output='screen'
         ),
+
+        # 将 Nav2 的 /cmd_vel (Twist) 桥接到 fishbot_diff_drive_controller 的 /cmd_vel (Twist)
+        launch_ros.actions.Node(
+            package='topic_tools',
+            executable='relay',
+            name='cmd_vel_relay',
+            arguments=['/cmd_vel', '/fishbot_diff_drive_controller/cmd_vel_unstamped'],
+            parameters=[{'use_sim_time': use_sim_time}],
+            output='screen'
+        ),
     ])
