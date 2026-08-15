@@ -280,9 +280,10 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.5
-      use_astar: false
-      allow_unknown: true
+      tolerance: 0.5 # 路径不必精确到目标点，0.5m 内就算到达
+      use_astar: false # false = 用 Dijkstra，true = 用 A*
+      allow_unknown: true # 允许路径穿过「未知区域」(255)这个对你论文可能有关：它允许规划器 穿过还没扫到的未知区域 。
+                          # 井下未完全建图时，如果设成 false ，规划器会拒绝走未知区域，可能规划失败。
 
 smoother_server:
   ros__parameters:

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全局规划器可视化 — Dijkstra vs A*（逐步版）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #0a0a14; color: #d0d0e0; min-height: 100vh; padding: 24px;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #e8e8f8; }
+  .sub { font-size: 14px; color: #8888a0; margin-bottom: 20px; line-height: 1.6; }
+  .sub b { color: #5b9cf5; }
+
+  .mains { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+
+  .board { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 16px; }
+  .board h2 { font-size: 16px; margin-bottom: 10px; }
+  .board h2 span { font-size: 12px; color: #8888a0; font-weight: normal; margin-left: 6px; }
+  canvas { display: block; border-radius: 6px; cursor: crosshair; }
+
+  .panel { width: 320px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 14px; }
+  .card h3 { font-size: 14px; margin-bottom: 10px; color: #cba6f7; }
+
+  .modes { display: flex; gap: 6px; flex-wrap: wrap; }
+  .modes button, .actions button {
+    flex: 1; min-width: 64px; padding: 8px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid #333355; background: #1a1a2e; color: #d0d0e0; font-size: 13px;
+  }
+  .modes button:hover, .actions button:hover { background: #262640; }
+  .modes button.on { background: #5b9cf5; color: #0a0a14; border-color: #5b9cf5; font-weight: 600; }
+
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .actions .run { background: #3cc97a; color: #0a0a14; border-color: #3cc97a; font-weight: 600; }
+  .actions .run:hover { background: #4fdc8f; }
+  .actions .step { background: #e8c840; color: #0a0a14; border-color: #e8c840; font-weight: 600; }
+  .actions .step:hover { background: #f2d95a; }
+
+  .legend { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .legend .row { display: flex; align-items: center; gap: 8px; }
+  .legend .sw { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #333; flex: none; }
+
+  .info { font-size: 13px; line-height: 1.8; font-family: 'SF Mono', 'Consolas', monospace; }
+  .info .d { color: #5b9cf5; }
+  .info .a { color: #a78bfa; }
+  .info .cur { color: #e8c840; font-weight: 700; }
+  .info .stepno { font-size: 20px; font-weight: 700; color: #e8e8f8; }
+
+  .result { font-size: 13px; line-height: 1.9; }
+  .result .big { font-size: 18px; font-weight: 700; }
+  .result .ok { color: #3cc97a; }
+  .result .warn { color: #e8c840; }
+
+  .tip { font-size: 12px; color: #666680; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<h1>全局规划器：在代价地图上找"代价最低"的路径</h1>
+<div class="sub">
+  每个格子有<b>代价</b>：灰蓝=自由(0)，橙红=膨胀区(离障碍物越近代价越高)，暗红=障碍物(不可走)。<br>
+  建议点「准备」后用「单步 →」一步步看：白框是"当前正在处理的格子"，旁边有它的 g / h / f 值。
+</div>
+
+<div class="mains">
+  <div class="board">
+    <h2>Dijkstra <span>f = g（无启发，一圈圈扩散）</span></h2>
+    <canvas id="cvD" width="680" height="480"></canvas>
+  </div>
+  <div class="board">
+    <h2>A* <span>f = g + h（朝终点聚焦）</span></h2>
+    <canvas id="cvA" width="680" height="480"></canvas>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>点选模式</h3>
+      <div class="modes">
+        <button id="m-start" class="on">设起点</button>
+        <button id="m-goal">设终点</button>
+        <button id="m-add">加障碍</button>
+        <button id="m-remove">清障碍</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>操作</h3>
+      <div class="actions">
+        <button class="run" id="btn-prepare">准备</button>
+        <button class="step" id="btn-step">单步 →</button>
+        <button id="btn-auto">自动播放</button>
+        <button id="btn-reset">重置</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>当前步骤</h3>
+      <div class="info" id="info">点「准备」后开始单步</div>
+    </div>
+
+    <div class="card">
+      <h3>图例</h3>
+      <div class="legend">
+        <div class="row"><div class="sw" style="background:#1e1e2e"></div> 自由空间（代价 0）</div>
+        <div class="row"><div class="sw" style="background:#c05a20"></div> 膨胀区（代价越高越红）</div>
+        <div class="row"><div class="sw" style="background:#2a0606"></div> 障碍物（不可走）</div>
+        <div class="row"><div class="sw" style="background:#3cc97a"></div> 起点</div>
+        <div class="row"><div class="sw" style="background:#e85555"></div> 终点</div>
+        <div class="row"><div class="sw" style="background:rgba(91,156,245,.45)"></div> 已搜索（已确认）</div>
+        <div class="row"><div class="sw" style="background:#ffffff"></div> 当前正在处理</div>
+        <div class="row"><div class="sw" style="background:#e8c840"></div> 最终路径</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>结果对比</h3>
+      <div class="result" id="result">—</div>
+    </div>
+
+    <div class="tip">
+      起点默认左下，终点默认右上。可以先用「设起点 / 设终点」换位置，再用「加障碍」堵路，看路径怎么绕。
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   常量与状态
+   ============================================================ */
+const COLS = 34, ROWS = 24, CELL = 20;
+const INF = Infinity;
+const INFLATION_RADIUS = 3.5;
+const MAX_COST = 50;
+
+let grid = [];
+let start = { x: 3, y: 3 };
+let goal  = { x: COLS - 4, y: ROWS - 4 };
+let mode = 'start';
+
+let dijkstraRes = null, astarRes = null;
+let animStep = 0, animTimer = null;
+
+const cvD = document.getElementById('cvD');
+const cvA = document.getElementById('cvA');
+const ctxD = cvD.getContext('2d');
+const ctxA = cvA.getContext('2d');
+
+/* ============================================================
+   地图构建
+   ============================================================ */
+function buildGrid() {
+  grid = [];
+  for (let c = 0; c < COLS; c++) {
+    grid[c] = [];
+    for (let r = 0; r < ROWS; r++) grid[c][r] = { cost: 0, obstacle: false };
+  }
+  const walls = [];
+  for (let c = 8; c <= 24; c++) walls.push([c, 8]);
+  for (let r = 10; r <= 18; r++) walls.push([14, r]);
+  for (let c = 18; c <= 30; c++) walls.push([c, 16]);
+  for (let c = 25; c <= 27; c++) for (let r = 4; r <= 6; r++) walls.push([c, r]);
+  for (const [c, r] of walls) if (c>=0&&c<COLS&&r>=0&&r<ROWS) grid[c][r].obstacle = true;
+  rebuildInflation();
+}
+
+function rebuildInflation() {
+  const walls = [];
+  for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++)
+    if (grid[c][r].obstacle) walls.push([c, r]);
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      if (grid[c][r].obstacle) { grid[c][r].cost = INF; continue; }
+      let dMin = Infinity;
+      for (const [oc, orr] of walls) { const d = Math.hypot(c - oc, r - orr); if (d < dMin) dMin = d; }
+      grid[c][r].cost = dMin <= INFLATION_RADIUS
+        ? Math.round(MAX_COST * (1 - dMin / INFLATION_RADIUS)) : 0;
+    }
+  }
+}
+
+/* ============================================================
+   搜索算法（Dijkstra / A* 共用，差别只在启发函数 h）
+   visited 记录每一步的完整信息：坐标、g、h、f、open 队列大小
+   ============================================================ */
+function search(map, s, goal, useHeuristic) {
+  // 进入格子 (c,r) 的代价 = 1（走一步）+ 该格子的危险代价
+  const moveCost = (c, r) => map[c][r].obstacle ? INF : 1 + map[c][r].cost;
+  // 启发函数：A* 用曼哈顿距离（到终点的估计），Dijkstra 恒为 0
+  const heuristic = (c, r) => useHeuristic ? (Math.abs(c - goal.x) + Math.abs(r - goal.y)) : 0;
+
+  const dist = Array.from({ length: COLS }, () => Array(ROWS).fill(INF));
+  const parent = Array.from({ length: COLS }, () => Array(ROWS).fill(null));
+  const closed = Array.from({ length: COLS }, () => Array(ROWS).fill(false));
+  const visited = [];
+  let open = [];
+
+  dist[s.x][s.y] = 0;
+  open.push({ c: s.x, r: s.y, g: 0 });
+
+  while (open.length > 0) {
+    // 从 open 队列里挑 f = g + h 最小的节点（这就是算法的核心选择）
+    let idx = 0;
+    for (let i = 1; i < open.length; i++) {
+      const fa = open[i].g + heuristic(open[i].c, open[i].r);
+      const fb = open[idx].g + heuristic(open[idx].c, open[idx].r);
+      if (fa < fb) idx = i;
+    }
+    const cur = open.splice(idx, 1)[0];
+    const c = cur.c, r = cur.r, gSoFar = cur.g;
+    if (closed[c][r]) continue;
+    closed[c][r] = true;
+
+    visited.push({
+      c, r,
+      g: gSoFar,                              // 累计已走代价
+      h: heuristic(c, r),                     // 到终点估计距离（Dijkstra 恒 0）
+      f: gSoFar + heuristic(c, r),            // 选择依据：f 越小越优先
+      openSize: open.length                   // 处理完它之后，还剩多少待处理
+    });
+
+    if (c === goal.x && r === goal.y) {
+      const path = [];
+      let p = { x: c, y: r };
+      while (p) { path.push(p); p = parent[p.x][p.y]; }
+      path.reverse();
+      return { visited, path, cost: gSoFar };
+    }
+
+    for (const [dc, dr] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+      const nc = c + dc, nr = r + dr;
+      if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
+      if (closed[nc][nr]) continue;
+      const sc = moveCost(nc, nr);
+      if (!isFinite(sc)) continue;
+      const ng = gSoFar + sc;
+      if (ng < dist[nc][nr]) {
+        dist[nc][nr] = ng;
+        parent[nc][nr] = { x: c, y: r };
+        open.push({ c: nc, r: nr, g: ng });
+      }
+    }
+  }
+  return { visited, path: [], cost: INF };
+}
+
+/* ============================================================
+   绘制
+   ============================================================ */
+function costColor(cost) {
+  if (!isFinite(cost)) return '#2a0606';
+  if (cost <= 0) return '#1e1e2e';
+  const t = Math.min(cost / MAX_COST, 1);
+  return `rgb(${Math.round(70+170*t)},${Math.round(30+30*t)},${Math.round(40-20*t)})`;
+}
+
+function draw(ctx, res, maxStep) {
+  for (let c = 0; c < COLS; c++)
+    for (let r = 0; r < ROWS; r++) {
+      ctx.fillStyle = costColor(grid[c][r].cost);
+      ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+    }
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let c = 0; c <= COLS; c++) { ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,ROWS*CELL); ctx.stroke(); }
+  for (let r = 0; r <= ROWS; r++) { ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(COLS*CELL,r*CELL); ctx.stroke(); }
+
+  if (res) {
+    const n = Math.min(maxStep, res.visited.length);
+    // 已搜索（已确认）的格子
+    ctx.fillStyle = 'rgba(91,156,245,0.45)';
+    for (let i = 0; i < n; i++) {
+      const p = res.visited[i];
+      ctx.fillRect(p.c*CELL+1, p.r*CELL+1, CELL-2, CELL-2);
+    }
+    // 当前正在处理的格子（白框高亮）
+    if (n > 0 && maxStep > 0 && maxStep <= res.visited.length) {
+      const cur = res.visited[n-1];
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(cur.c*CELL+2, cur.r*CELL+2, CELL-4, CELL-4);
+      ctx.strokeStyle = '#e8c840';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cur.c*CELL+2, cur.r*CELL+2, CELL-4, CELL-4);
+    }
+    // 该算法搜完（到达终点）后，显示路径
+    if (res.path.length && maxStep >= res.visited.length) {
+      ctx.fillStyle = '#e8c840';
+      for (const p of res.path) ctx.fillRect(p.x*CELL+3, p.y*CELL+3, CELL-6, CELL-6);
+    }
+  }
+
+  drawDot(ctx, start.x, start.y, '#3cc97a');
+  drawDot(ctx, goal.x, goal.y, '#e85555');
+}
+
+function drawDot(ctx, c, r, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(c*CELL+CELL/2, r*CELL+CELL/2, CELL*0.4, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+}
+
+function redraw() {
+  draw(ctxD, dijkstraRes, animStep);
+  draw(ctxA, astarRes, animStep);
+}
+
+/* ============================================================
+   控制：准备 / 单步 / 自动播放
+   ============================================================ */
+function prepare() {
+  stopAnim();
+  dijkstraRes = search(grid, start, goal, false);
+  astarRes     = search(grid, start, goal, true);
+  animStep = 0;
+  redraw();
+  updateInfo();
+  document.getElementById('result').textContent = '—';
+}
+
+function stepOnce() {
+  if (!dijkstraRes) { prepare(); }
+  const total = Math.max(dijkstraRes.visited.length, astarRes.visited.length);
+  if (animStep < total) animStep++;
+  redraw();
+  updateInfo();
+  if (animDone()) showResult();
+}
+
+function autoPlay() {
+  prepare();
+  const total = Math.max(dijkstraRes.visited.length, astarRes.visited.length);
+  const per = Math.max(1, Math.round(total / 150));
+  stopAnim();
+  animTimer = setInterval(() => {
+    animStep += per;
+    if (animStep > total) animStep = total;
+    redraw();
+    updateInfo();
+    if (animDone()) { stopAnim(); showResult(); }
+  }, 40);
+}
+
+function stopAnim() { if (animTimer) { clearInterval(animTimer); animTimer = null; } }
+
+function animDone() {
+  const d = dijkstraRes ? dijkstraRes.visited.length : 0;
+  const a = astarRes ? astarRes.visited.length : 0;
+  return animStep >= Math.max(d, a);
+}
+
+/* ============================================================
+   信息显示：展示当前处理节点的 g / h / f
+   ============================================================ */
+function curNode(res) {
+  if (!res || animStep <= 0) return null;
+  const idx = Math.min(animStep, res.visited.length) - 1;
+  return res.visited[idx];
+}
+
+function updateInfo() {
+  const dn = curNode(dijkstraRes), an = curNode(astarRes);
+  if (!dn && !an) { document.getElementById('info').textContent = '点「准备」后开始单步'; return; }
+  const total = Math.max(dijkstraRes.visited.length, astarRes.visited.length);
+  let html = `<div class="stepno">第 ${Math.min(animStep, total)} / ${total} 步</div>`;
+
+  if (dn) {
+    html += `<div class="d">Dijkstra 处理 (${dn.c},${dn.r})<br>
+      g=${dn.g}（累计代价） h=${dn.h}（无） <span class="cur">f=${dn.f}</span><br>
+      待处理队列 ${dn.openSize} 个</div>`;
+  } else {
+    html += `<div class="d">Dijkstra 已搜完（到终点）</div>`;
+  }
+  if (an) {
+    html += `<div style="margin-top:6px" class="a">A* 处理 (${an.c},${an.r})<br>
+      g=${an.g}（累计代价） h=${an.h}（到终点估计） <span class="cur">f=${an.f}</span><br>
+      待处理队列 ${an.openSize} 个</div>`;
+  } else {
+    html += `<div style="margin-top:6px" class="a">A* 已搜完（到终点）</div>`;
+  }
+  document.getElementById('info').innerHTML = html;
+}
+
+function showResult() {
+  const dv = dijkstraRes.visited.length;
+  const av = astarRes.visited.length;
+  const reachable = dijkstraRes.path.length > 0;
+  document.getElementById('result').innerHTML = reachable
+    ? `<div>搜索过的格子数：</div>
+       <div class="big">Dijkstra <span style="color:#5b9cf5">${dv}</span> 格</div>
+       <div class="big">A* <span style="color:#a78bfa">${av}</span> 格</div>
+       <div style="margin-top:6px">A* 少搜了 <span class="ok">${dv-av}</span> 格（快约 <span class="ok">${(100*(1-av/dv)).toFixed(0)}%</span>）</div>
+       <div style="margin-top:6px">路径总代价：<span class="warn">${dijkstraRes.cost.toFixed(0)}</span>（两者相同，都是最优）</div>`
+    : `<div class="warn">终点被障碍物围住，无法到达。</div>`;
+}
+
+/* ============================================================
+   交互
+   ============================================================ */
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.modes button').forEach(b => b.classList.remove('on'));
+  document.getElementById('m-' + m).classList.add('on');
+}
+
+function onCanvasClick(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const c = Math.floor((e.clientX - rect.left) / CELL);
+  const r = Math.floor((e.clientY - rect.top) / CELL);
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return;
+  if (mode === 'start') start = { x: c, y: r };
+  else if (mode === 'goal') goal = { x: c, y: r };
+  else if (mode === 'add') { grid[c][r].obstacle = true; grid[c][r].cost = INF; }
+  else if (mode === 'remove') { grid[c][r].obstacle = false; grid[c][r].cost = 0; }
+  if (mode === 'add' || mode === 'remove') rebuildInflation();
+  stopAnim(); dijkstraRes = null; astarRes = null; animStep = 0;
+  redraw();
+  document.getElementById('info').textContent = '地图已改，点「准备」重新计算';
+  document.getElementById('result').textContent = '—';
+}
+
+function resetAll() {
+  stopAnim();
+  start = { x: 3, y: 3 };
+  goal = { x: COLS - 4, y: ROWS - 4 };
+  dijkstraRes = null; astarRes = null; animStep = 0;
+  buildGrid();
+  redraw();
+  document.getElementById('info').textContent = '点「准备」后开始单步';
+  document.getElementById('result').textContent = '—';
+}
+
+/* ============================================================
+   初始化
+   ============================================================ */
+document.getElementById('m-start').onclick = () => setMode('start');
+document.getElementById('m-goal').onclick = () => setMode('goal');
+document.getElementById('m-add').onclick = () => setMode('add');
+document.getElementById('m-remove').onclick = () => setMode('remove');
+document.getElementById('btn-prepare').onclick = prepare;
+document.getElementById('btn-step').onclick = stepOnce;
+document.getElementById('btn-auto').onclick = autoPlay;
+document.getElementById('btn-reset').onclick = resetAll;
+cvD.addEventListener('click', onCanvasClick);
+cvA.addEventListener('click', onCanvasClick);
+
+buildGrid();
+redraw();
+</script>
+</body>
+</html>

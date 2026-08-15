@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DWB 局部控制器可视化 — 采样轨迹 + 打分选优</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #0a0a14; color: #d0d0e0; min-height: 100vh; padding: 24px;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #e8e8f8; }
+  .sub { font-size: 14px; color: #8888a0; margin-bottom: 20px; line-height: 1.7; }
+  .sub b { color: #5b9cf5; }
+
+  .mains { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .board { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 16px; }
+  .board h2 { font-size: 16px; margin-bottom: 10px; }
+  .board h2 span { font-size: 12px; color: #8888a0; font-weight: normal; margin-left: 6px; }
+  canvas { display: block; border-radius: 6px; cursor: crosshair; }
+
+  .panel { width: 330px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 14px; }
+  .card h3 { font-size: 14px; margin-bottom: 10px; color: #cba6f7; }
+
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .actions button {
+    flex: 1; min-width: 64px; padding: 9px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid #333355; background: #1a1a2e; color: #d0d0e0; font-size: 13px;
+  }
+  .actions button:hover { background: #262640; }
+  .actions .run { background: #3cc97a; color: #0a0a14; border-color: #3cc97a; font-weight: 600; }
+  .actions .step { background: #e8c840; color: #0a0a14; border-color: #e8c840; font-weight: 600; }
+
+  .info { font-size: 13px; line-height: 1.9; font-family: 'SF Mono', 'Consolas', monospace; }
+  .info .k { color: #8888a0; }
+  .info .sel { color: #e8c840; font-weight: 700; }
+  .info .best { color: #3cc97a; font-weight: 700; }
+  .info .stepno { font-size: 20px; font-weight: 700; color: #e8e8f8; }
+
+  .scores { font-size: 13px; line-height: 2.0; }
+  .scores .row { display: flex; justify-content: space-between; align-items: center; }
+  .scores .name { color: #a78bfa; }
+  .scores .val { font-family: 'SF Mono', 'Consolas', monospace; }
+  .scores .bar { height: 6px; background: #262640; border-radius: 3px; margin: 2px 0 8px; overflow: hidden; }
+  .scores .bar i { display: block; height: 100%; background: #5b9cf5; }
+
+  .legend { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .legend .row { display: flex; align-items: center; gap: 8px; }
+  .legend .sw { width: 18px; height: 4px; border-radius: 2px; flex: none; }
+  .legend .sw.dot { width: 14px; height: 14px; border-radius: 50%; }
+
+  .tip { font-size: 12px; color: #666680; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<h1>DWB 局部控制器：在机器人周围"采样一堆轨迹 → 打分 → 选最好的一条"</h1>
+<div class="sub">
+  蓝线是<b>全局路径</b>（全局规划器给的参考线）。机器人每次控制周期，会在自己周围<b>采样一批候选轨迹</b>（不同线速度 + 角速度），
+  每条轨迹用几个<b>打分器(critic)</b>评分，最后<b>选总分最低（绿色高亮）</b>的那条，按它的速度往前走一小步。
+  <br>点「单步 →」逐步看：每一步都会重新采样、重新打分。
+</div>
+
+<div class="mains">
+  <div class="board">
+    <h2>机器人视角 <span>候选轨迹（绿=好，红=差）</span></h2>
+    <canvas id="cv" width="900" height="600"></canvas>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>操作</h3>
+      <div class="actions">
+        <button class="step" id="btn-step">单步 →</button>
+        <button class="run" id="btn-auto">自动</button>
+        <button id="btn-reset">重置</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>当前状态</h3>
+      <div class="info" id="info">点「单步 →」开始</div>
+    </div>
+
+    <div class="card">
+      <h3>选中轨迹的评分（critics）</h3>
+      <div class="scores" id="scores">—</div>
+    </div>
+
+    <div class="card">
+      <h3>图例</h3>
+      <div class="legend">
+        <div class="row"><div class="sw" style="background:#5b9cf5"></div> 全局路径（参考线）</div>
+        <div class="row"><div class="sw" style="background:#a78bfa"></div> 候选轨迹（弧线，颜色越绿越好）</div>
+        <div class="row"><div class="sw" style="background:#3cc97a; height:5px"></div> 选中的轨迹（最好）</div>
+        <div class="row"><div class="sw dot" style="background:#e85555"></div> 障碍物</div>
+        <div class="row"><div class="sw dot" style="background:#5b9cf5"></div> 机器人（箭头=朝向）</div>
+        <div class="row"><div class="sw dot" style="background:#e8c840"></div> 目标点（可拖动）</div>
+      </div>
+    </div>
+
+    <div class="tip">
+      三个 critic 对应你配置里的参数：<b>PathDist/PathAlign</b>（贴路径）、<b>GoalDist/GoalAlign</b>（朝目标）、<b>BaseObstacle</b>（躲障碍）。
+      你可以拖动黄色目标点，看候选轨迹和选中结果怎么变。
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   场景常量（用真实单位：m、m/s、rad/s，渲染时映射成像素）
+   ============================================================ */
+const PX_PER_M = 500;      // 1 米 = 500 像素
+const SIM_TIME = 1.7;      // 预测时长（对应配置 sim_time: 1.7）
+const SIM_STEPS = 24;      // 模拟步数
+const DT_SIM = SIM_TIME / SIM_STEPS;
+const EXEC_TIME = 0.4;     // 每次「单步」实际前进多久
+const DT_EXEC = EXEC_TIME / SIM_STEPS;
+
+// 采样范围（对应配置 min/max_vel_x、max_vel_theta）
+const vxList = [0.0, 0.065, 0.13, 0.195, 0.26];      // m/s（5 档）
+const vthetaList = [-0.9, -0.6, -0.3, 0.0, 0.3, 0.6, 0.9]; // rad/s（7 档）
+
+// 全局路径（全局规划器给的折线）
+let path = [
+  { x: 80,  y: 520 },
+  { x: 300, y: 400 },
+  { x: 450, y: 420 },
+  { x: 700, y: 200 },
+  { x: 820, y: 160 },
+];
+
+// 障碍物（圆形，像素坐标 + 半径）
+let obstacles = [
+  { x: 372, y: 416, r: 26 },
+  { x: 760, y: 182, r: 24 },
+];
+
+let robot = { x: 80, y: 520, theta: 0 };
+let goal = path[path.length - 1];
+
+let lastCands = null;   // 上一次采样的候选（用于重绘）
+let stepNo = 0;
+let timer = null;
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+// 初始化朝向：指向路径第一个拐点
+robot.theta = Math.atan2(path[1].y - robot.y, path[1].x - robot.x);
+
+/* ============================================================
+   运动模型：差分小车，给定 (vx, vtheta) 推演一条轨迹
+   ============================================================ */
+function simulate(x, y, theta, vx, vtheta, dt, steps) {
+  const pts = [];
+  for (let i = 0; i < steps; i++) {
+    x += vx * Math.cos(theta) * dt * PX_PER_M;
+    y += vx * Math.sin(theta) * dt * PX_PER_M;
+    theta += vtheta * dt;
+    pts.push({ x, y, theta });
+  }
+  return pts;
+}
+
+/* ============================================================
+   打分（三个 critic，对应配置里的参数）
+   ============================================================ */
+function distToSegment(px, py, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  let t = len2 ? ((px - a.x) * dx + (py - a.y) * dy) / len2 : 0;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (a.x + t * dx), py - (a.y + t * dy));
+}
+
+function distToPath(px, py) {
+  let m = Infinity;
+  for (let i = 0; i < path.length - 1; i++)
+    m = Math.min(m, distToSegment(px, py, path[i], path[i + 1]));
+  return m;
+}
+
+function distToObstacle(px, py) {
+  let m = Infinity;
+  for (const o of obstacles) m = Math.min(m, Math.hypot(px - o.x, py - o.y) - o.r);
+  return m;
+}
+
+function scoreTraj(pts) {
+  const last = pts[pts.length - 1];
+  const pathDist = distToPath(last.x, last.y);           // 贴路径：末端离路径多远
+  const goalDist = Math.hypot(last.x - goal.x, last.y - goal.y); // 朝目标：末端离目标多远
+  let minD = Infinity;
+  for (const p of pts) minD = Math.min(minD, distToObstacle(p.x, p.y));
+  const SAFE = 30;                                         // 安全距离（像素）
+  const obsPen = minD < SAFE ? (1 - minD / SAFE) * 200 : 0; // 躲障碍：越近惩罚越大
+  const score = pathDist + 0.5 * goalDist + obsPen;
+  return { pathDist, goalDist, obsPen, score };
+}
+
+function sample() {
+  const cands = [];
+  for (const vx of vxList) {
+    for (const vtheta of vthetaList) {
+      const pts = simulate(robot.x, robot.y, robot.theta, vx, vtheta, DT_SIM, SIM_STEPS);
+      const s = scoreTraj(pts);
+      cands.push({ vx, vtheta, pts, s });
+    }
+  }
+  cands.sort((a, b) => a.s.score - b.s.score);
+  return cands;
+}
+
+/* ============================================================
+   执行一步：采样 → 选最优 → 前进
+   ============================================================ */
+function stepOnce() {
+  if (dist(robot, goal) < 20) { updateInfo(null); return; }
+  const cands = sample();
+  const best = cands[0];
+  lastCands = cands;
+  stepNo++;
+
+  // 按选中轨迹的速度，往前走一小段
+  const exec = simulate(robot.x, robot.y, robot.theta, best.vx, best.vtheta, DT_EXEC, SIM_STEPS);
+  const e = exec[exec.length - 1];
+  robot = { x: e.x, y: e.y, theta: e.theta };
+
+  redraw();
+  updateInfo(best);
+}
+
+function auto() {
+  stopTimer();
+  timer = setInterval(() => {
+    if (dist(robot, goal) < 20) { stopTimer(); return; }
+    stepOnce();
+  }, 90);
+}
+
+function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+/* ============================================================
+   绘制
+   ============================================================ */
+function redraw() {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+
+  // 全局路径
+  ctx.strokeStyle = '#5b9cf5';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(path[0].x, path[0].y);
+  for (let i = 1; i < path.length; i++) ctx.lineTo(path[i].x, path[i].y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 候选轨迹（按分数着色：绿=好 红=差）
+  if (lastCands) {
+    let minS = Infinity, maxS = -Infinity;
+    for (const c of lastCands) { minS = Math.min(minS, c.s.score); maxS = Math.max(maxS, c.s.score); }
+    for (const c of lastCands) {
+      const t = maxS > minS ? (c.s.score - minS) / (maxS - minS) : 0;
+      const hue = 120 - 120 * t; // 120=绿 → 0=红
+      ctx.strokeStyle = `hsla(${hue}, 80%, 55%, 0.55)`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(c.pts[0].x, c.pts[0].y);
+      for (const p of c.pts) ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+    // 选中的轨迹：绿色加粗
+    const best = lastCands[0];
+    ctx.strokeStyle = '#3cc97a';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(best.pts[0].x, best.pts[0].y);
+    for (const p of best.pts) ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+
+  // 障碍物
+  for (const o of obstacles) {
+    ctx.fillStyle = '#e85555';
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // 目标点
+  ctx.fillStyle = '#e8c840';
+  ctx.beginPath();
+  ctx.arc(goal.x, goal.y, 7, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 机器人（三角形，箭头方向 = 朝向）
+  const L = 18, W = 11;
+  ctx.save();
+  ctx.translate(robot.x, robot.y);
+  ctx.rotate(robot.theta);
+  ctx.beginPath();
+  ctx.moveTo(L, 0);
+  ctx.lineTo(-L * 0.6, W);
+  ctx.lineTo(-L * 0.6, -W);
+  ctx.closePath();
+  ctx.fillStyle = '#5b9cf5';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+/* ============================================================
+   信息面板
+   ============================================================ */
+function updateInfo(best) {
+  const info = document.getElementById('info');
+  const st = dist(robot, goal) < 20;
+  info.innerHTML =
+    `<div class="stepno">第 ${stepNo} 步</div>
+     <div><span class="k">位置</span> (${robot.x.toFixed(0)}, ${robot.y.toFixed(0)})</div>
+     <div><span class="k">朝向</span> ${(robot.theta * 180 / Math.PI).toFixed(0)}°</div>
+     <div><span class="k">采样</span> ${vxList.length} 线速度 × ${vthetaList.length} 角速度 = ${vxList.length * vthetaList.length} 条轨迹</div>
+     <div style="margin-top:6px">${st
+       ? '<span class="best">已到达目标</span>'
+       : best
+         ? `<span class="k">选中速度</span> vx=<span class="sel">${best.vx.toFixed(3)}</span> m/s, ω=<span class="sel">${best.vtheta.toFixed(2)}</span> rad/s`
+         : '—'}</div>`;
+
+  const sc = document.getElementById('scores');
+  if (!best) { sc.innerHTML = '—'; return; }
+  const items = [
+    { name: 'PathDist 贴路径', v: best.s.pathDist, map: '末端离路径越近越好' },
+    { name: 'GoalDist 朝目标', v: best.s.goalDist, map: '末端离目标越近越好' },
+    { name: 'BaseObstacle 躲障碍', v: best.s.obsPen, map: '靠近障碍惩罚越大' },
+  ];
+  const max = Math.max(...items.map(i => i.v), 1);
+  let html = `<div class="row"><span class="name">总分</span><span class="val best">${best.s.score.toFixed(1)}</span></div>`;
+  for (const it of items) {
+    html += `<div class="row"><span class="name">${it.name}</span><span class="val">${it.v.toFixed(1)}</span></div>
+             <div class="bar"><i style="width:${Math.min(100, it.v / max * 100)}%"></i></div>`;
+  }
+  sc.innerHTML = html;
+}
+
+/* ============================================================
+   交互：拖动目标点
+   ============================================================ */
+let dragging = false;
+cv.addEventListener('mousedown', (e) => {
+  const p = canvasPos(e);
+  if (Math.hypot(p.x - goal.x, p.y - goal.y) < 20) dragging = true;
+});
+cv.addEventListener('mousemove', (e) => {
+  if (!dragging) return;
+  const p = canvasPos(e);
+  goal = { x: Math.max(10, Math.min(cv.width - 10, p.x)), y: Math.max(10, Math.min(cv.height - 10, p.y)) };
+  path[path.length - 1] = goal;
+  lastCands = null;
+  redraw();
+});
+cv.addEventListener('mouseup', () => { dragging = false; });
+
+function canvasPos(e) {
+  const r = cv.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+/* ============================================================
+   重置
+   ============================================================ */
+function reset() {
+  stopTimer();
+  robot = { x: 80, y: 520, theta: Math.atan2(path[1].y - 520, path[1].x - 80) };
+  goal = { x: 820, y: 160 };
+  path[path.length - 1] = goal;
+  lastCands = null;
+  stepNo = 0;
+  redraw();
+  updateInfo(null);
+  document.getElementById('scores').innerHTML = '—';
+}
+
+document.getElementById('btn-step').onclick = stepOnce;
+document.getElementById('btn-auto').onclick = auto;
+document.getElementById('btn-reset').onclick = reset;
+
+redraw();
+updateInfo(null);
+</script>
+</body>
+</html>

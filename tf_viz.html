@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TF: map → odom → base_footprint</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; height: 100vh; display: flex; overflow: hidden; }
+#view { flex: 1; }
+.sidebar {
+  width: 320px; padding: 20px; display: flex; flex-direction: column; gap: 16px;
+  background: #111; color: #ddd; border-left: 1px solid #333; overflow-y: auto; font-size: 15px;
+}
+h3 { font-size: 16px; color: #cba6f7; margin-bottom: 8px; }
+.card { background: #1a1a1a; border-radius: 8px; padding: 12px 14px; border: 1px solid #333; margin-bottom: 8px; }
+.card .lbl { font-size: 13px; color: #888; margin-bottom: 4px; }
+.card .val { font-family: monospace; font-size: 18px; }
+.legend { display: flex; fr: 1px solid #555; padding: 9px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.btn:hover { background: #444; }
+.btn.on { background: #cba6f7; color: #111; border-color: #cba6f7; }
+.tip { font-size: 13px; color: #666; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div class="sidebar">
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#f38ba8"></div> map</div>
+    <div class="legend-item"><div class="dot" style="background:#a6e3a1"></div> odom</div>
+    <div class="legend-item"><div class="dot" style="background:#f9e2af"></div> base_footprint</div>
+  </div>
+
+  <div>
+    <h3>三个 TF 变换</h3>
+    <div class="card">
+      <div class="lbl">map → odom（漂移补偿）</div>
+      <div class="val" id="valMO" style="color:#f38ba8">x:0.00 y:0.00 θ:0.0°</div>
+    </div>
+    <div class="card">
+      <div class="lbl">odom → base（里程计读数）</div>
+      <div class="val" id="valOB" style="color:#a6e3a1">x:0.00 y:0.00 θ:0.0°</div>
+    </div>
+    <div class="card">
+      <div class="lbl">map → base（组合结果）</div>
+      <div class="val" id="valMB" style="color:#f9e2af">x:0.00 y:0.00 θ:0.0°</div>
+    </div>
+  </div>
+
+  <div>
+    <h3>控制</h3>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+      <button id="btn-auto" onclick="mode='auto';updateUI()">自动走 8 字</button>
+      <button id="btn-manual" class="on" onclick="mode='manual';updateUI()">手动 WASD</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+      <button onclick="slamFix()">SLAM 修正</button>
+      <button onclick="resetAll()">重置</button>
+    </div>
+    <div class="tip">鼠标拖拽旋转 | 滚轮缩放 | 右键平移<br>W前 S后 A左移 D右移 Q左转 E右转</div>
+  </div>
+
+  <div class="tip" style="color:#888;">
+    <b style="color:#f38ba8">map</b> 是绝对世界坐标系，固定不动。<br>
+    <b style="color:#a6e3a1">odom</b> 原点本应在起点，但里程计（编码器）每次读数都多走一点，误差累积后 odom 轴逐渐偏离 map 轴。<br>
+    <b style="color:#f9e2af">base_footprint</b> 是机器人真实位置。<br><br>
+    TF 树只有两条边：<b style="color:#f38ba8">map → odom</b> 和 <b style="color:#a6e3a1">odom → base</b>。<br>
+    <b style="color:#f9e2af">map → base</b> 是这两条组合出来的结果，不是独立发布的 TF。<br><br>
+    <b style="color:#f38ba8">map → odom</b> 就是漂移量，SLAM 每隔 10 秒修正一次，把 odom 拉回 map 原点。
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+/*
+ * 坐标系映射: 机器人 X(前)→Three.js+X, 机器人 Y(左)→Three.js-Z, 机器人 Z(上)→Three.js+Y
+ * 旋转: rotation.y = +θ (Three.js +Y 旋转把 +X 转到 -Z，与"左=-Z"一致)
+ */
+
+// ============ 状态 ============
+// truth = map → base（真实位置，SLAM 提供）
+// odo   = odom → base（里程计读数，带漂移）
+// mapOdo = map → odom（漂移补偿量）
+const truth  = { x:0, y:0, t:0 };
+const odo    = { x:0, y:0, t:0 };
+const mapOdo = { x:0, y:0, t:0 };
+const DRIFT = 0.04;   // 里程计每步系统性多走 4%
+let clock = 0;
+window.mode = 'manual';
+
+const trail = [], MAX_TRAIL = 200;
+function V3(rx, ry, h) { return new THREE.Vector3(rx, h ?? 0, -ry); }
+
+// SE(2) 组合与逆
+// C = A ∘ B
+function se2Compose(A, B) {
+  return {
+    x: A.x + B.x*Math.cos(A.t) - B.y*Math.sin(A.t),
+    y: A.y + B.x*Math.sin(A.t) + B.y*Math.cos(A.t),
+    t: A.t + B.t
+  };
+}
+// A = C ⊖ B，使得 A ∘ B = C
+function se2Inverse(C, B) {
+  const t = C.t - B.t;
+  return {
+    x: C.x - (B.x*Math.cos(t) - B.y*Math.sin(t)),
+    y: C.y - (B.x*Math.sin(t) + B.y*Math.cos(t)),
+    t
+  };
+}
+
+// ============ 场景初始化 ============
+const view = document.getElementById('view');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x181825);
+
+const cam = new THREE.PerspectiveCamera(45, view.clientWidth/view.clientHeight, 0.1, 60);
+cam.position.set(-10, 6, 0);
+cam.lookAt(0, 0, 0);
+
+const rnd = new THREE.WebGLRenderer({ antialias: true });
+rnd.setPixelRatio(window.devicePixelRatio);
+rnd.setSize(view.clientWidth, view.clientHeight);
+view.appendChild(rnd.domElement);
+
+const lrnd = new CSS2DRenderer();
+lrnd.setSize(view.clientWidth, view.clientHeight);
+lrnd.domElement.style.cssText = 'position:absolute;top:0;pointer-events:none';
+view.appendChild(lrnd.domElement);
+
+const ctrl = new OrbitControls(cam, rnd.domElement);
+ctrl.target.set(0, 0, 0);
+
+scene.add(new THREE.AmbientLight(0x404060, 2));
+const dl = new THREE.DirectionalLight(0xffffff, 2);
+dl.position.set(5, 8, 5);
+scene.add(dl);
+
+scene.add(new THREE.GridHelper(14, 14, 0x444466, 0x252540));
+
+// ============ 辅助函数 ============
+function mkLabel(txt, color) {
+  const d = document.createElement('div');
+  d.textContent = txt;
+  d.style.cssText = `color:#${color.toString(16).padStart(6,'0')};font-size:18px;font-weight:bold;text-shadow:0 0 6px #000`;
+  return new CSS2DObject(d);
+}
+
+function mkAxes(color, len, label) {
+  const g = new THREE.Group();
+  const m = new THREE.MeshBasicMaterial({ color });
+  const geo = new THREE.CylinderGeometry(0.04, 0.04, len, 16);
+  const cg = new THREE.ConeGeometry(0.1, 0.18, 16);
+
+  // X 轴 (前)
+  const xc = new THREE.Mesh(geo, m);
+  xc.rotation.z = -Math.PI/2; xc.position.set(len/2, 0.04, 0); g.add(xc);
+  const cx = new THREE.Mesh(cg, m);
+  cx.rotation.z = -Math.PI/2; cx.position.set(len, 0.04, 0); g.add(cx);
+
+  // Y 轴 (左) → Three.js -Z
+  const yc = new THREE.Mesh(geo, m);
+  yc.rotation.x = -Math.PI/2; yc.position.set(0, 0.04, -len/2); g.add(yc);
+  const cy = new THREE.Mesh(cg, m);
+  cy.rotation.x = -Math.PI/2; cy.position.set(0, 0.04, -len); g.add(cy);
+
+  // Z 轴 (上) → Three.js Y
+  const zh = len * 0.5;
+  const zc = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, zh, 16), m);
+  zc.position.set(0, zh/2 + 0.12, 0); g.add(zc);
+  const cz = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.18, 16), m);
+  cz.position.set(0, zh + 0.12, 0); g.add(cz);
+
+  // 原点球
+  const sp = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), m);
+  sp.position.y = 0.12; g.add(sp);
+
+  // 标签
+  const addL = (t, px, py, pz) => { const l = mkLabel(t, color); l.position.set(px, py, pz); g.add(l); };
+  addL('X前', len+0.25, 0.04, 0);
+  addL('Y左', 0, 0.04, -len-0.25);
+  addL('Z上', 0, zh+0.12+0.25, 0);
+
+  // 坐标系名称标签（悬浮在上方）
+  const nl = mkLabel(label, color); nl.position.set(0, len*0.5 + 0.6, 0); g.add(nl);
+  return g;
+}
+
+function mkRobot(color) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(0.9, 0.15, 0.55),
+    new THREE.MeshStandardMaterial({ color, roughness: 0.3, metalness: 0.2 })
+  );
+  body.position.y = 0.075; g.add(body);
+  const dot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.14, 16, 16),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.8 })
+  );
+  dot.position.set(0.35, 0.1, 0); g.add(dot);
+  return g;
+}
+
+// ============ 场景物体 ============
+// map 坐标系 (红，固定原点)
+const mapAxes = mkAxes(0xf38ba8, 3.0, 'map');
+scene.add(mapAxes);
+
+// odom 坐标系 (绿，会漂移)
+const odomAxes = mkAxes(0xa6e3a1, 2.0, 'odom');
+scene.add(odomAxes);
+
+// 机器人 (黄) + base_footprint 坐标系
+const realBot = new THREE.Group();
+realBot.add(mkRobot(0xf9e2af));
+const baseAxes = mkAxes(0xf9e2af, 1.2, 'base');
+baseAxes.position.y = 0.02;
+realBot.add(baseAxes);
+scene.add(realBot);
+
+// 连线
+function mkLine(color, opacity) {
+  const l = new THREE.Line(new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthTest: false }));
+  scene.add(l); return l;
+}
+const lineMO = mkLine(0xf38ba8, 0.7);  // map → odom
+const lineOB = mkLine(0xa6e3a1, 0.7);  // odom → base
+
+function updLine(l, a, b) { l.geometry.dispose(); l.geometry = new THREE.BufferGeometry().setFromPoints([a, b]); }
+
+// 轨迹线
+function mkTrail(color, opacity) {
+  const l = new THREE.Line(new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthTest: false }));
+  scene.add(l); return l;
+}
+const tLine = mkTrail(0xf9e2af, 0.35);
+
+// ============ 逻辑 ============
+function move(dx, dy, dt) {
+  // 真实位姿 (map 帧) 精确更新
+  const c = Math.cos(truth.t), s = Math.sin(truth.t);
+  truth.x += dx*c - dy*s;
+  truth.y += dx*s + dy*c;
+  truth.t += dt;
+
+  // 里程计 (odom 帧) 带比例漂移
+  const nx = dx*(1+DRIFT), ny = dy*(1+DRIFT), nt = dt*(1+DRIFT);
+  const oc = Math.cos(odo.t), os = Math.sin(odo.t);
+  odo.x += nx*oc - ny*os;
+  odo.y += nx*os + ny*oc;
+  odo.t += nt;
+
+  // map → odom = truth ⊖ odo
+  Object.assign(mapOdo, se2Inverse(truth, odo));
+}
+
+window.slamFix = () => {
+  // SLAM 重新定位：里程计漂移清零，odom 拉回 map 原点
+  Object.assign(odo, truth);
+  Object.assign(mapOdo, { x:0, y:0, t:0 });
+};
+
+window.resetAll = () => {
+  Object.assign(truth, { x:0, y:0, t:0 });
+  Object.assign(odo,   { x:0, y:0, t:0 });
+  Object.assign(mapOdo,{ x:0, y:0, t:0 });
+  clock = 0;
+  trail.length = 0;
+};
+
+window.updateUI = () => {
+  document.getElementById('btn-auto').className = window.mode === 'auto' ? 'btn on' : 'btn';
+  document.getElementById('btn-manual').className = window.mode === 'manual' ? 'btn on' : 'btn';
+};
+
+// ============ 键盘 ============
+const keys = {};
+window.onkeydown = e => { keys[e.key.toLowerCase()] = true; };
+window.onkeyup = e => { keys[e.key.toLowerCase()] = false; };
+let lm = Date.now();
+setInterval(() => {
+  if (window.mode !== 'manual') return;
+  const dt = Math.min((Date.now()-lm)/1000, 0.08); lm = Date.now();
+  let dx=0, dy=0, dt2=0;
+  if (keys['w']||keys['arrowup'])    dx += dt;
+  if (keys['s']||keys['arrowdown'])  dx -= dt;
+  if (keys['a']) dy += dt;   // 左移
+  if (keys['d']) dy -= dt;   // 右移
+  if (keys['q']) dt2 += 2*dt;
+  if (keys['e']) dt2 -= 2*dt;
+  if (dx||dy||dt2) move(dx, dy, dt2);
+}, 16);
+
+// SLAM 定时修正
+let lastFix = Date.now();
+setInterval(() => {
+  if (Date.now() - lastFix > 10000) { lastFix = Date.now(); window.slamFix(); }
+}, 1000);
+
+// ============ 渲染 ============
+let lt = 0;
+function animate(now) {
+  requestAnimationFrame(animate);
+  if (!lt) { lt = now; return; }
+  const dt = Math.min((now-lt)/1000, 0.1); lt = now;
+
+  if (window.mode === 'auto') {
+    clock += dt;
+    const t = clock * 0.5;
+    const tx = 3*Math.sin(t), ty = 2*Math.sin(2*t);
+    const ta = Math.atan2(4*Math.cos(2*t), 3*Math.cos(t));
+    const wdx = tx-truth.x, wdy = ty-truth.y, d = Math.hypot(wdx,wdy);
+    if (d > 0.02) {
+      const c = Math.cos(-truth.t), s = Math.sin(-truth.t);
+      const bdx = wdx*c - wdy*s;
+      const bdy = wdx*s + wdy*c;
+      const scale = Math.min(d, dt) / d;
+      move(
+        bdx * scale,
+        bdy * scale,
+        Math.min(Math.abs(ta-truth.t), 1.5*dt)*Math.sign(ta-truth.t)
+      );
+    }
+  }
+
+  // 更新物体
+  mapAxes.position.set(0, 0, 0);
+  mapAxes.rotation.y = 0;
+
+  odomAxes.position.set(mapOdo.x, 0, -mapOdo.y);
+  odomAxes.rotation.y = mapOdo.t;
+
+  realBot.position.set(truth.x, 0, -truth.y);
+  realBot.rotation.y = truth.t;
+
+  // 连线
+  const z = 0.05;
+  const o = V3(0, 0, z);
+  const mpos = V3(mapOdo.x, mapOdo.y, z);
+  const bpos = V3(truth.x, truth.y, z);
+  updLine(lineMO, o, mpos);      // map → odom
+  updLine(lineOB, mpos, bpos);   // odom → base
+
+  // 轨迹
+  trail.push(bpos);
+  if (trail.length > MAX_TRAIL) trail.shift();
+  tLine.geometry.dispose();
+  tLine.geometry = new THREE.BufferGeometry().setFromPoints(trail);
+
+  // 面板
+  const f = (p) => `x:${p.x.toFixed(2)} y:${p.y.toFixed(2)} θ:${(p.t*180/Math.PI).toFixed(1)}°`;
+  document.getElementById('valMO').textContent = f(mapOdo);
+  document.getElementById('valOB').textContent = f(odo);
+  document.getElementById('valMB').textContent = f(truth);
+
+  ctrl.update();
+  rnd.render(scene, cam);
+  lrnd.render(scene, cam);
+}
+
+requestAnimationFrame(animate);
+window.addEventListener('resize', () => {
+  cam.aspect = view.clientWidth/view.clientHeight; cam.updateProjectionMatrix();
+  rnd.setSize(view.clientWidth, view.clientHeight);
+  lrnd.setSize(view.clientWidth, view.clientHeight);
+});
+</script>
+</body>
+</html>
+lex-wrap: wrap; gap: 12px; font-size: 14px; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.dot { width: 14px; height: 14px; border-radius: 50%; }
+.btn { background: #333; color: #ddd; borde
