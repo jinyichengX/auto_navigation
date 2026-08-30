@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaserScan 消息可视化（按消息字段组织）</title>
+<style>
+  :root {
+    --bg: #0f1420; --panel: #1a2233; --panel2: #222d42;
+    --text: #dbe4f0; --dim: #8b98ad; --accent: #4da3ff;
+    --green: #3ddc84; --red: #ff5f56; --yellow: #ffd166;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); padding: 16px;
+  }
+  header { text-align: center; margin-bottom: 14px; }
+  header h1 { font-size: 20px; color: #fff; }
+  header p { color: var(--dim); font-size: 13px; margin-top: 4px; }
+  .container { display: flex; gap: 14px; max-width: 1300px; margin: 0 auto; flex-wrap: wrap; }
+  .left { flex: 1 1 600px; min-width: 320px; }
+  .right { flex: 1 1 360px; min-width: 300px; display: flex; flex-direction: column; gap: 14px; }
+  canvas {
+    width: 100%; background: #0c111c; border: 1px solid #2a3750;
+    border-radius: 10px; display: block; cursor: crosshair;
+  }
+  .panel {
+    background: var(--panel); border: 1px solid #2a3750;
+    border-radius: 10px; padding: 14px;
+  }
+  .panel h3 { font-size: 14px; margin-bottom: 10px; color: #fff; }
+  .panel h3 code { color: var(--accent); font-size: 12px; font-weight: normal; }
+  .field {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 9px; flex-wrap: wrap;
+  }
+  .field label { font-size: 12px; color: var(--dim); min-width: 96px; font-family: monospace; }
+  .field input[type=range] { flex: 1; accent-color: var(--accent); min-width: 60px; }
+  .field input[type=text] {
+    flex: 1; background: var(--panel2); color: var(--text); border: 1px solid #33415e;
+    border-radius: 4px; padding: 4px 8px; font-family: monospace; font-size: 12px;
+  }
+  .field span.val { font-size: 12px; color: var(--accent); min-width: 84px; text-align: right; font-family: monospace; }
+  .field span.unit { font-size: 11px; color: var(--dim); }
+  .sec-title {
+    font-size: 11px; color: var(--yellow); letter-spacing: 1px; margin: 4px 0 8px;
+    border-bottom: 1px dashed #2a3750; padding-bottom: 4px;
+  }
+  button {
+    background: var(--panel2); color: var(--text); border: 1px solid #33415e;
+    padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+  button:hover { border-color: var(--accent); }
+  button.active { background: var(--accent); color: #081018; font-weight: bold; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tree {
+    background: #101725; border: 1px solid #2a3750; border-radius: 8px;
+    padding: 10px 12px; font-family: monospace; font-size: 12px; line-height: 1.75;
+    max-height: 260px; overflow-y: auto;
+  }
+  .tree .k { color: var(--dim); }
+  .tree .v { color: var(--green); }
+  .tree .s { color: var(--accent); }
+  .table-wrap { max-height: 220px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 3px 6px; text-align: right; border-bottom: 1px solid #243047; }
+  th { position: sticky; top: 0; background: var(--panel2); color: var(--dim); font-weight: normal; }
+  td.dist { color: var(--yellow); }
+  tr.hl { background: #1d4a2c !important; }
+  tr.sel { background: #2a5f8a !important; color: #ffd166; cursor: pointer; }
+  tr.sel td.dist { color: #ffd166; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--dim); margin-top: 8px; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+  .tip { font-size: 12px; color: var(--dim); line-height: 1.7; margin-top: 6px; }
+  .tip b { color: var(--yellow); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LaserScan 消息可视化（按消息字段组织）</h1>
+  <p>右侧面板严格按 sensor_msgs/msg/LaserScan 字段分组：header · 角度 · 距离 · 时间 · ranges[]</p>
+</header>
+
+<div class="container">
+
+  <!-- ======== 左：可视化画布 ======== -->
+  <div class="left">
+    <canvas id="scanCanvas"></canvas>
+    <div class="legend">
+      <span><i style="background:#ff5f56"></i>障碍物（可拖拽）</span>
+      <span><i style="background:#4da3ff"></i>激光射线</span>
+      <span><i style="background:#3ddc84"></i>激光命中点</span>
+      <span><i style="background:#ffd166"></i>range_max 量程圈</span>
+    </div>
+    <p class="tip">
+      <b>点击数据表某一行</b> → 画布上高亮对应那束激光。
+      建图模式用 <b>WASD / 方向键</b>遥控机器人（先点击画面获得焦点）。
+    </p>
+  </div>
+
+  <!-- ======== 右：严格按消息字段组织 ======== -->
+  <div class="right">
+
+    <!-- ── 消息结构总览（对应 ros2 interface show 的字段） ── -->
+    <div class="panel">
+      <h3>sensor_msgs/msg/LaserScan <span class="badge" style="font-size:11px;color:var(--dim)">实时值</span></h3>
+      <div class="tree" id="msgTree"></div>
+    </div>
+
+    <!-- ── 字段编辑 ── -->
+    <div class="panel">
+      <h3>字段编辑 <code>（改滑块 = 改消息字段值）</code></h3>
+
+      <div class="sec-title">header</div>
+      <div class="field">
+        <label>frame_id</label>
+        <input type="text" id="fFrameId" value="base_footprint">
+      </div>
+      <div class="field">
+        <label>stamp</label>
+        <span class="val" id="vStamp" style="text-align:left">0.000000000 s</span>
+      </div>
+
+      <div class="sec-title">角度（弧度 / 度）</div>
+      <div class="field">
+        <label>angle_min</label>
+        <input type="range" id="fAngleMin" min="-180" max="0" value="-180" step="1">
+        <span class="val" id="vAngleMin">-180°</span>
+      </div>
+      <div class="field">
+        <label>angle_max</label>
+        <input type="range" id="fAngleMax" min="0" max="180" value="180" step="1">
+        <span class="val" id="vAngleMax">180°</span>
+      </div>
+      <div class="field">
+        <label>angle_increment</label>
+        <input type="range" id="fAngleInc" min="1" max="45" value="10" step="1">
+        <span class="val" id="vAngleInc">10°</span>
+      </div>
+
+      <div class="sec-title">距离（米）</div>
+      <div class="field">
+        <label>range_min</label>
+        <input type="range" id="fRangeMin" min="0" max="1" value="0.1" step="0.05">
+        <span class="val" id="vRangeMin">0.1 m</span>
+      </div>
+      <div class="field">
+        <label>range_max</label>
+        <input type="range" id="fRangeMax" min="3" max="10" value="6" step="0.5">
+        <span class="val" id="vRangeMax">6 m</span>
+      </div>
+
+      <div class="sec-title">时间（秒）</div>
+      <div class="field">
+        <label>scan_time</label>
+        <input type="range" id="fScanTime" min="0.05" max="0.5" value="0.1" step="0.01">
+        <span class="val" id="vScanTime">0.1 s</span>
+      </div>
+      <div class="field">
+        <label>time_increment</label>
+        <span class="val" id="vTimeInc" style="text-align:left">派生 = scan_time / 光束数</span>
+      </div>
+
+      <div class="sec-title">模式 & 场景</div>
+      <div class="field">
+        <label>模式</label>
+        <div class="seg">
+          <button id="btnScan" class="active">原地扫描</button>
+          <button id="btnMap">建图模式</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>场景</label>
+        <div class="seg">
+          <button id="btnRoom">房间</button>
+          <button id="btnCircles">散落圆</button>
+          <button id="btnEmpty">空旷</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>操作</label>
+        <div class="seg">
+          <button id="btnPause">▶ 旋转</button>
+          <button id="btnClear">清空累积点</button>
+        </div>
+      </div>
+      <div class="field" id="headingRow">
+        <label>TF yaw</label>
+        <input type="range" id="fHeading" min="0" max="360" value="0">
+        <span class="val" id="vHeading">0°</span>
+      </div>
+    </div>
+
+    <!-- ── ranges[] 数据数组 ── -->
+    <div class="panel">
+      <h3>ranges[] <code>（点击行高亮对应射线）</code></h3>
+      <div class="tip" id="selInfo" style="color:var(--yellow); margin-bottom:6px">点击任意行，查看该束激光的信息</div>
+      <div class="table-wrap" id="tableWrap"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// 简写：获取元素（定义在最前，供后续所有代码使用）
+const $ = id => document.getElementById(id);
+
+// ============================================================
+// 模拟的 LaserScan 消息 —— 字段名与真实消息完全一致
+// ============================================================
+const SCAN = {
+  header: {
+    stamp: { sec: 0, nanosec: 0 },
+    frame_id: "base_footprint",
+  },
+  angle_min: -Math.PI,          // 起始角（rad）
+  angle_max: Math.PI,           // 终止角（rad）
+  angle_increment: 10 * Math.PI / 180,  // 角度增量（rad）
+  time_increment: 0.0,          // 束间时间（s），派生：scan_time / 光束数
+  scan_time: 0.1,               // 一帧扫描周期（s）
+  range_min: 0.1,               // 最小有效距离（m）
+  range_max: 6.0,               // 最大有效距离（m）
+  ranges: [],                   // ★ 距离数组（核心数据）
+  intensities: [],              // 强度（本工具未使用，保持空数组）
+};
+
+// 光束数 = (angle_max - angle_min) / angle_increment + 1（派生值）
+function numRays() {
+  return Math.round((SCAN.angle_max - SCAN.angle_min) / SCAN.angle_increment) + 1;
+}
+
+// ============================================================
+// 场景状态
+// ============================================================
+const canvas = document.getElementById("scanCanvas");
+const ctx = canvas.getContext("2d");
+const WORLD = { min: -6, max: 6 };
+let scale = 50, cx = 0, cy = 0;
+
+let robot = { x: 0, y: 0, yaw: 0 };
+let obstacles = [];
+let mapPoints = [];
+let selectedRay = -1;     // 数据表点击选中的射线索引（-1 = 无）
+
+let paused = true;        // 原地扫描默认静止，用 TF yaw 滑块控制
+let mode = "scan";        // scan | map
+let animClock = 0.0;      // 模拟的仿真时钟（stamp 用）
+let frameCount = 0;
+let keys = new Set();
+
+// ============================================================
+// 场景预设
+// ============================================================
+function sceneRoom() {
+  const s = 8.5;
+  obstacles = [
+    { type: "rect", x: -s/2, y: -s/2, w: s, h: 0.3 },
+    { type: "rect", x: -s/2, y:  s/2, w: s, h: 0.3 },
+    { type: "rect", x: -s/2, y: -s/2, w: 0.3, h: s },
+    { type: "rect", x:  s/2, y: -s/2, w: 0.3, h: s },
+    { type: "circle", x: 1.2, y: -0.8, r: 0.5 },
+    { type: "circle", x: -1.6, y: 1.2, r: 0.4 },
+    { type: "circle", x: 0.4, y: 1.8, r: 0.3 },
+  ];
+}
+function sceneCircles() {
+  obstacles = [];
+  for (let i = 0; i < 6; i++) {
+    const a = i * Math.PI / 3 + 0.4;
+    obstacles.push({ type: "circle", x: 3.2*Math.cos(a), y: 3.2*Math.sin(a), r: 0.4 + 0.25*Math.random() });
+  }
+  obstacles.push({ type: "circle", x: 0, y: 0, r: 0.35 });
+}
+function sceneEmpty() {
+  obstacles = [{ type: "circle", x: 4.5, y: 0, r: 0.6 }];
+}
+sceneRoom();
+
+// ============================================================
+// 坐标
+// ============================================================
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  scale = Math.min(w, h) / (WORLD.max - WORLD.min);
+  cx = w / 2; cy = h / 2;
+}
+const sx = wx => cx + wx * scale;
+const sy = wy => cy - wy * scale;
+const wxs = v => (v - cx) / scale;
+const wys = v => (cy - v) / scale;
+
+// ============================================================
+// 射线求交（手写）
+// ============================================================
+function rayRect(ox, oy, dx, dy, r) {
+  let tmin = 0, tmax = Infinity;
+  for (const [e1, e2] of [[(r.x-ox)/dx, (r.x+r.w-ox)/dx], [(r.y-oy)/dy, (r.y+r.h-oy)/dy]]) {
+    const lo = Math.min(e1, e2), hi = Math.max(e1, e2);
+    if (lo > tmin) tmin = lo;
+    if (hi < tmax) tmax = hi;
+  }
+  return (tmax >= tmin && tmax >= 0) ? (tmin > 0 ? tmin : 0) : Infinity;
+}
+function rayCircle(ox, oy, dx, dy, c) {
+  const mcx = ox - c.x, mcy = oy - c.y;
+  const b = 2 * (mcx*dx + mcy*dy);
+  const cc = mcx*mcx + mcy*mcy - c.r*c.r;
+  const disc = b*b - 4*cc;
+  if (disc < 0) return Infinity;
+  const sq = Math.sqrt(disc);
+  const t1 = (-b-sq)/2, t2 = (-b+sq)/2;
+  return t1 >= 0 ? t1 : (t2 >= 0 ? t2 : Infinity);
+}
+function raycast(ox, oy, angle, maxDist) {
+  const dx = Math.cos(angle), dy = Math.sin(angle);
+  let best = maxDist;
+  for (const ob of obstacles) {
+    const t = ob.type === "rect" ? rayRect(ox, oy, dx, dy, ob) : rayCircle(ox, oy, dx, dy, ob);
+    if (t < best) best = t;
+  }
+  return best;
+}
+
+// ============================================================
+// 每帧：把 raycast 结果写入 SCAN.ranges（即消息的 ranges 数组）
+// ============================================================
+function updateScanData() {
+  const n = numRays();
+  SCAN.ranges.length = 0;
+  // 束间时间 = 一帧扫描周期 ÷ (光束数-1)（与真实雷达一致）
+  SCAN.time_increment = n > 1 ? SCAN.scan_time / (n - 1) : SCAN.scan_time;
+  for (let i = 0; i < n; i++) {
+    const angle = SCAN.angle_min + i * SCAN.angle_increment;
+    const dist = raycast(robot.x, robot.y, robot.yaw + angle, SCAN.range_max);
+    // 超出有效范围 → 按规范置为 range_max（表示"无命中"）
+    SCAN.ranges.push(dist);
+  }
+}
+
+// ============================================================
+// 绘制
+// ============================================================
+function drawGrid() {
+  ctx.strokeStyle = "#1a2436"; ctx.lineWidth = 1;
+  for (let m = Math.ceil(WORLD.min); m <= WORLD.max; m++) {
+    ctx.beginPath(); ctx.moveTo(sx(m), sy(WORLD.min)); ctx.lineTo(sx(m), sy(WORLD.max)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx(WORLD.min), sy(m)); ctx.lineTo(sx(WORLD.max), sy(m)); ctx.stroke();
+  }
+  ctx.strokeStyle = "#2e3f5c";
+  ctx.beginPath(); ctx.moveTo(sx(WORLD.min), sy(0)); ctx.lineTo(sx(WORLD.max), sy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sx(0), sy(WORLD.min)); ctx.lineTo(sx(0), sy(WORLD.max)); ctx.stroke();
+  ctx.fillStyle = "#5a6b85"; ctx.font = "11px monospace";
+  for (let m = Math.ceil(WORLD.min); m <= WORLD.max; m++) {
+    ctx.fillText(m+"m", sx(m)+3, sy(0)-4);
+    ctx.fillText(m+"m", sx(0)+4, sy(m)-4);
+  }
+}
+function drawRangeCircle() {
+  ctx.strokeStyle = "rgba(255,209,102,0.25)";
+  ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.arc(sx(robot.x), sy(robot.y), SCAN.range_max*scale, 0, Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]);
+}
+function drawMapPoints() {
+  ctx.fillStyle = "rgba(166,120,255,0.7)";
+  const step = Math.max(1, Math.floor(mapPoints.length / 4000));
+  for (let i = 0; i < mapPoints.length; i += step) {
+    ctx.fillRect(sx(mapPoints[i].x)-0.5, sy(mapPoints[i].y)-0.5, 1.5, 1.5);
+  }
+}
+function drawObstacles() {
+  for (const ob of obstacles) {
+    ctx.fillStyle = "#ff5f56";
+    ctx.strokeStyle = "rgba(255,255,255,0.25)"; ctx.lineWidth = 1;
+    if (ob.type === "rect") {
+      ctx.fillRect(sx(ob.x), sy(ob.y+ob.h), ob.w*scale, ob.h*scale);
+      ctx.strokeRect(sx(ob.x), sy(ob.y+ob.h), ob.w*scale, ob.h*scale);
+    } else {
+      ctx.beginPath(); ctx.arc(sx(ob.x), sy(ob.y), ob.r*scale, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  }
+}
+function drawRays() {
+  const n = numRays();
+  for (let i = 0; i < n; i++) {
+    const angle = SCAN.angle_min + i * SCAN.angle_increment;
+    const dist = SCAN.ranges[i];
+    const hit = dist < SCAN.range_max;
+    const isSel = (i === selectedRay);
+    // 高亮选中的那束激光
+    ctx.strokeStyle = isSel ? "rgba(255,209,102,0.95)" : hit ? "rgba(77,163,255,0.5)" : "rgba(77,163,255,0.12)";
+    ctx.lineWidth = isSel ? 3 : 1;
+    ctx.beginPath();
+    ctx.moveTo(sx(robot.x), sy(robot.y));
+    ctx.lineTo(sx(robot.x + dist*Math.cos(robot.yaw+angle)), sy(robot.y + dist*Math.sin(robot.yaw+angle)));
+    ctx.stroke();
+    if (hit) {
+      ctx.fillStyle = isSel ? "#ffd166" : "#3ddc84";
+      ctx.beginPath();
+      ctx.arc(sx(robot.x + dist*Math.cos(robot.yaw+angle)), sy(robot.y + dist*Math.sin(robot.yaw+angle)),
+              isSel ? 4 : 2.2, 0, Math.PI*2);
+      ctx.fill();
+      if (mode === "map") {
+        mapPoints.push({ x: robot.x + dist*Math.cos(robot.yaw+angle), y: robot.y + dist*Math.sin(robot.yaw+angle) });
+      }
+    }
+  }
+}
+function drawRobot() {
+  ctx.save();
+  ctx.translate(sx(robot.x), sy(robot.y));
+  ctx.rotate(-robot.yaw);
+  ctx.fillStyle = "#fff";
+  ctx.beginPath(); ctx.arc(0, 0, 0.25*scale, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#4da3ff";
+  ctx.beginPath();
+  ctx.moveTo(0.38*scale, 0); ctx.lineTo(-0.15*scale, 0.15*scale); ctx.lineTo(-0.15*scale, -0.15*scale);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = "#8b98ad"; ctx.font = "11px monospace";
+  ctx.fillText("yaw=" + (robot.yaw*180/Math.PI).toFixed(0) + "°", sx(robot.x)+16, sy(robot.y)-16);
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  drawGrid();
+  drawRangeCircle();
+  if (mode === "map") drawMapPoints();
+  drawObstacles();
+  updateScanData();   // 先算 ranges，再画射线
+  drawRays();
+  drawRobot();
+}
+
+// ============================================================
+// 右侧面板：消息结构总览（实时值）
+// ============================================================
+function updateMsgTree() {
+  const n = numRays();
+  const deg = r => (r*180/Math.PI).toFixed(1) + "°";
+  const r5 = v => (v*180/Math.PI).toFixed(3);
+  // 同步"字段编辑"面板里的 stamp / time_increment
+  $("vStamp").textContent = animClock.toFixed(3) + " s";
+  $("vTimeInc").textContent = SCAN.time_increment.toFixed(4) + " s (scan_time ÷ 光束数)";
+  // ranges 只显示前 5 项 + 省略号
+  let rangePreview = SCAN.ranges.slice(0, 5).map(d => d < SCAN.range_max ? d.toFixed(2) : "∞").join(", ");
+  if (n > 5) rangePreview += ", ...";
+  document.getElementById("msgTree").innerHTML =
+    '<span class="k">sensor_msgs/msg/LaserScan</span><br>'
+    + '&nbsp;&nbsp;<span class="k">std_msgs/Header header</span><br>'
+    + '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">stamp:</span> <span class="v">' + animClock.toFixed(3) + '</span> <span class="k">s</span><br>'
+    + '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">frame_id:</span> <span class="s">"' + SCAN.header.frame_id + '"</span><br>'
+    + '&nbsp;&nbsp;<span class="k">angle_min:</span> <span class="v">' + r5(SCAN.angle_min) + '</span> <span class="k">rad (' + deg(SCAN.angle_min) + ')</span><br>'
+    + '&nbsp;&nbsp;<span class="k">angle_max:</span> <span class="v">' + r5(SCAN.angle_max) + '</span> <span class="k">rad (' + deg(SCAN.angle_max) + ')</span><br>'
+    + '&nbsp;&nbsp;<span class="k">angle_increment:</span> <span class="v">' + (SCAN.angle_increment*180/Math.PI).toFixed(2) + '</span> <span class="k">°</span><br>'
+    + '&nbsp;&nbsp;<span class="k">time_increment:</span> <span class="v">' + SCAN.time_increment.toFixed(4) + '</span> <span class="k">s</span><br>'
+    + '&nbsp;&nbsp;<span class="k">scan_time:</span> <span class="v">' + SCAN.scan_time.toFixed(2) + '</span> <span class="k">s</span><br>'
+    + '&nbsp;&nbsp;<span class="k">range_min:</span> <span class="v">' + SCAN.range_min.toFixed(1) + '</span> <span class="k">m</span><br>'
+    + '&nbsp;&nbsp;<span class="k">range_max:</span> <span class="v">' + SCAN.range_max.toFixed(1) + '</span> <span class="k">m</span><br>'
+    + '&nbsp;&nbsp;<span class="k">ranges:</span> <span class="s">[' + n + ' 项]</span> <span class="v">' + rangePreview + '</span><br>'
+    + '&nbsp;&nbsp;<span class="k">intensities:</span> <span class="v">[]</span> <span class="k">（未使用）</span>';
+}
+
+// ============================================================
+// ranges[] 数据表：点击行高亮对应射线
+// ============================================================
+function updateTable() {
+  const wrap = document.getElementById("tableWrap");
+  const ratio = wrap.scrollHeight > 0 ? wrap.scrollTop / wrap.scrollHeight : 0;
+  const n = numRays();
+  let html = "<table><thead><tr><th>#</th><th>角度(°)</th><th>ranges[i] (m)</th><th>状态</th></tr></thead><tbody>";
+  for (let i = 0; i < n; i++) {
+    const angle = SCAN.angle_min + i * SCAN.angle_increment;
+    const dist = SCAN.ranges[i];
+    const hit = dist < SCAN.range_max;
+    const cls = i === selectedRay ? "sel" : (hit ? "" : "hl");
+    html += "<tr class='" + cls + "' data-i='" + i + "'>"
+      + "<td>" + i + "</td>"
+      + "<td>" + (angle*180/Math.PI).toFixed(1) + "</td>"
+      + "<td class='dist'>" + (hit ? dist.toFixed(2) : "∞") + "</td>"
+      + "<td>" + (hit ? "命中" : "超程") + "</td></tr>";
+  }
+  html += "</tbody></table>";
+  wrap.innerHTML = html;
+  wrap.scrollTop = ratio * wrap.scrollHeight;
+}
+
+// 事件委托（pointerdown，与画布拖拽一致）：点击行 → 画布高亮 + 显示选中信息
+$("tableWrap").addEventListener("pointerdown", (e) => {
+  const tr = e.target.closest("tr[data-i]");
+  if (!tr) return;
+  selectedRay = parseInt(tr.dataset.i);
+  const angle = SCAN.angle_min + selectedRay * SCAN.angle_increment;
+  const dist = SCAN.ranges[selectedRay];
+  $("selInfo").textContent = "选中 #" + selectedRay + "：角度 "
+    + (angle*180/Math.PI).toFixed(1) + "°，距离 "
+    + (dist < SCAN.range_max ? dist.toFixed(2) : "∞") + " m";
+  updateTable();
+  draw();
+});
+
+// ============================================================
+// 动画循环
+// ============================================================
+function step() {
+  const dt = 0.016;
+  animClock += dt;   // 仿真时钟前进（stamp）
+  if (mode === "scan") {
+    if (!paused) {
+      // 原地旋转：角速度 = 2π / scan_time（旋转越快，scan_time 越小）
+      robot.yaw += (2 * Math.PI / SCAN.scan_time) * dt;
+      let deg = ((robot.yaw*180/Math.PI) % 360 + 360) % 360;
+      document.getElementById("fHeading").value = deg.toFixed(0);
+      document.getElementById("vHeading").textContent = deg.toFixed(0) + "°";
+    }
+  } else {
+    // 建图模式：键盘遥控，不受暂停影响
+    const v = 2.0, w = 1.6;
+    let vx = 0, vy = 0, dyaw = 0;
+    if (keys.has("w") || keys.has("ArrowUp"))    { vx += Math.cos(robot.yaw); vy += Math.sin(robot.yaw); }
+    if (keys.has("s") || keys.has("ArrowDown"))  { vx -= Math.cos(robot.yaw); vy -= Math.sin(robot.yaw); }
+    if (keys.has("a") || keys.has("ArrowLeft"))  { dyaw += w; }
+    if (keys.has("d") || keys.has("ArrowRight")) { dyaw -= w; }
+    robot.x += vx*v*dt; robot.y += vy*v*dt; robot.yaw += dyaw*dt;
+  }
+  draw();
+  if (frameCount % 8 === 0) { updateMsgTree(); updateTable(); }
+  frameCount++;
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// 控件绑定
+// ============================================================
+$("fFrameId").onchange = (e) => { SCAN.header.frame_id = e.target.value; };
+
+$("fAngleMin").oninput = (e) => {
+  SCAN.angle_min = parseFloat(e.target.value) * Math.PI / 180;
+  $("vAngleMin").textContent = e.target.value + "°";
+};
+$("fAngleMax").oninput = (e) => {
+  SCAN.angle_max = parseFloat(e.target.value) * Math.PI / 180;
+  $("vAngleMax").textContent = e.target.value + "°";
+};
+$("fAngleInc").oninput = (e) => {
+  SCAN.angle_increment = parseFloat(e.target.value) * Math.PI / 180;
+  $("vAngleInc").textContent = e.target.value + "°";
+};
+$("fRangeMin").oninput = (e) => {
+  SCAN.range_min = parseFloat(e.target.value);
+  $("vRangeMin").textContent = SCAN.range_min.toFixed(1) + " m";
+};
+$("fRangeMax").oninput = (e) => {
+  SCAN.range_max = parseFloat(e.target.value);
+  $("vRangeMax").textContent = SCAN.range_max.toFixed(1) + " m";
+};
+$("fScanTime").oninput = (e) => {
+  SCAN.scan_time = parseFloat(e.target.value);
+  $("vScanTime").textContent = SCAN.scan_time.toFixed(2) + " s";
+};
+$("fHeading").oninput = (e) => {
+  robot.yaw = parseFloat(e.target.value) * Math.PI / 180;
+  $("vHeading").textContent = e.target.value + "°";
+};
+$("btnPause").onclick = () => {
+  paused = !paused;
+  $("btnPause").textContent = paused ? "▶ 旋转" : "⏸ 暂停";
+};
+$("btnClear").onclick = () => { mapPoints = []; };
+$("btnScan").onclick = () => setMode("scan");
+$("btnMap").onclick = () => setMode("map");
+$("btnRoom").onclick = () => { sceneRoom(); mapPoints = []; };
+$("btnCircles").onclick = () => { sceneCircles(); mapPoints = []; };
+$("btnEmpty").onclick = () => { sceneEmpty(); mapPoints = []; };
+
+function setMode(m) {
+  mode = m;
+  $("btnScan").classList.toggle("active", m === "scan");
+  $("btnMap").classList.toggle("active", m === "map");
+  $("headingRow").style.display = m === "scan" ? "" : "none";
+  mapPoints = [];
+}
+
+// 键盘（建图模式遥控）
+window.addEventListener("keydown", (e) => {
+  if (["w","a","s","d","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
+    e.preventDefault();
+    keys.add(e.key);
+  }
+});
+window.addEventListener("keyup", (e) => { keys.delete(e.key); });
+
+// 障碍物拖拽
+let dragging = null;
+canvas.addEventListener("pointerdown", (e) => {
+  const r = canvas.getBoundingClientRect();
+  const wx = wxs(e.clientX - r.left), wy = wys(e.clientY - r.top);
+  for (const ob of obstacles) {
+    const hit = ob.type === "circle"
+      ? Math.hypot(wx-ob.x, wy-ob.y) <= ob.r + 0.2
+      : (wx >= ob.x-0.15 && wx <= ob.x+ob.w+0.15 && wy >= ob.y-0.15 && wy <= ob.y+ob.h+0.15);
+    if (hit) { dragging = ob; break; }
+  }
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  const r = canvas.getBoundingClientRect();
+  dragging.x = wxs(e.clientX - r.left);
+  dragging.y = wys(e.clientY - r.top);
+});
+canvas.addEventListener("pointerup", () => { dragging = null; });
+
+// ============================================================
+// 启动
+// ============================================================
+window.addEventListener("resize", resize);
+// 同步初始滑块显示
+$("vStamp").textContent = "0.000000000 s";
+$("vTimeInc").textContent = "派生 = scan_time / 光束数";
+resize();
+requestAnimationFrame(step);
+</script>
+</body>
+</html>

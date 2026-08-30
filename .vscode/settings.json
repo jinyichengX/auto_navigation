@@ -3,5 +3,6 @@
         "files.associations": {
         "*.sdf": "xml",
         "*.world": "xml"
-    }
+    },
+    "clangd.path": "/usr/bin/clangd"
 }

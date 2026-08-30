@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nav2 行为树可视化 — 导航流程编排</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #0a0a14; color: #d0d0e0; min-height: 100vh; padding: 24px;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #e8e8f8; }
+  .sub { font-size: 14px; color: #8888a0; margin-bottom: 20px; line-height: 1.7; }
+  .sub b { color: #5b9cf5; }
+
+  .mains { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+
+  .board { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 16px; }
+  .board h2 { font-size: 16px; margin-bottom: 10px; }
+  .board h2 span { font-size: 12px; color: #8888a0; font-weight: normal; margin-left: 6px; }
+
+  #tree { position: relative; width: 1120px; height: 480px; overflow: visible; }
+  #edges { position: absolute; inset: 0; }
+  .node {
+    position: absolute; transform: translate(-50%, -50%);
+    padding: 6px 12px; border-radius: 8px; border: 2px solid;
+    font-size: 13px; white-space: nowrap; cursor: pointer; user-select: none;
+    transition: box-shadow .15s, background .15s;
+    text-align: center; line-height: 1.3;
+  }
+  .node:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.15); }
+
+  /* 节点类型配色 */
+  .node.type-recovery      { background: #2a2410; border-color: #e8c840; color: #e8c840; }
+  .node.type-sequence      { background: #101a2a; border-color: #5b9cf5; color: #8fb9f5; }
+  .node.type-fallback      { background: #1c1428; border-color: #a78bfa; color: #c9b6fa; }
+  .node.type-roundrobin    { background: #1c1428; border-color: #a78bfa; color: #c9b6fa; }
+  .node.type-reactive      { background: #1c1428; border-color: #a78bfa; color: #c9b6fa; }
+  .node.type-rate          { background: #0f1e22; border-color: #56c8d8; color: #7fd8e4; }
+  .node.type-action        { background: #0f1f16; border-color: #3cc97a; color: #7fe0a8; }
+  .node.type-condition     { background: #241a0c; border-color: #f0a030; color: #f5c070; }
+
+  /* 运行状态 */
+  .node.st-running { box-shadow: 0 0 0 4px #e8c840, 0 0 16px #e8c840; }
+  .node.st-success { background: #123a24 !important; border-color: #3cc97a !important; color: #b6f5d2 !important; }
+  .node.st-failure { background: #3a1212 !important; border-color: #e85555 !important; color: #ffb0b0 !important; }
+
+  .panel { width: 340px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: #11111c; border: 1px solid #262640; border-radius: 10px; padding: 14px; }
+  .card h3 { font-size: 14px; margin-bottom: 10px; color: #cba6f7; }
+
+  .scenes, .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .scenes button, .actions button {
+    flex: 1; min-width: 64px; padding: 9px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid #333355; background: #1a1a2e; color: #d0d0e0; font-size: 13px;
+  }
+  .scenes button:hover, .actions button:hover { background: #262640; }
+  .scenes button.on { background: #5b9cf5; color: #0a0a14; border-color: #5b9cf5; font-weight: 600; }
+  .actions .run { background: #3cc97a; color: #0a0a14; border-color: #3cc97a; font-weight: 600; }
+  .actions .step { background: #e8c840; color: #0a0a14; border-color: #e8c840; font-weight: 600; }
+
+  .info { font-size: 13px; line-height: 1.9; }
+  .info .stepno { font-size: 20px; font-weight: 700; color: #e8e8f8; }
+  .info .note { color: #e8c840; margin-top: 6px; }
+  .info .status { font-weight: 700; }
+
+  .detail { font-size: 13px; line-height: 1.8; }
+  .detail .t { color: #cba6f7; font-weight: 600; }
+  .detail .d { color: #a0a0b8; }
+  .detail .c { color: #7fd8e4; font-family: 'SF Mono', 'Consolas', monospace; }
+
+  .legend { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .legend .row { display: flex; align-items: center; gap: 8px; }
+  .legend .sw { width: 16px; height: 16px; border-radius: 4px; border: 2px solid #444; flex: none; }
+</style>
+</head>
+<body>
+
+<h1>Nav2 行为树：导航流程的"总导演"</h1>
+<div class="sub">
+  一棵树从上往下执行。<b>蓝</b>=顺序(Sequence)，<b>紫</b>=选择/轮询，<b>黄</b>=恢复节点(Recovery)，<b>青</b>=频率控制，
+  <b>绿</b>=动作(Action，真正干活)，<b>橙</b>=条件(Condition，判断)。
+  <br>选一个场景，点「单步 →」看节点怎么流转：<b>黄框</b>=正在执行，<b>绿</b>=成功，<b>红</b>=失败。也可以直接点击任意节点看它的说明。
+</div>
+
+<div class="mains">
+  <div class="board">
+    <h2>navigate_to_pose 行为树 <span>（你工程实际用的默认树）</span></h2>
+    <div id="tree">
+      <svg id="edges" width="1120" height="480"></svg>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>场景</h3>
+      <div class="scenes">
+        <button id="sc-normal" class="on">正常到达</button>
+        <button id="sc-stuck">卡住→恢复</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>操作</h3>
+      <div class="actions">
+        <button class="step" id="btn-step">单步 →</button>
+        <button class="run" id="btn-auto">自动</button>
+        <button id="btn-reset">重置</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>当前执行</h3>
+      <div class="info" id="info">点「单步 →」开始</div>
+    </div>
+
+    <div class="card">
+      <h3>节点说明（点击树上的节点）</h3>
+      <div class="detail" id="detail">点击任意节点查看它的作用</div>
+    </div>
+
+    <div class="card">
+      <h3>图例</h3>
+      <div class="legend">
+        <div class="row"><div class="sw" style="background:#2a2410;border-color:#e8c840"></div> 恢复节点 RecoveryNode</div>
+        <div class="row"><div class="sw" style="background:#101a2a;border-color:#5b9cf5"></div> 顺序 Sequence</div>
+        <div class="row"><div class="sw" style="background:#1c1428;border-color:#a78bfa"></div> 选择/轮询 Fallback·RoundRobin</div>
+        <div class="row"><div class="sw" style="background:#0f1e22;border-color:#56c8d8"></div> 装饰器 RateController</div>
+        <div class="row"><div class="sw" style="background:#0f1f16;border-color:#3cc97a"></div> 动作 Action</div>
+        <div class="row"><div class="sw" style="background:#241a0c;border-color:#f0a030"></div> 条件 Condition</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   节点定义（坐标是 SVG/div 里的像素位置）
+   ============================================================ */
+const NODES = [
+  { id:'nr',      type:'recovery',   label:'NavigateRecovery',   x:560,  y:40,  desc:'最外层恢复节点，最多重试 6 次。主流程失败就进入恢复动作。' },
+  { id:'pipeline',type:'sequence',   label:'PipelineSequence',   x:310,  y:130, desc:'顺序执行：先算路径，再沿路径开车。' },
+  { id:'rf',      type:'reactive',   label:'ReactiveFallback',   x:820,  y:130, desc:'反应式选择：正常流程失败后才激活恢复动作，并持续监控目标是否更新。' },
+
+  { id:'rate',    type:'rate',       label:'RateController 1Hz', x:190,  y:220, desc:'频率控制器：限制全局规划每秒最多 1 次。' },
+  { id:'rn_follow',type:'recovery',  label:'RecoveryNode',       x:430,  y:220, desc:'开车失败时，清一次局部代价地图再重试。' },
+  { id:'goalUpd', type:'condition',  label:'GoalUpdated',        x:690,  y:220, desc:'条件：判断导航目标是否被更新了。' },
+  { id:'rr',      type:'roundrobin', label:'RoundRobin',         x:880,  y:220, desc:'轮询：依次尝试各个恢复动作（清地图→转→等→退）。' },
+
+  { id:'rn_compute',type:'recovery', label:'RecoveryNode',       x:150,  y:310, desc:'算路径失败时，清一次全局代价地图再重试。' },
+  { id:'follow',  type:'action',     label:'FollowPath',         x:380,  y:310, desc:'动作：调用 controller_server（DWB）沿路径开车，返回 cmd_vel。' },
+  { id:'clearL1', type:'action',     label:'ClearLocalCostmap',  x:500,  y:310, desc:'动作：清空局部代价地图（把误判的障碍抹掉）。' },
+  { id:'clearAct',type:'sequence',   label:'ClearingActions',    x:720,  y:310, desc:'顺序：依次清局部、清全局代价地图。' },
+  { id:'spin',    type:'action',     label:'Spin',               x:830,  y:310, desc:'动作：原地旋转 90°（1.57 rad），摆脱卡住。' },
+  { id:'wait',    type:'action',     label:'Wait 5s',            x:920,  y:310, desc:'动作：等待 5 秒，给传感器时间更新。' },
+  { id:'backup',  type:'action',     label:'BackUp',             x:1000, y:310, desc:'动作：后退 0.3m，离开障碍物。' },
+
+  { id:'compute', type:'action',     label:'ComputePathToPose',  x:90,   y:400, desc:'动作：调用 planner_server（全局规划器）在全局代价地图上算路径。' },
+  { id:'clearG1', type:'action',     label:'ClearGlobalCostmap', x:210,  y:400, desc:'动作：清空全局代价地图。' },
+  { id:'clearL2', type:'action',     label:'ClearLocalCostmap',  x:690,  y:400, desc:'动作：清空局部代价地图。' },
+  { id:'clearG2', type:'action',     label:'ClearGlobalCostmap', x:780,  y:400, desc:'动作：清空全局代价地图。' },
+];
+
+// 边：父 → 子
+const EDGES = [
+  ['nr','pipeline'], ['nr','rf'],
+  ['pipeline','rate'], ['pipeline','rn_follow'],
+  ['rf','goalUpd'], ['rf','rr'],
+  ['rate','rn_compute'],
+  ['rn_compute','compute'], ['rn_compute','clearG1'],
+  ['rn_follow','follow'], ['rn_follow','clearL1'],
+  ['rr','clearAct'], ['rr','spin'], ['rr','wait'], ['rr','backup'],
+  ['clearAct','clearL2'], ['clearAct','clearG2'],
+];
+
+// 每个节点对应的 Nav2 配置模块
+const CONFIG = {
+  compute: 'planner_server（全局规划器）',
+  follow:  'controller_server（DWB 控制器）',
+  clearL1: 'local_costmap',
+  clearL2: 'local_costmap',
+  clearG1: 'global_costmap',
+  clearG2: 'global_costmap',
+  nr:      'bt_navigator',
+  pipeline:'bt_navigator',
+};
+
+const nodeMap = Object.fromEntries(NODES.map(n => [n.id, n]));
+const parentMap = {};
+for (const [p, c] of EDGES) parentMap[c] = p;
+
+/* ============================================================
+   两种执行场景（每步 = 当前节点 + 返回状态 + 说明）
+   ============================================================ */
+const SCENES = {
+  normal: [
+    { id:'nr',      st:'running', note:'开始导航，NavigateRecovery 接管（最多重试 6 次）' },
+    { id:'pipeline',st:'running', note:'进入正常流程：先规划，再开车' },
+    { id:'rate',    st:'running', note:'全局规划限速 1Hz' },
+    { id:'rn_compute',st:'running', note:'开始算路径' },
+    { id:'compute', st:'running', note:'ComputePathToPose 调全局规划器画线中…' },
+    { id:'compute', st:'success', note:'路径算好了' },
+    { id:'rn_follow',st:'running', note:'开始沿路径开车' },
+    { id:'follow',  st:'running', note:'FollowPath 调 DWB 控制器开车中…' },
+    { id:'follow',  st:'success', note:'到达目标！' },
+    { id:'pipeline',st:'success', note:'正常流程完成' },
+    { id:'nr',      st:'success', note:'导航成功' },
+  ],
+  stuck: [
+    { id:'nr',      st:'running', note:'开始导航' },
+    { id:'pipeline',st:'running', note:'进入正常流程' },
+    { id:'rate',    st:'running', note:'全局规划限速 1Hz' },
+    { id:'rn_compute',st:'running', note:'开始算路径' },
+    { id:'compute', st:'success', note:'路径算好了' },
+    { id:'rn_follow',st:'running', note:'开始沿路径开车' },
+    { id:'follow',  st:'running', note:'DWB 开车中…' },
+    { id:'follow',  st:'failure', note:'卡住了！FollowPath 失败' },
+    { id:'clearL1', st:'running', note:'恢复：清局部代价地图' },
+    { id:'clearL1', st:'success', note:'清理完成，重试开车' },
+    { id:'follow',  st:'running', note:'DWB 重新开车中…' },
+    { id:'follow',  st:'success', note:'绕过去了，到达目标！' },
+    { id:'pipeline',st:'success', note:'正常流程完成' },
+    { id:'nr',      st:'success', note:'导航成功' },
+  ],
+};
+
+/* ============================================================
+   状态
+   ============================================================ */
+let scene = 'normal';
+let stepIdx = 0;
+let nodeStatus = {};   // nodeId -> 'running'|'success'|'failure'
+let timer = null;
+let selectedId = null;
+
+const tree = document.getElementById('tree');
+const svg = document.getElementById('edges');
+
+/* ============================================================
+   构建节点 DOM 和连线
+   ============================================================ */
+function buildNodes() {
+  for (const n of NODES) {
+    const div = document.createElement('div');
+    div.className = `node type-${n.type}`;
+    div.id = 'n-' + n.id;
+    div.style.left = n.x + 'px';
+    div.style.top = n.y + 'px';
+    div.textContent = n.label;
+    div.addEventListener('click', () => selectNode(n.id));
+    tree.appendChild(div);
+  }
+}
+
+function buildEdges() {
+  for (const [p, c] of EDGES) {
+    const a = nodeMap[p], b = nodeMap[c];
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+    line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+    line.setAttribute('stroke', 'rgba(120,120,160,0.35)');
+    line.setAttribute('stroke-width', '2');
+    line.dataset.edge = `${p}-${c}`;
+    svg.appendChild(line);
+  }
+}
+
+/* ============================================================
+   渲染：应用节点状态 + 高亮活跃路径
+   ============================================================ */
+function render() {
+  for (const n of NODES) {
+    const el = document.getElementById('n-' + n.id);
+    el.classList.remove('st-running', 'st-success', 'st-failure');
+    if (nodeStatus[n.id]) el.classList.add('st-' + nodeStatus[n.id]);
+    if (n.id === selectedId) el.style.outline = '2px solid #fff';
+    else el.style.outline = 'none';
+  }
+
+  // 高亮当前节点到根的连线
+  const cur = stepIdx > 0 && stepIdx <= SCENES[scene].length ? SCENES[scene][stepIdx - 1].id : null;
+  for (const line of svg.querySelectorAll('line')) {
+    line.setAttribute('stroke', 'rgba(120,120,160,0.35)');
+    line.setAttribute('stroke-width', '2');
+  }
+  if (cur) {
+    let id = cur;
+    const path = [id];
+    while (parentMap[id]) { id = parentMap[id]; path.push(id); }
+    for (let i = 0; i < path.length - 1; i++) {
+      const e = `${path[i + 1]}-${path[i]}`; // 父-子
+      const line = svg.querySelector(`line[data-edge="${e}"]`);
+      if (line) { line.setAttribute('stroke', '#e8c840'); line.setAttribute('stroke-width', '3'); }
+    }
+  }
+}
+
+/* ============================================================
+   推进 / 播放 / 重置
+   ============================================================ */
+function step() {
+  const steps = SCENES[scene];
+  if (stepIdx >= steps.length) return;
+  const s = steps[stepIdx];
+  nodeStatus[s.id] = s.st;
+  stepIdx++;
+  render();
+  updateInfo(s);
+}
+
+function auto() {
+  stopTimer();
+  timer = setInterval(() => {
+    if (stepIdx >= SCENES[scene].length) { stopTimer(); return; }
+    step();
+  }, 700);
+}
+function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+function reset() {
+  stopTimer();
+  stepIdx = 0;
+  nodeStatus = {};
+  selectedId = null;
+  render();
+  document.getElementById('info').innerHTML = '点「单步 →」开始';
+}
+
+/* ============================================================
+   信息 / 详情面板
+   ============================================================ */
+function updateInfo(s) {
+  const info = document.getElementById('info');
+  const statusTxt = { running:'<span class="status" style="color:#e8c840">执行中…</span>',
+                      success:'<span class="status" style="color:#3cc97a">成功</span>',
+                      failure:'<span class="status" style="color:#e85555">失败</span>' };
+  const n = nodeMap[s.id];
+  info.innerHTML =
+    `<div class="stepno">第 ${stepIdx} / ${SCENES[scene].length} 步</div>
+     <div>节点：<b style="color:#cba6f7">${n.label}</b> ${statusTxt[s.st]}</div>
+     <div class="note">${s.note}</div>`;
+}
+
+function selectNode(id) {
+  selectedId = id;
+  const n = nodeMap[id];
+  const cfg = CONFIG[id] ? `<div><span class="t">配置模块：</span><span class="c">${CONFIG[id]}</span></div>` : '';
+  document.getElementById('detail').innerHTML =
+    `<div class="t">${n.label}</div>
+     <div class="d">${n.desc}</div>${cfg}
+     <div style="margin-top:4px"><span class="t">类型：</span>${typeName(n.type)}</div>`;
+  render();
+}
+
+function typeName(t) {
+  return { recovery:'恢复节点 RecoveryNode', sequence:'顺序 Sequence',
+           fallback:'选择 Fallback', reactive:'反应式选择 ReactiveFallback',
+           roundrobin:'轮询 RoundRobin', rate:'装饰器 RateController',
+           action:'动作 Action', condition:'条件 Condition' }[t];
+}
+
+/* ============================================================
+   场景切换 / 按钮
+   ============================================================ */
+function setScene(s) {
+  scene = s;
+  document.getElementById('sc-normal').classList.toggle('on', s === 'normal');
+  document.getElementById('sc-stuck').classList.toggle('on', s === 'stuck');
+  reset();
+}
+
+document.getElementById('sc-normal').onclick = () => setScene('normal');
+document.getElementById('sc-stuck').onclick = () => setScene('stuck');
+document.getElementById('btn-step').onclick = step;
+document.getElementById('btn-auto').onclick = auto;
+document.getElementById('btn-reset').onclick = reset;
+
+buildNodes();
+buildEdges();
+render();
+</script>
+</body>
+</html>

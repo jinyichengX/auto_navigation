@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>simple_slam1.py 建图原理逐步图解（从 ros2 run 开始）</title>
+<style>
+  :root{
+    --bg:#0e1420; --panel:#161e2e; --panel2:#1e2a40; --line:#2a3a58;
+    --text:#dde6f3; --dim:#8a99b5; --blue:#4da3ff; --green:#3ddc84;
+    --yellow:#ffd166; --red:#ff5f56; --purple:#a678ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);padding:14px}
+  header{max-width:1280px;margin:0 auto 10px;text-align:center}
+  header h1{font-size:21px;color:#fff}
+  header p{color:var(--dim);font-size:13px;margin-top:4px}
+  nav#stepTabs{max-width:1280px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:6px}
+  nav#stepTabs button{
+    background:var(--panel2);color:var(--dim);border:1px solid var(--line);
+    border-radius:14px;padding:5px 11px;font-size:12px;cursor:pointer;white-space:nowrap;
+  }
+  nav#stepTabs button.on{background:var(--blue);color:#07131f;font-weight:bold;border-color:var(--blue)}
+  main{max-width:1280px;margin:0 auto;display:flex;gap:14px;flex-wrap:wrap}
+  .col{flex:1 1 480px;min-width:320px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+  .card h3{font-size:13px;color:var(--blue);margin-bottom:8px}
+  .card h3 .step-no{color:var(--yellow);margin-right:6px}
+  pre{
+    background:#0b111d;border:1px solid var(--line);border-radius:8px;
+    padding:12px;font-family:Consolas,"Courier New",monospace;font-size:12.5px;
+    line-height:1.65;overflow-x:auto;color:#b8c6dd;tab-size:4;
+  }
+  pre .cm{color:#5b6b85;font-style:italic}   /* 注释 */
+  pre .kw{color:var(--purple)}               /* 关键字 */
+  pre .fn{color:var(--blue)}                 /* 函数名 */
+  pre .hl{background:#24385c;display:inline-block;width:100%;color:#fff;border-radius:3px} /* 高亮关键行 */
+  .desc{font-size:13px;line-height:1.85;color:var(--text)}
+  .desc b{color:var(--yellow)}
+  .desc code{background:var(--panel2);padding:1px 6px;border-radius:4px;font-size:12px;color:var(--green);font-family:Consolas,monospace}
+  .vizwrap{background:#0b111d;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
+  .vizwrap svg{max-width:100%;height:auto}
+  .interact{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;align-items:center}
+  .ic{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim)}
+  .ic input[type=range]{accent-color:var(--blue)}
+  .ic .val{color:var(--yellow);font-family:monospace;min-width:64px;text-align:right}
+  .ic button{
+    background:var(--panel2);color:var(--text);border:1px solid var(--line);
+    border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;
+  }
+  .ic button:active{background:var(--blue);color:#06131f}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--dim);margin-top:8px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  .navBtns{max-width:1280px;margin:14px auto 0;display:flex;justify-content:center;align-items:center;gap:16px}
+  .navBtns button{
+    background:var(--blue);color:#06131f;border:none;border-radius:8px;
+    padding:9px 26px;font-size:14px;font-weight:bold;cursor:pointer;
+  }
+  .navBtns button:disabled{background:var(--panel2);color:var(--dim);cursor:not-allowed}
+  .navBtns span{font-size:12px;color:var(--dim)}
+  .note{max-width:1280px;margin:12px auto 0;background:#1a2438;border:1px solid var(--line);
+    border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.8;color:var(--dim)}
+  .note b{color:var(--yellow)}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--dim);margin-top:8px}
+  .flow .box{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 10px}
+  .flow .box.on{border-color:var(--yellow);color:var(--yellow)}
+  .flow .arr{color:var(--blue)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>simple_slam1.py 建图原理 · 逐步图解</h1>
+  <p>从 <code>ros2 run</code> 到地图画出来，每个子步骤都有 SVG 图 + 对应代码 + 交互操作。全程不用 Canvas。</p>
+</header>
+
+<nav id="stepTabs"></nav>
+
+<main>
+  <!-- 左：代码 -->
+  <div class="col">
+    <div class="card">
+      <h3>对应代码 <span style="color:var(--dim);font-weight:normal;font-size:12px">（simple_slam1.py）</span></h3>
+      <pre id="codeBox"></pre>
+    </div>
+  </div>
+
+  <!-- 右：图 + 交互 -->
+  <div class="col">
+    <div class="card">
+      <h3>图解 <span style="color:var(--dim);font-weight:normal;font-size:12px" id="vizTitle"></span></h3>
+      <div class="vizwrap" id="vizBox"></div>
+      <div class="interact" id="interactBox"></div>
+      <div class="legend" id="legendBox"></div>
+    </div>
+  </div>
+</main>
+
+<div class="descBox card" id="descBox" style="max-width:1280px;margin:0 auto"></div>
+
+<div class="navBtns">
+  <button id="prevBtn">← 上一步</button>
+  <span id="stepCounter"></span>
+  <button id="nextBtn">下一步 →</button>
+</div>
+
+<div class="note" id="noteBox"></div>
+
+<script>
+"use strict";
+// =====================================================================
+// 公共 SVG 工具
+// =====================================================================
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+// 画"世界坐标系十字"：cx,cy 为原点像素，unit 为每米像素
+function axisSVG(cx, cy, unit, len){
+  const half = len/2;
+  let s = "";
+  s += `<line x1="${cx-half*unit}" y1="${cy}" x2="${cx+half*unit}" y2="${cy}" stroke="#3a4d72" stroke-width="1"/>`;
+  s += `<line x1="${cx}" y1="${cy-half*unit}" x2="${cx}" y2="${cy+half*unit}" stroke="#3a4d72" stroke-width="1"/>`;
+  s += `<text x="${cx+half*unit-14}" y="${cy-6}" font-size="11" fill="#5b6b85">x</text>`;
+  s += `<text x="${cx+8}" y="${cy-half*unit+12}" font-size="11" fill="#5b6b85">y</text>`;
+  for(let m=-Math.floor(half);m<=Math.floor(half);m++){
+    if(m===0)continue;
+    const px = cx + m*unit, py = cy - m*unit;
+    s += `<text x="${px+2}" y="${cy+14}" font-size="8" fill="#44546f">${m}</text>`;
+    s += `<text x="${cx+4}" y="${py+3}" font-size="8" fill="#44546f">${m}</text>`;
+  }
+  return s;
+}
+
+// 机器人：x,y 像素，yaw 弧度（0 朝右）
+function robotSVG(x, y, yaw, scale){
+  const ang = -yaw; // SVG y 向下
+  const hx = Math.cos(ang), hy = Math.sin(ang);
+  return `<circle cx="${x}" cy="${y}" r="${0.28*scale}" fill="#fff" stroke="#8a99b5"/>
+  <polygon points="${x+hx*0.42*scale},${y+hy*0.42*scale} ${x-hx*0.14*scale-hy*0.16*scale},${y-hy*0.14*scale+hx*0.16*scale} ${x-hx*0.14*scale+hy*0.16*scale},${y-hy*0.14*scale-hx*0.16*scale}" fill="#4da3ff"/>
+  <line x1="${x}" y1="${y}" x2="${x+hx*0.42*scale}" y2="${y+hy*0.42*scale}" stroke="#ffd166" stroke-width="2"/>`;
+}
+
+// 栅格：返回 n 行 m 列的格子字符串，cell 为格子像素
+function gridSVG(ox, oy, rows, cols, cell, fillMap){
+  let s = "";
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const f = fillMap ? fillMap(r,c) : "transparent";
+      s += `<rect x="${ox+c*cell}" y="${oy+r*cell}" width="${cell-1}" height="${cell-1}" rx="1" fill="${f}" stroke="#263650" stroke-width="0.5"/>`;
+    }
+  }
+  return s;
+}
+// log-odds 值 → 格子颜色（l=0 透明灰，正=占用偏红/黑，负=空闲偏绿）
+function loColor(l){
+  if(l===0) return "#1a2438";
+  const t = Math.min(1, Math.abs(l)/4);
+  if(l>0){ // 占用：白→黄→红→深红
+    const r = 255, g = Math.round(210-140*t), b = Math.round(90-70*t);
+    return `rgb(${r},${g},${b})`;
+  }
+  // 空闲：白→绿→深绿
+  const g = 220, r = Math.round(200-180*t), b = Math.round(190-150*t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// =====================================================================
+// 步骤定义（title / code / desc / render / legend / note）
+// =====================================================================
+const STEPS = [
+// ================= 步骤 0：ros2 run =================
+{
+title:"启动节点",
+code:`<span class="cm"># 终端执行：启动建图节点</span>
+$ ros2 run slam_learn simple_mapping
+<span class="hl">rclpy.init(args=args)
+node = SimpleMappingNode()   <span class="cm"># 创建节点对象</span>
+rclpy.spin(node)             <span class="cm"># 开始事件循环，等待消息</span></span>`,
+desc:`<b>发生了什么：</b>终端里执行 <code>ros2 run slam_learn simple_mapping</code>，ROS 找到 <code>simple_slam1.py</code> 的 <code>main()</code> 入口。
+它依次做三件事：
+1. <code>rclpy.init()</code>：初始化 ROS 2 运行时（通信底层）。
+2. <code>SimpleMappingNode()</code>：创建节点对象，此时 <code>__init__</code> 里的<code>订阅 /scan</code>、<code>发布 /map</code>、<code>TF 监听</code>全部注册好。
+3. <code>rclpy.spin()</code>：进入死循环——节点开始"睡觉，有消息就叫醒我"。此后所有建图逻辑都由 <code>scan_callback</code> 在收到激光帧时触发。`,
+render(vz, it, lg){
+  vz.innerHTML = `
+  <svg viewBox="0 0 560 300" width="560">
+    <rect x="20" y="10" width="300" height="110" rx="8" fill="#0d1424" stroke="#2a3a58"/>
+    <text x="36" y="40" font-size="13" fill="#3ddc84" font-family="monospace">$ ros2 run slam_learn simple_mapping</text>
+    <text x="36" y="66" font-size="12" fill="#b8c6dd" font-family="monospace">[INFO] node created: simple_mapping</text>
+    <text x="36" y="88" font-size="12" fill="#b8c6dd" font-family="monospace">[INFO] subscription: /scan</text>
+    <text x="36" y="108" font-size="12" fill="#b8c6dd" font-family="monospace">[INFO] publisher:    /map</text>
+
+    <rect x="360" y="40" width="170" height="70" rx="10" fill="#1e2a40" stroke="#4da3ff"/>
+    <text x="445" y="66" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">SimpleMappingNode</text>
+    <text x="445" y="88" font-size="11" fill="#8a99b5" text-anchor="middle">订阅 /scan · 发布 /map · 听 TF</text>
+
+    <line x1="320" y1="75" x2="356" y2="75" stroke="#ffd166" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="338" y="66" font-size="10" fill="#ffd166" text-anchor="middle">创建</text>
+
+    <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#ffd166"/></marker></defs>
+
+    <text x="30" y="210" font-size="12" fill="#5b6b85">之后进入 spin() 死循环：</text>
+    <text x="30" y="235" font-size="12" fill="#b8c6dd" font-family="monospace">┌─ 睡觉 ── 收到 /scan 一帧 ──▶ scan_callback()</text>
+    <text x="30" y="258" font-size="12" fill="#b8c6dd" font-family="monospace">│                ▲</text>
+    <text x="30" y="281" font-size="12" fill="#b8c6dd" font-family="monospace">└──────── 处理完继续睡（等下一帧）────────────┘</text>
+  `;
+  lg.innerHTML = `<span><i style="background:#3ddc84"></i>终端输出</span><span><i style="background:#4da3ff"></i>节点</span><span><i style="background:#ffd166"></i>事件流</span>`;
+  it.innerHTML = "";
+}
+},
+// ================= 步骤 1：__init__ 地图参数 =================
+{
+title:"地图参数（网格有多大）",
+code:`<span class="hl">self.resolution = 0.05      <span class="cm"># 每格 5cm</span>
+self.map_size_m = 20.0       <span class="cm"># 地图 20m x 20m</span>
+self.width  = int(20/0.05)   <span class="cm"># = 400 列</span>
+self.height = int(20/0.05)   <span class="cm"># = 400 行</span>
+self.origin_x = -10.0        <span class="cm"># 地图原点(世界坐标)在中心</span>
+self.origin_y = -10.0
+self.map_log_odds = np.zeros((400,400))</span>
+<span class="cm"># 后面建图就是往这 400×400 个格子里填数</span>`,
+desc:`<b>发生了什么：</b>节点创建时先把"画布"定好——一张 <b>400×400</b> 的格子阵列，覆盖 <b>20m×20m</b> 的空间。
+<ul style="margin:6px 0 0 18px">
+<li><b>resolution（分辨率）</b>：1 格 = 5cm。格子越小地图越精细，但同样面积格子越多。</li>
+<li><b>width/height（格数）</b> = 实际长度 ÷ 分辨率 = 20 ÷ 0.05 = 400。</li>
+<li><b>origin（原点）</b>：地图中心对应世界坐标 (0,0)，所以原点在世界坐标 (-10,-10)——即地图左下角。</li>
+<li><b>map_log_odds</b>：存格子值的二维数组，初始全 0（未知）。</li>
+</ul>
+<b>拖动下面"分辨率"滑块</b>：观察 20m 不变时，格子数随分辨率变化。`,
+render(vz, it, lg){
+  let res = 0.05, n = 400;
+  function draw(){
+    const cell = 20, nv = 12;          // 示意网格 12×12 格
+    const ox = 130, oy = 50;           // 网格左上角（SVG 像素）
+    const cenX = ox + nv/2*cell;       // 网格中心 X
+    const cenY = oy + nv/2*cell;       // 网格中心 Y
+    let s = `<svg viewBox="0 0 560 360" width="560">`;
+    s += `<text x="20" y="26" font-size="12" fill="#8a99b5">20m×20m 地图（示意图 12×12 格，实际 ${n.toFixed(0)}×${n.toFixed(0)} 格）</text>`;
+    s += gridSVG(ox, oy, nv, nv, cell, ()=>"#1a2438");
+    // 世界坐标轴（虚线，穿过地图中心 = 世界原点）
+    s += `<line x1="${ox}" y1="${cenY}" x2="${ox+nv*cell}" y2="${cenY}" stroke="#3a4d72" stroke-dasharray="5 4"/>`;
+    s += `<line x1="${cenX}" y1="${oy}" x2="${cenX}" y2="${oy+nv*cell}" stroke="#3a4d72" stroke-dasharray="5 4"/>`;
+    // 坐标轴方向标签（x 右，y 上 —— ROS 标准坐标系）
+    s += `<text x="${ox+nv*cell+4}" y="${cenY-5}" font-size="12" fill="#3a4d72" font-weight="bold">x→</text>`;
+    s += `<text x="${cenX+6}" y="${oy-5}" font-size="12" fill="#3a4d72" font-weight="bold">y↑</text>`;
+    // 世界原点 (0,0) = 地图中心（蓝点）
+    s += `<circle cx="${cenX}" cy="${cenY}" r="4" fill="#4da3ff"/>`;
+    s += `<text x="${cenX+9}" y="${cenY-10}" font-size="11" fill="#4da3ff">世界原点 (0,0) = 地图中心</text>`;
+    // origin 点 = 地图左下角 = 世界坐标 (-10,-10)（红点）
+    const px = ox, py = oy + nv*cell;
+    s += `<circle cx="${px}" cy="${py}" r="5" fill="#ff5f56"/>`;
+    s += `<line x1="${px}" y1="${py}" x2="${px-26}" y2="${py+36}" stroke="#ff5f56" stroke-width="1.5"/>`;
+    s += `<text x="${px-28}" y="${py+54}" font-size="11" fill="#ff5f56" text-anchor="end">origin (−10,−10)</text>`;
+    s += `<text x="${px+8}" y="${py+18}" font-size="10" fill="#8a99b5">地图左下角 = 第 0 行第 0 列</text>`;
+    // 右上角 (10,10)
+    s += `<text x="${ox+nv*cell-4}" y="${oy+14}" font-size="10" fill="#5b6b85" text-anchor="end">(10,10)</text>`;
+    // 一格标注
+    s += `<rect x="${ox}" y="${oy}" width="${cell}" height="${cell}" fill="none" stroke="#ffd166" stroke-width="2"/>`;
+    s += `<line x1="${ox}" y1="${oy+cell+6}" x2="${ox+cell}" y2="${oy+cell+6}" stroke="#ffd166" stroke-width="1.5"/>`;
+    s += `<text x="${ox+cell/2}" y="${oy+cell+24}" font-size="10" fill="#ffd166" text-anchor="middle">1 格 = ${(res*100).toFixed(0)}cm</text>`;
+    // 信息卡
+    s += `<rect x="432" y="60" width="116" height="216" rx="8" fill="#1e2a40" stroke="#2a3a58"/>`;
+    s += `<text x="446" y="90" font-size="11.5" fill="#4da3ff">分辨率</text><text x="536" y="90" font-size="11.5" fill="#b8c6dd" text-anchor="end">${res.toFixed(2)}m</text>`;
+    s += `<text x="446" y="116" font-size="11.5" fill="#4da3ff">实际尺寸</text><text x="536" y="116" font-size="11.5" fill="#b8c6dd" text-anchor="end">20m</text>`;
+    s += `<text x="446" y="142" font-size="11.5" fill="#ffd166">格子数</text><text x="536" y="142" font-size="11.5" fill="#ffd166" text-anchor="end">${n.toFixed(0)}²</text>`;
+    s += `<text x="446" y="166" font-size="10" fill="#8a99b5">= 20÷${res.toFixed(2)}</text>`;
+    s += `<text x="446" y="198" font-size="10.5" fill="#8a99b5">数组元素</text><text x="536" y="198" font-size="10.5" fill="#8a99b5" text-anchor="end">${(n*n).toFixed(0)}</text>`;
+    s += `<text x="446" y="236" font-size="10" fill="#ffd166">origin 决定这张图</text>`;
+    s += `<text x="446" y="254" font-size="10" fill="#ffd166">放在世界的哪里</text>`;
+    s += `</svg>`;
+    vz.innerHTML = s;
+  }
+  draw();
+  it.innerHTML = `<div class="ic"><label>分辨率</label><input type="range" id="s1res" min="0.01" max="0.2" step="0.01" value="0.05"><span class="val" id="s1val"></span></div>`;
+  const inp = it.querySelector("#s1res"), val = it.querySelector("#s1val");
+  function upd(){
+    res = parseFloat(inp.value); n = 20/res;
+    val.textContent = res.toFixed(2)+" m/格 → "+n.toFixed(0)+"²格";
+    draw();
+  }
+  inp.oninput = upd; upd();
+  lg.innerHTML = `<span><i style="background:#ff5f56"></i>origin (−10,−10) 点</span><span><i style="background:#4da3ff"></i>世界原点 (0,0)</span><span><i style="background:#ffd166"></i>1 格尺寸</span>`;
+}
+},
+// ================= 步骤 2：订阅与发布（spin 前） =================
+{
+title:"订阅 /scan、发布 /map、TF",
+code:`<span class="hl">self.scan_sub = self.create_subscription(
+    LaserScan, '/scan', self.scan_callback, 10)
+self.map_pub = self.create_publisher(
+    OccupancyGrid, '/map', 10)
+self.map_timer = self.create_timer(2.0, self.publish_map)
+
+self.tf_buffer = Buffer()
+self.tf_listener = TransformListener(self.tf_buffer, self)
+self.tf_broadcaster = TransformBroadcaster(self)
+self.create_timer(0.05, self._publish_map_odom_tf)</span>`,
+desc:`<b>发生了什么：</b>节点向 ROS 2 声明"我是谁、我要什么、我提供什么"：
+<ul style="margin:6px 0 0 18px">
+<li><b>订阅 /scan</b>：告诉 ROS"一有激光帧就塞给我"，<code>scan_callback</code> 会被自动调用。</li>
+<li><b>发布 /map</b>：建好地图后发到话题上，RViz 订阅显示。</li>
+<li><b>定时器 publish_map</b>：每 2 秒发布一次地图。</li>
+<li><b>TF 监听</b>：把机器人位姿（odom→激光）缓存进 buffer，随时查询。</li>
+<li><b>TF 广播 + 0.05s 定时器</b>：每 20Hz 发布一次 <code>map→odom</code> 变换（给别的节点用）。</li>
+</ul>
+左图是节点的"接线图"：激光从 <code>/scan</code> 进来，地图从 <code>/map</code> 出去，TF 双向。`,
+render(vz, it, lg){
+  vz.innerHTML = `
+  <svg viewBox="0 0 560 300" width="560">
+    <!-- 三个外部方框 -->
+    <rect x="20"  y="60" width="130" height="64" rx="8" fill="#1e2a40" stroke="#3ddc84"/>
+    <text x="85" y="86" font-size="12" fill="#3ddc84" text-anchor="middle">/scan</text>
+    <text x="85" y="106" font-size="10" fill="#8a99b5" text-anchor="middle">LaserScan</text>
+    <text x="85" y="120" font-size="10" fill="#8a99b5" text-anchor="middle">由雷达/桥发布</text>
+
+    <rect x="410" y="60" width="130" height="64" rx="8" fill="#1e2a40" stroke="#ffd166"/>
+    <text x="475" y="86" font-size="12" fill="#ffd166" text-anchor="middle">/map</text>
+    <text x="475" y="106" font-size="10" fill="#8a99b5" text-anchor="middle">OccupancyGrid</text>
+    <text x="475" y="120" font-size="10" fill="#8a99b5" text-anchor="middle">RViz 订阅显示</text>
+
+    <rect x="215" y="40" width="130" height="100" rx="10" fill="#24385c" stroke="#4da3ff"/>
+    <text x="280" y="70" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">节点</text>
+    <text x="280" y="92" font-size="10" fill="#b8c6dd" text-anchor="middle">scan_callback</text>
+    <text x="280" y="108" font-size="10" fill="#b8c6dd" text-anchor="middle">publish_map</text>
+    <text x="280" y="124" font-size="10" fill="#b8c6dd" text-anchor="middle">TF buffer</text>
+
+    <!-- 箭头 -->
+    <line x1="152" y1="92" x2="211" y2="92" stroke="#3ddc84" stroke-width="2"/>
+    <polygon points="211,92 201,87 201,97" fill="#3ddc84"/>
+    <text x="182" y="82" font-size="10" fill="#3ddc84" text-anchor="middle">订阅</text>
+
+    <line x1="349" y1="92" x2="406" y2="92" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="406,92 396,87 396,97" fill="#ffd166"/>
+    <text x="378" y="82" font-size="10" fill="#ffd166" text-anchor="middle">发布</text>
+
+    <!-- TF -->
+    <rect x="215" y="170" width="130" height="46" rx="8" fill="#1e2a40" stroke="#a678ff"/>
+    <text x="280" y="190" font-size="11" fill="#a678ff" text-anchor="middle">TF</text>
+    <text x="280" y="206" font-size="10" fill="#8a99b5" text-anchor="middle">map→odom (20Hz)</text>
+    <line x1="280" y1="140" x2="280" y2="168" stroke="#a678ff" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="292" y="158" font-size="10" fill="#a678ff">查询 odom→laser</text>
+
+    <text x="20" y="260" font-size="11.5" fill="#8a99b5">rclpy.spin() 之后：收到 /scan → scan_callback；</text>
+    <text x="20" y="280" font-size="11.5" fill="#8a99b5">定时 2s → publish_map；定时 0.05s → 广播 map→odom。</text>
+  `;
+  it.innerHTML = "";
+  lg.innerHTML = `<span><i style="background:#3ddc84"></i>输入话题</span><span><i style="background:#ffd166"></i>输出话题</span><span><i style="background:#4da3ff"></i>节点回调</span><span><i style="background:#a678ff"></i>TF</span>`;
+}
+},
+// ================= 步骤 3：收到激光帧 =================
+{
+title:"收到 /scan（scan_callback 入口）",
+code:`<span class="cm"># 每收到一帧激光，ROS 自动调用：</span>
+<span class="hl">def scan_callback(self, msg):
+    <span class="cm"># 1. 查 TF：找“激光坐标系在 odom 下的位姿”</span>
+    t = self.tf_buffer.lookup_transform(
+        'odom', msg.header.frame_id,
+        msg.header.stamp, timeout=Duration(seconds=0.1))
+    <span class="cm"># 2. 解析出机器人位置与朝向</span>
+    robot_x = t.transform.translation.x
+    robot_y = t.transform.translation.y
+    robot_yaw = self.quat_to_yaw(t.transform.rotation)</span>`,
+desc:`<b>发生了什么：</b>雷达转一圈发出一帧 <code>LaserScan</code>（几百束激光的距离数组）。
+节点被唤醒后，先做两件事：
+<ul style="margin:6px 0 0 18px">
+<li><b>查 TF</b>：用 <code>msg.header.stamp</code>（这一帧的时间戳）查询 <code>odom→base_footprint</code> 的变换，得到机器人此刻的位置 <code>(x,y)</code> 和朝向 <code>yaw</code>。<b>用帧时间戳查</b>保证"激光是哪一刻的，就用那一刻的位姿"。</li>
+<li><b>为什么必须查 TF？</b>因为激光数据只告诉你"障碍在雷达坐标系里多远的<b>相对</b>位置"，要知道障碍在<b>世界（odom）</b>哪里，必须先知道雷达（机器人）在世界哪里。</li>
+</ul>
+<b>拖动光束数/机器人朝向</b>：左图是一帧激光，黄色箭头是机器人朝向。`,
+render(vz, it, lg){
+  let beams=36, yaw=0.6;
+  function draw(){
+    const cx=280, cy=150, unit=55, rmax=2.2*unit;
+    let s=`<svg viewBox="0 0 560 320" width="560">`;
+    s+=axisSVG(cx,cy,unit,4);
+    s+=robotSVG(cx,cy,yaw,unit);
+    // 量程圈
+    s+=`<circle cx="${cx}" cy="${cy}" r="${rmax}" fill="none" stroke="#ffd166" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>`;
+    // 激光扇形
+    const amin=-Math.PI, inc=(2*Math.PI)/beams;
+    for(let i=0;i<beams;i++){
+      const a=yaw+amin+i*inc;
+      s+=`<line x1="${cx}" y1="${cy}" x2="${cx+rmax*Math.cos(a)}" y2="${cy-rmax*Math.sin(a)}" stroke="#4da3ff" stroke-width="1" opacity="0.45"/>`;
+    }
+    s+=`<text x="${cx+rmax+10}" y="${cy-8}" font-size="11" fill="#ffd166">range_max 圈</text>`;
+    s+=`<text x="${cx-150}" y="${cy-130}" font-size="12" fill="#b8c6dd">一帧激光：从 -180° 到 +180°，共 ${beams} 束</text>`;
+    s+=`<text x="${cx-150}" y="${cy-110}" font-size="11" fill="#8a99b5">msg.header.frame_id = "base_footprint"</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`
+    <div class="ic"><label>光束数</label><input type="range" id="s3b" min="8" max="72" step="2" value="36"><span class="val" id="s3bv"></span></div>
+    <div class="ic"><label>朝向 yaw</label><input type="range" id="s3y" min="-180" max="180" step="5" value="35"><span class="val" id="s3yv"></span></div>`;
+  const ib=it.querySelector("#s3b"), iy=it.querySelector("#s3y");
+  const vb=it.querySelector("#s3bv"), vy=it.querySelector("#s3yv");
+  function upd(){ beams=parseInt(ib.value); yaw=parseInt(iy.value)*Math.PI/180;
+    vb.textContent=beams+"束"; vy.textContent=(iy.value)+"°"; draw(); }
+  ib.oninput=upd; iy.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#4da3ff"></i>激光射线</span><span><i style="background:#fff"></i>机器人</span><span><i style="background:#ffd166"></i>量程圈</span><span><i style="background:#3a4d72"></i>世界坐标轴(odom)</span>`;
+}
+},
+// ================= 步骤 4：四元数 → yaw =================
+{
+title:"四元数转偏航角 yaw",
+code:`<span class="cm"># TF 里的旋转是四元数 (x,y,z,w)，2D 建图只需要绕 Z 轴的角度：</span>
+<span class="hl">def quat_to_yaw(self, q):
+    return math.atan2(
+        2.0 * (q.w * q.z + q.x * q.y),
+        1.0 - 2.0 * (q.y * q.y + q.z * q.z))</span>
+<span class="cm"># robot_yaw = 机器人朝向（相对 odom 的 X 轴，弧度）</span>`,
+desc:`<b>发生了什么：</b>TF 变换里的旋转用<b>四元数</b>（4 个数，表示绕任意轴的旋转）表示。
+但 2D 建图中机器人只在平面上转，只需要一个数——<b>偏航角 yaw</b>（绕 Z 轴的转角）。
+上面的 <code>atan2</code> 公式就是从四元数里"提取"出这个角度。
+<ul style="margin:6px 0 0 18px">
+<li>yaw = 0 → 机器人正对 odom 的 X 轴方向</li>
+<li>yaw = π/2 → 朝左（逆时针 90°）</li>
+<li>yaw = -π/2 → 朝右（顺时针 90°）</li>
+</ul>
+<b>拖动滑块</b>：改变四元数（用绕 Z 轴角度换算），看 <code>yaw</code> 输出与机器人朝向。`,
+render(vz, it, lg){
+  let deg=30;
+  function draw(){
+    const cx=280, cy=160, unit=60;
+    const rad=deg*Math.PI/180;
+    let s=`<svg viewBox="0 0 560 330" width="560">`;
+    s+=axisSVG(cx,cy,unit,4);
+    s+=robotSVG(cx,cy,rad,unit);
+    // 弧线示意角度
+    s+=`<path d="M ${cx+0.9*unit} ${cy} A ${0.9*unit} ${0.9*unit} 0 0 0 ${cx+0.9*unit*Math.cos(rad)} ${cy-0.9*unit*Math.sin(rad)}" fill="none" stroke="#ffd166" stroke-width="1.5"/>`;
+    s+=`<text x="${cx+unit*0.55}" y="${cy-14}" font-size="12" fill="#ffd166">yaw=${rad.toFixed(2)} rad</text>`;
+    s+=`<text x="${cx+unit*1.15}" y="${cy+4}" font-size="11" fill="#8a99b5">odom X 轴（0°）</text>`;
+    // 四元数换算
+    const qw=Math.cos(rad/2), qz=Math.sin(rad/2);
+    s+=`<rect x="60" y="250" width="440" height="56" rx="8" fill="#1e2a40" stroke="#2a3a58"/>`;
+    s+=`<text x="80" y="272" font-size="11.5" fill="#a678ff">四元数 (x,y,z,w) = (0, 0, ${qz.toFixed(4)}, ${qw.toFixed(4)})</text>`;
+    s+=`<text x="80" y="294" font-size="11.5" fill="#3ddc84">atan2(2·w·z, 1-2·z²) = ${rad.toFixed(4)} rad = ${deg.toFixed(0)}°</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><label>绕 Z 转角</label><input type="range" id="s4d" min="-180" max="180" step="5" value="30"><span class="val" id="s4v"></span></div>`;
+  const inp=it.querySelector("#s4d"), val=it.querySelector("#s4v");
+  function upd(){ deg=parseInt(inp.value); val.textContent=deg+"°"; draw(); }
+  inp.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#fff"></i>机器人朝向</span><span><i style="background:#ffd166"></i>yaw 角</span>`;
+}
+},
+// ================= 步骤 5：遍历激光 =================
+{
+title:"遍历每束激光（算角度）",
+code:`<span class="cm"># ranges[i] 与角度一一对应：</span>
+<span class="hl">for i, r in enumerate(msg.ranges):
+    angle = msg.angle_min + i * msg.angle_increment
+
+    <span class="cm"># 过滤无效：无回波/过近/超量程</span>
+    if (math.isinf(r) or math.isnan(r)
+            or r &lt; msg.range_min or r &gt;= msg.range_max):
+        continue</span>`,
+desc:`<b>发生了什么：</b>一帧激光 = 一个 <code>ranges</code> 数组（几百个数），但消息里没存每个数的角度——角度用公式算：
+<p style="margin:6px 0"><code>angle = angle_min + i × angle_increment</code></p>
+第 <code>i</code> 束激光的<b>角度</b> = 起始角 <code>angle_min</code> + i 个 <code>angle_increment</code>。
+<ul style="margin:6px 0 0 18px">
+<li><code>ranges[i]</code>：第 i 束测到的距离（米）</li>
+<li>无效数据（inf/nan/过近/超程）直接跳过——雷达没测到东西，这一束没有意义</li>
+</ul>
+<b>拖动滑块选第 i 束</b>：看它对应的角度（相对雷达正前方），以及该角度在扇形里的位置。`,
+render(vz, it, lg){
+  const beams=37; let idx=18; // 中间束
+  const amin=-Math.PI, inc=2*Math.PI/beams;
+  function draw(){
+    const cx=280, cy=150, unit=60, rmax=2*unit;
+    let s=`<svg viewBox="0 0 560 320" width="560">`;
+    s+=axisSVG(cx,cy,unit,4);
+    s+=robotSVG(cx,cy,0,unit);
+    // 全部束（弱）
+    for(let i=0;i<beams;i++){
+      const a=amin+i*inc;
+      s+=`<line x1="${cx}" y1="${cy}" x2="${cx+rmax*Math.cos(a)}" y2="${cy-rmax*Math.sin(a)}" stroke="#4da3ff" stroke-width="1" opacity="0.3"/>`;
+    }
+    // 选中束（强）
+    const a=amin+idx*inc;
+    s+=`<line x1="${cx}" y1="${cy}" x2="${cx+rmax*Math.cos(a)}" y2="${cy-rmax*Math.sin(a)}" stroke="#ffd166" stroke-width="3"/>`;
+    // 角度标注
+    s+=`<path d="M ${cx+0.7*unit} ${cy} A ${0.7*unit} ${0.7*unit} 0 0 0 ${cx+0.7*unit*Math.cos(a)} ${cy-0.7*unit*Math.sin(a)}" fill="none" stroke="#3ddc84" stroke-width="1.5"/>`;
+    s+=`<text x="${cx+0.4*unit}" y="${cy-10}" font-size="11" fill="#3ddc84">angle=${(a*180/Math.PI).toFixed(0)}°</text>`;
+    s+=`<text x="${cx-150}" y="${cy-140}" font-size="12" fill="#b8c6dd">第 ${idx} 束：angle_min + ${idx}×increment</text>`;
+    s+=`<text x="${cx-150}" y="${cy-120}" font-size="11" fill="#ffd166">ranges[${idx}] = 这一束的距离</text>`;
+    s+=`<text x="${cx-150}" y="${cy-100}" font-size="11" fill="#8a99b5">角度 ${(a*180/Math.PI).toFixed(1)}°（0°=雷达正前方）</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><label>第 i 束</label><input type="range" id="s5i" min="0" max="${beams-1}" step="1" value="18"><span class="val" id="s5v"></span></div>`;
+  const inp=it.querySelector("#s5i"), val=it.querySelector("#s5v");
+  function upd(){ idx=parseInt(inp.value); val.textContent="i="+idx; draw(); }
+  inp.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#ffd166"></i>选中束</span><span><i style="background:#4da3ff" style="opacity:.35"></i>其余束</span><span><i style="background:#3ddc84"></i>角度弧</span>`;
+}
+},
+// ================= 步骤 6：极坐标 → 直角坐标 =================
+{
+title:"极坐标 → 直角坐标（lx, ly）",
+code:`<span class="cm"># 已知：距离 r、角度 angle（雷达坐标系内）</span>
+<span class="hl">lx = r * math.cos(angle)
+ly = r * math.sin(angle)</span>
+<span class="cm"># (lx, ly) = 障碍在“雷达坐标系”里的直角坐标</span>`,
+desc:`<b>发生了什么：</b>激光给的是<b>极坐标</b>（距离 r + 角度 angle），建图需要<b>直角坐标</b>。
+用三角函数换算：
+<ul style="margin:6px 0 0 18px">
+<li><code>lx = r·cos(angle)</code>：沿雷达 X 轴的分量（前后）</li>
+<li><code>ly = r·sin(angle)</code>：沿雷达 Y 轴的分量（左右）</li>
+</ul>
+这俩坐标是<b>相对雷达的</b>——雷达正前方是 (r,0)，正左是 (0,r)。
+<b>拖动角度</b>：看 (lx, ly) 怎么沿着半径圆弧移动。`,
+render(vz, it, lg){
+  let ang=50, r=2.0;
+  function draw(){
+    const cx=280, cy=160, unit=55;
+    const a=ang*Math.PI/180;
+    const lx=r*Math.cos(a), ly=r*Math.sin(a);
+    const px=cx+lx*unit, py=cy-ly*unit;
+    let s=`<svg viewBox="0 0 560 330" width="560">`;
+    s+=axisSVG(cx,cy,unit,4);
+    // 辅助圆
+    s+=`<circle cx="${cx}" cy="${cy}" r="${r*unit}" fill="none" stroke="#2a3a58" stroke-dasharray="3 3"/>`;
+    // 半径线（距离）
+    s+=`<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="#3ddc84" stroke-width="2"/>`;
+    // 直角投影
+    s+=`<line x1="${px}" y1="${py}" x2="${px}" y2="${cy}" stroke="#a678ff" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    s+=`<line x1="${px}" y1="${py}" x2="${cx}" y2="${py}" stroke="#a678ff" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    // 点
+    s+=`<circle cx="${px}" cy="${py}" r="5" fill="#ff5f56"/>`;
+    s+=`<text x="${px+8}" y="${py-8}" font-size="12" fill="#ff5f56">障碍点</text>`;
+    // 标注
+    s+=`<text x="${cx+r*unit*0.5}" y="${cy-10}" font-size="11" fill="#3ddc84">r=${r.toFixed(1)} m</text>`;
+    s+=`<text x="${px+6}" y="${cy-8}" font-size="11" fill="#a678ff">lx=${lx.toFixed(2)}</text>`;
+    s+=`<text x="${cx+10}" y="${py-4}" font-size="11" fill="#a678ff">ly=${ly.toFixed(2)}</text>`;
+    s+=`<text x="${cx-155}" y="${cy-130}" font-size="12" fill="#b8c6dd">lx = r·cos(angle) = ${lx.toFixed(2)}</text>`;
+    s+=`<text x="${cx-155}" y="${cy-108}" font-size="12" fill="#b8c6dd">ly = r·sin(angle) = ${ly.toFixed(2)}</text>`;
+    s+=`<text x="${cx-155}" y="${cy-86}" font-size="11" fill="#8a99b5">（相对雷达坐标系，单位：米）</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`
+    <div class="ic"><label>角度</label><input type="range" id="s6a" min="-180" max="180" step="2" value="50"><span class="val" id="s6av"></span></div>
+    <div class="ic"><label>距离 r</label><input type="range" id="s6r" min="0.5" max="3" step="0.1" value="2"><span class="val" id="s6rv"></span></div>`;
+  const ia=it.querySelector("#s6a"), ir=it.querySelector("#s6r");
+  const va=it.querySelector("#s6av"), vr=it.querySelector("#s6rv");
+  function upd(){ ang=parseInt(ia.value); r=parseFloat(ir.value);
+    va.textContent=ang+"°"; vr.textContent=r.toFixed(1)+"m"; draw(); }
+  ia.oninput=upd; ir.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#3ddc84"></i>距离 r</span><span><i style="background:#a678ff"></i>直角投影</span><span><i style="background:#ff5f56"></i>障碍点</span>`;
+}
+},
+// ================= 步骤 7：世界坐标变换 =================
+{
+title:"旋转+平移 → 世界坐标 (wx, wy)",
+code:`<span class="cm"># 关键一步：把“相对雷达”的 (lx,ly) 变成“相对世界(odom)”的 (wx,wy)</span>
+<span class="hl">wx = robot_x + lx*math.cos(robot_yaw) - ly*math.sin(robot_yaw)
+wy = robot_y + lx*math.sin(robot_yaw) + ly*math.cos(robot_yaw)</span>`,
+desc:`<b>发生了什么：</b>(lx,ly) 是相对雷达的，雷达自己也在动。要得到障碍在世界（odom）里的位置，要<b>先旋转、再平移</b>：
+<ul style="margin:6px 0 0 18px">
+<li><b>旋转</b>：乘 2D 旋转矩阵 <code>[cos, -sin; sin, cos]</code>，把雷达朝向 yaw 转进去</li>
+<li><b>平移</b>：加上机器人位置 <code>(robot_x, robot_y)</code></li>
+</ul>
+<p style="margin:6px 0"><b>拆开看就是两个公式：</b><br>
+<code>wx = robot_x + lx·cos(yaw) − ly·sin(yaw)</code><br>
+<code>wy = robot_y + lx·sin(yaw) + ly·cos(yaw)</code></p>
+<b>拖动 yaw</b>：同一个 (lx,ly)，机器人转不同朝向，障碍的世界坐标跟着转。`,
+render(vz, it, lg){
+  let yaw=0, lxa=2, lya=0.5;
+  function draw(){
+    const cx=280, cy=160, unit=55;
+    const y=yaw*Math.PI/180;
+    const wx=lxa*Math.cos(y)-lya*Math.sin(y);
+    const wy=lxa*Math.sin(y)+lya*Math.cos(y);
+    const px=cx+wx*unit, py=cy-wy*unit;
+    let s=`<svg viewBox="0 0 560 330" width="560">`;
+    s+=axisSVG(cx,cy,unit,4);
+    // 雷达局部坐标系（小，画在原点=机器人位置）
+    const rx=cx, ry=cy;
+    s+=`<line x1="${rx}" y1="${ry}" x2="${rx+0.8*unit*Math.cos(y)}" y2="${ry-0.8*unit*Math.sin(y)}" stroke="#ffd166" stroke-width="2"/>`;
+    s+=`<text x="${rx+0.5*unit}" y="${ry-12}" font-size="10" fill="#ffd166">雷达X轴</text>`;
+    // 局部点
+    const lpx=rx+lxa*unit, lpy=ry-lya*unit;
+    // 世界点（旋转平移后）
+    s+=`<line x1="${rx}" y1="${ry}" x2="${px}" y2="${py}" stroke="#3ddc84" stroke-width="2"/>`;
+    s+=`<circle cx="${px}" cy="${py}" r="6" fill="#ff5f56"/>`;
+    s+=`<text x="${px+8}" y="${py-10}" font-size="12" fill="#ff5f56">世界坐标 (${wx.toFixed(2)}, ${wy.toFixed(2)})</text>`;
+    // 机器人
+    s+=robotSVG(cx,cy,y,unit);
+    // 公式标注
+    s+=`<text x="${cx-160}" y="${cy-140}" font-size="12" fill="#b8c6dd">本地 (lx,ly)=(${lxa.toFixed(1)}, ${lya.toFixed(1)})</text>`;
+    s+=`<text x="${cx-160}" y="${cy-118}" font-size="12" fill="#3ddc84">wx = ${lxa.toFixed(1)}·cos(${yaw}°) − ${lya.toFixed(1)}·sin(${yaw}°) = ${wx.toFixed(2)}</text>`;
+    s+=`<text x="${cx-160}" y="${cy-96}" font-size="12" fill="#3ddc84">wy = ${lxa.toFixed(1)}·sin(${yaw}°) + ${lya.toFixed(1)}·cos(${yaw}°) = ${wy.toFixed(2)}</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`
+    <div class="ic"><label>yaw</label><input type="range" id="s7y" min="-180" max="180" step="5" value="0"><span class="val" id="s7v"></span></div>
+    <div class="ic"><label>lx</label><input type="range" id="s7lx" min="-2" max="2" step="0.1" value="2"><span class="val" id="s7lxv"></span></div>
+    <div class="ic"><label>ly</label><input type="range" id="s7ly" min="-2" max="2" step="0.1" value="0.5"><span class="val" id="s7lyv"></span></div>`;
+  const iy=it.querySelector("#s7y"), ilx=it.querySelector("#s7lx"), ily=it.querySelector("#s7ly");
+  const vy=it.querySelector("#s7v"), vlx=it.querySelector("#s7lxv"), vly=it.querySelector("#s7lyv");
+  function upd(){ yaw=parseInt(iy.value); lxa=parseFloat(ilx.value); lya=parseFloat(ily.value);
+    vy.textContent=yaw+"°"; vlx.textContent=lxa.toFixed(1); vly.textContent=lya.toFixed(1); draw(); }
+  iy.oninput=upd; ilx.oninput=upd; ily.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#ffd166"></i>雷达X轴(朝向)</span><span><i style="background:#3ddc84"></i>世界位移</span><span><i style="background:#ff5f56"></i>障碍世界坐标</span>`;
+}
+},
+// ================= 步骤 8：world_to_map =================
+{
+title:"世界坐标 → 栅格坐标 (gx, gy)",
+code:`<span class="hl">def world_to_map(self, wx, wy):
+    gx = int((wx - self.origin_x) / self.resolution)
+    gy = int((wy - self.origin_y) / self.resolution)
+    return gx, gy</span>
+<span class="cm"># 例：wx=1.0 → gx = (1.0-(-10))/0.05 = 220</span>`,
+desc:`<b>发生了什么：</b>现在知道障碍在世界里的位置（米），但地图是个格子数组，得换算成"第几行第几列"：
+<p style="margin:6px 0"><code>gx = (wx − origin_x) ÷ resolution</code></p>
+<ul style="margin:6px 0 0 18px">
+<li><code>origin_x = -10</code>：地图左下角的世界坐标</li>
+<li><code>resolution = 0.05</code>：每格 5cm</li>
+<li>wx=1.0 → gx = (1+10)/0.05 = <b>220 列</b></li>
+</ul>
+<b>拖动 wx</b>：看世界坐标对应的格子索引。图中放大显示了一排格子。`,
+render(vz, it, lg){
+  let wx=1.0;
+  const res=0.05, ox=-10, cell=30;
+  function draw(){
+    const gx=Math.floor((wx-ox)/res);
+    const cols=12; // 显示 12 格
+    const startGx=gx-3;
+    let s=`<svg viewBox="0 0 560 320" width="560">`;
+    const top=90;
+    // 格子行
+    let cells="";
+    for(let c=0;c<cols;c++){
+      const idx=startGx+c;
+      const isSel=(idx===gx);
+      cells+=`<rect x="${40+c*cell}" y="${top}" width="${cell-2}" height="${cell-2}" rx="2" fill="${isSel?'#ff5f56':'#1a2438'}" stroke="${isSel?'#ff5f56':'#263650'}"/>`;
+      cells+=`<text x="${40+c*cell+cell/2}" y="${top+cell/2+4}" font-size="${isSel?13:10}" fill="${isSel?'#fff':'#5b6b85'}" text-anchor="middle">${idx}</text>`;
+    }
+    cells+=`<text x="40" y="${top+cell+22}" font-size="11" fill="#8a99b5">格子索引 gx（列号）</text>`;
+    s+=cells;
+    // 世界坐标尺
+    const wxPos=40+(gx-startGx)*cell+cell/2;
+    s+=`<line x1="${wxPos}" y1="${top-40}" x2="${wxPos}" y2="${top}" stroke="#ffd166" stroke-width="2" stroke-dasharray="4 3"/>`;
+    s+=`<text x="${wxPos}" y="${top-48}" font-size="12" fill="#ffd166" text-anchor="middle">wx=${wx.toFixed(2)} m</text>`;
+    // 公式
+    s+=`<text x="40" y="230" font-size="13" fill="#3ddc84">gx = (wx − origin_x) ÷ resolution</text>`;
+    s+=`<text x="40" y="254" font-size="13" fill="#b8c6dd">gx = (${wx.toFixed(2)} − (−10)) ÷ 0.05 = ${gx}</text>`;
+    s+=`<text x="40" y="278" font-size="12" fill="#ffd166">→ 这个障碍落在第 ${gx} 列</text>`;
+    s+=`<text x="40" y="302" font-size="11" fill="#8a99b5">越界（gx&lt;0 或 ≥400）→ 该点在地图外，直接跳过</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><label>wx (米)</label><input type="range" id="s8w" min="-9" max="9" step="0.05" value="1"><span class="val" id="s8v"></span></div>`;
+  const inp=it.querySelector("#s8w"), val=it.querySelector("#s8v");
+  function upd(){ wx=parseFloat(inp.value); val.textContent=wx.toFixed(2)+"m"; draw(); }
+  inp.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#ff5f56"></i>选中格(gx)</span><span><i style="background:#ffd166"></i>世界坐标对应列</span>`;
+}
+},
+// ================= 步骤 9：add_log_odds =================
+{
+title:"标记占用：add_log_odds",
+code:`<span class="hl">def add_log_odds(self, gx, gy, delta):
+    new_val = self.map_log_odds[gy, gx] + delta
+    if new_val > self.clamp_max: new_val = self.clamp_max
+    elif new_val < self.clamp_min: new_val = self.clamp_min
+    self.map_log_odds[gy, gx] = new_val</span>
+<span class="cm"># 激光终点（障碍）→ delta = +0.9（log_odds_occ）</span>`,
+desc:`<b>发生了什么：</b>激光终点说明"这里有障碍"，就把这个格子的值<b>加 0.9</b>。
+这个值叫 <b>log-odds（对数几率）</b>：
+<ul style="margin:6px 0 0 18px">
+<li>值 &gt; 0 → 越可能是有障碍（格子颜色越深红）</li>
+<li>值 &lt; 0 → 越可能是空闲</li>
+<li>值 = 0 → 未知（没扫过）</li>
+</ul>
+<b>为什么用加减而不是覆盖？</b>多次扫描同一处，值不断累加，越来越确定——这是栅格地图"抗噪声"的核心：一次误检不足以翻转格子。
+<b>点击"扫到一次"按钮</b>：每点一次格子 +0.9，看数值与颜色变化。`,
+render(vz, it, lg){
+  let l=0;
+  function draw(){
+    const cell=110, x=180, y=90;
+    let s=`<svg viewBox="0 0 560 330" width="560">`;
+    s+=`<text x="30" y="40" font-size="13" fill="#8a99b5">激光终点处的格子（放大显示）</text>`;
+    // 激光线
+    s+=robotSVG(60, 140, 0, 40);
+    s+=`<line x1="100" y1="140" x2="${x+cell/2}" y2="${y+cell/2}" stroke="#4da3ff" stroke-width="2"/>`;
+    s+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="6" fill="${loColor(l)}" stroke="#ff5f56" stroke-width="2"/>`;
+    s+=`<text x="${x+cell/2}" y="${y+cell/2+5}" font-size="16" fill="#fff" text-anchor="middle" font-weight="bold">${l.toFixed(1)}</text>`;
+    s+=`<text x="${x+cell/2}" y="${y+cell+24}" font-size="12" fill="#8a99b5" text-anchor="middle">log-odds 值</text>`;
+    // 刻度条
+    const bx=40, bw=480, by=250;
+    s+=`<line x1="${bx}" y1="${by}" x2="${bx+bw}" y2="${by}" stroke="#2a3a58" stroke-width="6"/>`;
+    s+=`<line x1="${bx+bw/2}" y1="${by}" x2="${bx+bw/2}" y2="${by}" stroke="#8a99b5" stroke-width="2"/>`;
+    const px=bx + (l+4)/8*bw;
+    s+=`<circle cx="${px}" cy="${by}" r="7" fill="#ffd166"/>`;
+    s+=`<text x="${bx}" y="${by+22}" font-size="10" fill="#5b6b85">-4(空闲)</text>`;
+    s+=`<text x="${bx+bw-30}" y="${by+22}" font-size="10" fill="#5b6b85">+4(占用)</text>`;
+    s+=`<text x="40" y="300" font-size="11.5" fill="#8a99b5">多次扫描同一格：l 不断 +0.9，越来越确定为“障碍”</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><button id="s9btn">扫到一次 (+0.9)</button><button id="s9res">重置</button></div>`;
+  const btn=it.querySelector("#s9btn"), res=it.querySelector("#s9res");
+  btn.onclick=()=>{ l=Math.min(4, l+0.9); draw(); };
+  res.onclick=()=>{ l=0; draw(); };
+  lg.innerHTML=`<span><i style="background:#5b6b85"></i>刻度：左空闲右占用</span>`;
+}
+},
+// ================= 步骤 10：Bresenham =================
+{
+title:"画射线：draw_ray（Bresenham）",
+code:`<span class="hl">def draw_ray(self, x0, y0, x1, y1, value):
+    <span class="cm"># 从起点(机器人)到终点(障碍)，逐格走一遍</span>
+    dx = abs(x1-x0); dy = -abs(y1-y0)
+    sx = 1 if x0&lt;x1 else -1; sy = 1 if y0&lt;y1 else -1
+    err = dx + dy
+    x, y = x0, y0
+    while True:
+        if x == x1 and y == y1: break
+        e2 = 2 * err
+        if e2 &gt;= dy: err += dy; x += sx
+        if e2 &lt;= dx: err += dx; y += sy
+        if self.in_map(x, y):
+            self.add_log_odds(x, y, value)</span>
+<span class="cm"># 这里 value = log_odds_free = -0.7（空闲）</span>`,
+desc:`<b>发生了什么：</b>激光能从机器人射到障碍物，说明<b>中间经过的格子都是空的</b>，要把它们标记为"空闲"（-0.7）。
+问题：一条斜线要经过哪些格子？用 <b>Bresenham 算法</b>——每次只走 x 或 y 一格，用误差 <code>err</code> 决定走哪边，走出一条"像素级直线"。
+<ul style="margin:6px 0 0 18px">
+<li>绿色格子 = 已被标记空闲的格子</li>
+<li>终点（障碍）不在这里更新——由调用方单独加占用</li>
+</ul>
+<b>拖动进度条</b>：一格格看 Bresenham 怎么从起点走到终点。`,
+render(vz, it, lg){
+  const x0=1,y0=1, x1=11, y1=6; // 格子坐标
+  let t=1;
+  // 预计算 Bresenham 路径（包含起点，不含终点）
+  function path(){
+    const pts=[];
+    let x=x0,y=y0,dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0);
+    const sx=x0<x1?1:-1, sy=y0<y1?1:-1;
+    let err=dx+dy;
+    while(!(x===x1&&y===y1)){
+      pts.push([x,y]);
+      const e2=2*err;
+      if(e2>=dy){err+=dy;x+=sx;}
+      if(e2<=dx){err+=dx;y+=sy;}
+    }
+    return pts;
+  }
+  const pts=path();
+  function draw(){
+    const cell=38, ox=60, oy=70;
+    const rows=9, cols=14;
+    let s=`<svg viewBox="0 0 560 330" width="560">`;
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        let f="#1a2438";
+        const idx=pts.findIndex(p=>p[0]===c&&p[1]===r);
+        if(idx>=0 && idx<t) f = "#2f8f5b";
+        s+=`<rect x="${ox+c*cell}" y="${oy+r*cell}" width="${cell-2}" height="${cell-2}" rx="2" fill="${f}" stroke="#263650"/>`;
+        if(idx===t-1 && idx>=0){
+          s+=`<rect x="${ox+c*cell}" y="${oy+r*cell}" width="${cell-2}" height="${cell-2}" rx="2" fill="#ffd166" stroke="#ffd166"/>`;
+        }
+      }
+    }
+    // 起点/终点标记
+    s+=`<text x="${ox+x0*cell+cell/2}" y="${oy+y0*cell+cell/2+4}" font-size="11" fill="#fff" text-anchor="middle">起点</text>`;
+    s+=`<text x="${ox+x1*cell+cell/2}" y="${oy+y1*cell+cell/2+4}" font-size="11" fill="#ff5f56" text-anchor="middle">终点</text>`;
+    s+=`<text x="40" y="${oy+rows*cell+24}" font-size="12" fill="#b8c6dd">已走过 ${Math.min(t,pts.length)}/${pts.length} 格 · 每格标记空闲(-0.7)</text>`;
+    s+=`<text x="40" y="${oy+rows*cell+46}" font-size="11" fill="#8a99b5">注意终点只标占用、不标空闲（避免互相抵消）</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><label>进度</label><input type="range" id="s10t" min="1" max="${pts.length}" step="1" value="1"><span class="val" id="s10v"></span></div>`;
+  const inp=it.querySelector("#s10t"), val=it.querySelector("#s10v");
+  function upd(){ t=parseInt(inp.value); val.textContent=t+"/"+pts.length+"格"; draw(); }
+  inp.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#2f8f5b"></i>已标记空闲</span><span><i style="background:#ffd166"></i>当前格</span><span><i style="background:#ff5f56"></i>终点(障碍)</span>`;
+}
+},
+// ================= 步骤 11：发布 /map =================
+{
+title:"发布地图：publish_map",
+code:`<span class="hl">def publish_map(self):
+    msg = OccupancyGrid()
+    msg.header.frame_id = 'map'
+    msg.info.resolution = self.resolution
+    msg.info.width  = self.width
+    msg.info.height = self.height
+    msg.info.origin.position.x = self.origin_x
+    msg.info.origin.position.y = self.origin_y
+    msg.info.origin.orientation.w = 1.0
+
+    <span class="cm"># log-odds → 0~100 占用值（sigmoid 反变换）</span>
+    probs = 1.0 - 1.0/(1.0 + np.exp(self.map_log_odds))
+    data = np.where(self.map_log_odds == 0.0, -1,
+                    (probs*100.0).astype(np.int8))
+    msg.data = data.flatten().tolist()
+    self.map_pub.publish(msg)</span>`,
+desc:`<b>发生了什么：</b>格子数组是"内部表示"（log-odds），发给 RViz 要转成标准 <code>OccupancyGrid</code>：
+<ul style="margin:6px 0 0 18px">
+<li><b>元信息</b>：frame_id='map'、分辨率、宽高、原点——告诉 RViz"这张图多大多细、摆在哪"</li>
+<li><b>换算</b>：log-odds l → 占用概率 p = 1/(1+e<sup>-l</sup>)，再乘 100</li>
+<li><b>未知</b>：l=0（没扫过）→ 值为 -1，RViz 显示为灰色</li>
+<li><b>data</b>：一维数组，按"行优先"展平（第 0 行全部、第 1 行全部…）</li>
+</ul>
+<b>每 2 秒发布一次</b>（定时器）。RViz 添加 <b>Map</b> 显示，选 /map 话题即可看到。`,
+render(vz, it, lg){
+  // 画一个 16×12 的示意栅格地图：有墙、有障碍、有空闲、有未知
+  const rows=12, cols=16, cell=26, ox=40, oy=40;
+  function cellVal(r,c){
+    // 0未知 1空闲 2占用
+    if(r===0||r===rows-1||c===0||c===cols-1) return 2;      // 外墙
+    if(c===8 && (r>1&&r<10)) return 2;                       // 中墙
+    if(c===12 && r===4) return 2;                            // 柱子
+    if((r===5||r===6) && (c>1&&c<7)) return 1;               // 空闲走廊
+    if((r>1&&r<10) && (c>1&&c<7)) return 1;
+    if(c>9&&c<15 && r>1&&r<10) return 1;
+    return 0; // 未知
+  }
+  function draw(){
+    let s=`<svg viewBox="0 0 560 360" width="560">`;
+    // 左边：栅格图
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        const v=cellVal(r,c);
+        const f = v===2 ? "#8f2f2f" : v===1 ? "#2f8f5b" : "#232f4a";
+        s+=`<rect x="${ox+c*cell}" y="${oy+r*cell}" width="${cell-1}" height="${cell-1}" fill="${f}" stroke="#1a2438"/>`;
+      }
+    }
+    s+=`<text x="${ox}" y="${oy+rows*cell+18}" font-size="11" fill="#8a99b5">OccupancyGrid 内容（400×400 缩略示意）</text>`;
+    // 右边：消息字段
+    s+=`<rect x="440" y="40" width="100" height="250" rx="8" fill="#1e2a40" stroke="#2a3a58"/>`;
+    s+=`<text x="456" y="68" font-size="11" fill="#4da3ff">header.frame_id</text><text x="522" y="68" font-size="11" fill="#b8c6dd" text-anchor="end">map</text>`;
+    s+=`<text x="456" y="96" font-size="11" fill="#4da3ff">resolution</text><text x="522" y="96" font-size="11" fill="#b8c6dd" text-anchor="end">0.05</text>`;
+    s+=`<text x="456" y="124" font-size="11" fill="#4da3ff">width</text><text x="522" y="124" font-size="11" fill="#b8c6dd" text-anchor="end">400</text>`;
+    s+=`<text x="456" y="152" font-size="11" fill="#4da3ff">height</text><text x="522" y="152" font-size="11" fill="#b8c6dd" text-anchor="end">400</text>`;
+    s+=`<text x="456" y="180" font-size="11" fill="#4da3ff">origin</text><text x="522" y="180" font-size="11" fill="#b8c6dd" text-anchor="end">(-10,-10)</text>`;
+    s+=`<text x="456" y="216" font-size="11" fill="#ffd166">data[] 值</text>`;
+    s+=`<text x="456" y="238" font-size="10" fill="#b8c6dd">-1 未知</text>`;
+    s+=`<text x="456" y="258" font-size="10" fill="#b8c6dd">0  空闲</text>`;
+    s+=`<text x="456" y="278" font-size="10" fill="#b8c6dd">100 占用</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML="";
+  lg.innerHTML=`<span><i style="background:#8f2f2f"></i>占用(100)</span><span><i style="background:#2f8f5b"></i>空闲(0)</span><span><i style="background:#232f4a"></i>未知(-1)</span><span><i style="background:#4da3ff"></i>消息字段</span>`;
+}
+},
+// ================= 步骤 12：map→odom TF =================
+{
+title:"发布 map→odom TF",
+code:`<span class="hl">def _publish_map_odom_tf(self):
+    ts = TransformStamped()
+    ts.header.stamp = self.get_clock().now().to_msg()
+    ts.header.frame_id = 'map'
+    ts.child_frame_id  = 'odom'
+    ts.transform.rotation.w = 1.0   <span class="cm"># 恒等变换</span>
+    self.tf_broadcaster.sendTransform(ts)</span>
+<span class="cm"># 每 0.05s（20Hz）发一次，内容恒等 → map 与 odom 重合</span>`,
+desc:`<b>发生了什么：</b>地图画在 odom 坐标系下，但消息里 <code>frame_id='map'</code>。
+为了让其他节点（RViz、Nav2）知道"map 和 odom 的关系"，节点<b>持续发布</b> <code>map→odom</code> 变换：
+<ul style="margin:6px 0 0 18px">
+<li><b>恒等变换</b>（不旋转不平移）→ map 坐标系与 odom 坐标系<b>重合</b></li>
+<li><b>为什么每 20Hz 发？</b>TF 变换默认有时效性，要持续刷新</li>
+<li><b>这正是简化版缺"定位修正"的地方</b>：真实 SLAM 里 map→odom 随时间变化，用来抵消里程计漂移（左图虚线）。</li>
+</ul>
+图中 TF 树：<code>map → odom → base_footprint → laser</code>，本节点只负责 map→odom 这一段。`,
+render(vz, it, lg){
+  vz.innerHTML = `
+  <svg viewBox="0 0 560 300" width="560">
+    <text x="280" y="30" font-size="13" fill="#8a99b5" text-anchor="middle">TF 树（机器人坐标系的完整链条）</text>
+    <!-- 节点 -->
+    <rect x="60"  y="70" width="120" height="52" rx="8" fill="#1e2a40" stroke="#ffd166"/>
+    <text x="120" y="92" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold">map</text>
+    <text x="120" y="110" font-size="10" fill="#8a99b5" text-anchor="middle">本节点发布 ⭐</text>
+
+    <rect x="230" y="70" width="120" height="52" rx="8" fill="#1e2a40" stroke="#3ddc84"/>
+    <text x="290" y="92" font-size="13" fill="#3ddc84" text-anchor="middle" font-weight="bold">odom</text>
+    <text x="290" y="110" font-size="10" fill="#8a99b5" text-anchor="middle">里程计发布</text>
+
+    <rect x="400" y="70" width="120" height="52" rx="8" fill="#1e2a40" stroke="#4da3ff"/>
+    <text x="460" y="92" font-size="12" fill="#4da3ff" text-anchor="middle" font-weight="bold">base_footprint</text>
+    <text x="460" y="110" font-size="10" fill="#8a99b5" text-anchor="middle">robot_state_pub</text>
+
+    <rect x="230" y="180" width="120" height="52" rx="8" fill="#1e2a40" stroke="#a678ff"/>
+    <text x="290" y="202" font-size="12" fill="#a678ff" text-anchor="middle" font-weight="bold">laser</text>
+    <text x="290" y="220" font-size="10" fill="#8a99b5" text-anchor="middle">/scan 的 frame_id</text>
+
+    <!-- 连线 -->
+    <line x1="182" y1="96" x2="226" y2="96" stroke="#ffd166" stroke-width="2.5"/>
+    <polygon points="226,96 216,91 216,101" fill="#ffd166"/>
+    <text x="204" y="84" font-size="10" fill="#ffd166" text-anchor="middle">恒等</text>
+
+    <line x1="352" y1="96" x2="396" y2="96" stroke="#3ddc84" stroke-width="2.5"/>
+    <polygon points="396,96 386,91 386,101" fill="#3ddc84"/>
+    <text x="374" y="84" font-size="10" fill="#3ddc84" text-anchor="middle">位姿</text>
+
+    <line x1="290" y1="122" x2="290" y2="176" stroke="#a678ff" stroke-width="2.5"/>
+    <polygon points="290,176 285,166 295,166" fill="#a678ff"/>
+    <text x="302" y="154" font-size="10" fill="#a678ff">固定</text>
+
+    <!-- 真实 SLAM 说明 -->
+    <text x="40" y="270" font-size="11.5" fill="#8a99b5">真实 SLAM：map→odom 会随漂移不断变化（左图实线→虚线）。</text>
+    <text x="40" y="290" font-size="11.5" fill="#8a99b5">本简化版：map→odom 恒等 → map 与 odom 重合 → 无修正，所以会"歪"。</text>
+  `;
+  it.innerHTML="";
+  lg.innerHTML=`<span><i style="background:#ffd166"></i>本节点发布</span><span><i style="background:#3ddc84"></i>里程计发布</span><span><i style="background:#a678ff"></i>固定关节</span>`;
+}
+},
+// ================= 步骤 13：整体循环 =================
+{
+title:"循环：一帧一帧累积成地图",
+code:`<span class="cm"># 每收到一帧激光（10Hz 左右），整个流程走一遍：</span>
+<span class="hl">1. 查 TF → 机器人位姿 (x, y, yaw)
+2. 每束激光：极坐标 → 直角坐标 → 世界坐标
+3. world_to_map → 终点格子 +0.9（占用）
+4. Bresenham → 中间格子 -0.7（空闲）
+5. 每 2 秒发布一次 /map</span>
+<span class="cm"># 机器人边走边扫 → 400×400 个格子被反复更新 → 地图越来越清晰</span>`,
+desc:`<b>发生了什么：</b>把步骤 0~12 串起来，就是完整的建图循环：
+<ul style="margin:6px 0 0 18px">
+<li>机器人每移动一点、雷达每转一圈，都产生<b>新的一帧</b></li>
+<li>每帧都在往 400×400 的格子里"画"：障碍格加深、空闲格变绿、未知格被探索</li>
+<li>同一堵墙被很多帧扫到 → 那一串格子 log-odds 很高 → 颜色最深 → 地图"成型"</li>
+</ul>
+<b>拖动进度条</b>：模拟机器人绕一圈，看地图从"一张白纸"逐渐累积成"房间轮廓"。`,
+render(vz, it, lg){
+  // 模拟累积：用 20×16 栅格，进度决定画多少
+  const rows=16, cols=20, cell=24, ox=50, oy=36;
+  let prog=0.35;
+  function draw(){
+    // 预生成一张"目标地图"（房间 + 斜墙 + 障碍）
+    const walls=new Set();
+    for(let c=0;c<cols;c++){ walls.add(`0,${c}`); walls.add(`${rows-1},${c}`); }
+    for(let r=0;r<rows;r++){ walls.add(`${r},0`); walls.add(`${r},${cols-1}`); }
+    // 斜墙
+    for(let k=0;k<10;k++){ walls.add(`${3+k},${4+k}`); }
+    // 障碍
+    walls.add(`8,12`); walls.add(`9,12`); walls.add(`8,13`);
+    let s=`<svg viewBox="0 0 560 340" width="560">`;
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        const key=`${r},${c}`;
+        const isWall=walls.has(key);
+        // 进度决定：按"从中心向外 + 从下到上"的顺序逐渐扫到
+        const distFromCenter=Math.abs(c-cols/2)+Math.abs(r-rows/2);
+        const scanOrder=(distFromCenter+ (c+r)%3*0.3) / (cols+rows); // 0~1
+        let f="#232f4a";
+        if(scanOrder < prog){
+          f = isWall ? "#8f2f2f" : "#2f8f5b";
+        }
+        s+=`<rect x="${ox+c*cell}" y="${oy+r*cell}" width="${cell-1}" height="${cell-1}" fill="${f}" stroke="#1a2438"/>`;
+      }
+    }
+    s+=`<text x="${ox}" y="${oy+rows*cell+20}" font-size="12" fill="#b8c6dd">机器人绕圈扫描 → 地图逐渐“画”出来</text>`;
+    s+=`<text x="${ox}" y="${oy+rows*cell+40}" font-size="11" fill="#8a99b5">深红=墙(占用) · 绿=空闲 · 深蓝=还没扫到(未知)</text>`;
+    s+=`</svg>`;
+    vz.innerHTML=s;
+  }
+  draw();
+  it.innerHTML=`<div class="ic"><label>扫描进度</label><input type="range" id="s13p" min="0" max="1" step="0.01" value="0.35"><span class="val" id="s13v"></span></div>`;
+  const inp=it.querySelector("#s13p"), val=it.querySelector("#s13v");
+  function upd(){ prog=parseFloat(inp.value); val.textContent=(prog*100).toFixed(0)+"%"; draw(); }
+  inp.oninput=upd; upd();
+  lg.innerHTML=`<span><i style="background:#8f2f2f"></i>墙(占用)</span><span><i style="background:#2f8f5b"></i>空闲</span><span><i style="background:#232f4a"></i>未知</span>`;
+}
+},
+// ================= 步骤 14：总结 =================
+{
+title:"总结：完整数据流",
+code:`<span class="cm"># 一帧激光 → 地图更新的完整链路：</span>
+<span class="hl">/scan ─▶ 查TF得位姿 ─▶ 每束激光：
+   极坐标(r,angle) ─▶ (lx,ly) ─▶ (wx,wy) ─▶ 格子(gx,gy)
+   └─ 终点: log-odds +0.9 占用
+   └─ 射线: log-odds -0.7 空闲（Bresenham）
+▶ 400×400 格子数组 ─▶ /map 发布 ─▶ RViz 显示</span>
+<span class="cm"># 本质：坐标变换 + 栅格累积，就是栅格地图 SLAM 的核心</span>`,
+desc:`<b>到这里，simple_slam1.py 的全部原理讲完了。</b>它的本质就两件事：
+<ol style="margin:6px 0 0 18px">
+<li><b>坐标变换</b>：把每一束激光的 (距离,角度) 变成世界坐标 (wx,wy)，再到格子索引 (gx,gy)</li>
+<li><b>栅格累积</b>：命中格 +0.9、穿过格 -0.7，400×400 个格子反复累加</li>
+</ol>
+<b>它没有的部分</b>（= 完整 SLAM 的下一步）：
+<ul style="margin:6px 0 0 18px">
+<li><b>扫描匹配</b>：用当前激光对齐已有地图，修正位姿 → 解决"歪"</li>
+<li><b>回环检测 + 图优化</b>：绕一圈回来把整张图"拉正" → 解决全局漂移</li>
+</ul>
+先把这个程序跑通、看懂，再往前走，就是真正的 SLAM 了。`,
+render(vz, it, lg){
+  vz.innerHTML=`
+  <svg viewBox="0 0 560 320" width="560">
+    <!-- 流水线 -->
+    <rect x="20"  y="90" width="90" height="52" rx="8" fill="#1e2a40" stroke="#3ddc84"/>
+    <text x="65" y="112" font-size="11" fill="#3ddc84" text-anchor="middle">/scan 激光</text>
+    <text x="65" y="130" font-size="9" fill="#8a99b5" text-anchor="middle">(r, angle)</text>
+
+    <rect x="150" y="90" width="90" height="52" rx="8" fill="#1e2a40" stroke="#a678ff"/>
+    <text x="195" y="112" font-size="11" fill="#a678ff" text-anchor="middle">坐标变换</text>
+    <text x="195" y="130" font-size="9" fill="#8a99b5" text-anchor="middle">+TF位姿</text>
+
+    <rect x="280" y="90" width="100" height="52" rx="8" fill="#1e2a40" stroke="#ffd166"/>
+    <text x="330" y="112" font-size="11" fill="#ffd166" text-anchor="middle">格子更新</text>
+    <text x="330" y="130" font-size="9" fill="#8a99b5" text-anchor="middle">±log-odds</text>
+
+    <rect x="420" y="90" width="110" height="52" rx="8" fill="#1e2a40" stroke="#4da3ff"/>
+    <text x="475" y="112" font-size="11" fill="#4da3ff" text-anchor="middle">/map 发布</text>
+    <text x="475" y="130" font-size="9" fill="#8a99b5" text-anchor="middle">→ RViz</text>
+
+    <line x1="112" y1="116" x2="146" y2="116" stroke="#3ddc84" stroke-width="2"/>
+    <polygon points="146,116 138,112 138,120" fill="#3ddc84"/>
+    <line x1="242" y1="116" x2="276" y2="116" stroke="#a678ff" stroke-width="2"/>
+    <polygon points="276,116 268,112 268,120" fill="#a678ff"/>
+    <line x1="382" y1="116" x2="416" y2="116" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="416,116 408,112 408,120" fill="#ffd166"/>
+
+    <!-- 每帧循环 -->
+    <text x="280" y="210" font-size="12" fill="#8a99b5" text-anchor="middle">↑ 机器人移动 → 新一帧 → 再次走完整条链路（10Hz）↑</text>
+    <text x="280" y="240" font-size="12" fill="#ffd166" text-anchor="middle">400×400 格子数组 = 地图</text>
+    <text x="280" y="268" font-size="11.5" fill="#8a99b5" text-anchor="middle">缺：扫描匹配（修漂移）→ 下一课</text>
+  `;
+  it.innerHTML="";
+  lg.innerHTML=`<span><i style="background:#3ddc84"></i>输入</span><span><i style="background:#a678ff"></i>坐标变换</span><span><i style="background:#ffd166"></i>累积</span><span><i style="background:#4da3ff"></i>输出</span>`;
+}
+},
+];
+
+// =====================================================================
+// 页面渲染逻辑
+// =====================================================================
+const codeBox=document.getElementById("codeBox");
+const vizBox=document.getElementById("vizBox");
+const interactBox=document.getElementById("interactBox");
+const legendBox=document.getElementById("legendBox");
+const descBox=document.getElementById("descBox");
+const noteBox=document.getElementById("noteBox");
+const stepTabs=document.getElementById("stepTabs");
+const vizTitle=document.getElementById("vizTitle");
+const stepCounter=document.getElementById("stepCounter");
+const prevBtn=document.getElementById("prevBtn");
+const nextBtn=document.getElementById("nextBtn");
+let cur=0;
+
+// 生成步骤标签
+STEPS.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.textContent=(i+1)+". "+s.title;
+  b.onclick=()=>showStep(i);
+  stepTabs.appendChild(b);
+});
+
+function showStep(i){
+  cur=i;
+  const s=STEPS[i];
+  // 高亮标签
+  [...stepTabs.children].forEach((b,j)=>b.classList.toggle("on",j===i));
+  // 代码
+  codeBox.innerHTML=s.code;
+  // 描述
+  descBox.innerHTML=`<h3 style="color:var(--blue);margin-bottom:6px">${i+1}. ${s.title} · 这一步发生了什么</h3><div class="desc">${s.desc}</div>`;
+  // 标题
+  vizTitle.textContent="（SVG 图，可交互）";
+  // 图 + 交互 + 图例
+  vizBox.innerHTML="";
+  interactBox.innerHTML="";
+  legendBox.innerHTML="";
+  s.render(vizBox, interactBox, legendBox);
+  // 计数器
+  stepCounter.textContent=(i+1)+" / "+STEPS.length;
+  prevBtn.disabled=(i===0);
+  nextBtn.disabled=(i===STEPS.length-1);
+  // 底部说明
+  const notes=[
+    "提示：所有图都是 SVG（矢量），拖滑块/点按钮即可交互，无需刷新页面。",
+    "提示：把角度/距离/位姿的值来回拖动，观察对应坐标和格子如何联动变化。",
+    "提示：本页代码全部摘自 simple_slam1.py，可与源文件逐行对照。",
+    "提示：每帧激光触发一次 scan_callback，本页即模拟了它内部逐行执行的过程。",
+    "提示：这是「建图」原理；要解决地图歪斜，需要扫描匹配（后续阶段）。"
+  ];
+  noteBox.innerHTML="<b>💡 "+notes[i%notes.length]+"</b>";
+}
+
+prevBtn.onclick=()=>{ if(cur>0) showStep(cur-1); };
+nextBtn.onclick=()=>{ if(cur<STEPS.length-1) showStep(cur+1); };
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight") nextBtn.onclick();
+  if(e.key==="ArrowLeft") prevBtn.onclick();
+});
+
+showStep(0);
+</script>
+</body>
+</html>
