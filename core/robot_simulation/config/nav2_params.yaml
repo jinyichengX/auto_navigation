@@ -279,11 +279,15 @@ planner_server:
     expected_planner_frequency: 20.0
     use_sim_time: True
     planner_plugins: ["GridBased"]
+    # GridBased:
+    #   plugin: "straight_planner/StraightPlanner"
+    #   # tolerance: 0.5 # StraightPlanner does not use this
+    #   # use_astar: false # StraightPlanner does not use this
+    #   # allow_unknown: true # StraightPlanner checks obstacles directly
     GridBased:
-      plugin: "straight_planner/StraightPlanner"
-      # tolerance: 0.5 # StraightPlanner does not use this
-      # use_astar: false # StraightPlanner does not use this
-      # allow_unknown: true # StraightPlanner checks obstacles directly
+      plugin: "rrt_planner/RRTPlannerPlugin"
+      step_size: 0.5    # 单次生长步长（m）
+      iter_max: 5000    # 最大迭代次数
 
 smoother_server:
   ros__parameters:

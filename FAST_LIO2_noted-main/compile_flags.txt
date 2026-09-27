@@ -1,0 +1,4 @@
+-std=c++17
+-w
+-I/home/jinyicheng/auto_navigation/FAST_LIO2_noted-main/FAST-LIO/include
+-I/home/jinyicheng/auto_navigation/FAST_LIO2_noted-main/FAST-LIO/src

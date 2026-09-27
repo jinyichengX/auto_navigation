@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>px4_control</name>
+  <version>0.0.1</version>
+  <description>PX4 offboard 控制示例与键盘遥控</description>
+  <maintainer email="jinyicheng@example.com">jinyicheng</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>px4_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

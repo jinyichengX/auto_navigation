@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAST-LIO2 源码精读笔记</title>
+<style>
+  :root {
+    --nl-surface: #ffffff;
+    --nl-surface-muted: #f5f5f5;
+    --nl-border: #d4d4d4;
+    --nl-text: #1a1a1a;
+    --nl-text-muted: #6b6b6b;
+    --nl-brand: #16a34a;
+    --nl-brand-text: #15803d;
+    --nl-brand-muted: #dcfce7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --nl-surface: #1f1f1f;
+      --nl-surface-muted: #2a2a2a;
+      --nl-border: #3a3a3a;
+      --nl-text: #f0f0f0;
+      --nl-text-muted: #9a9a9a;
+      --nl-brand: #22c55e;
+      --nl-brand-text: #4ade80;
+      --nl-brand-muted: #14532d;
+    }
+  }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--nl-text); background: var(--nl-surface); margin: 0; padding: 20px; line-height: 1.6; max-width: 920px; margin: 0 auto; }
+  .nl-header { border-bottom: 2px solid var(--nl-brand); padding-bottom: 10px; margin-bottom: 16px; }
+  .nl-title { font-size: 20px; font-weight: 700; }
+  .nl-subtitle { font-size: 13px; color: var(--nl-text-muted); margin-top: 4px; }
+  .nl-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .nl-step { font-size: 12px; padding: 4px 10px; border-radius: 12px; background: var(--nl-surface-muted); border: 1px solid var(--nl-border); color: var(--nl-text-muted); cursor: default; }
+  .nl-step.done { color: var(--nl-brand-text); border-color: var(--nl-brand); }
+  .nl-step.active { background: var(--nl-brand); color: #fff; border-color: var(--nl-brand); font-weight: 600; }
+  .nl-section { margin-bottom: 14px; }
+  .nl-section-title { font-size: 16px; font-weight: 700; color: var(--nl-brand-text); }
+  .nl-file { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--nl-text-muted); margin-top: 3px; }
+  .nl-card { background: var(--nl-surface-muted); border: 1px solid var(--nl-border); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+  .nl-card-title { font-size: 14px; font-weight: 600; color: var(--nl-brand-text); margin-bottom: 10px; }
+  .nl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .nl-table th, .nl-table td { border: 1px solid var(--nl-border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  .nl-table th { background: var(--nl-surface); font-weight: 600; font-size: 12px; color: var(--nl-text-muted); }
+  .nl-mono { font-family: ui-monospace, Menlo, monospace; font-weight: 600; white-space: nowrap; }
+  .nl-badge { font-size: 11px; padding: 2px 7px; border-radius: 8px; font-weight: 600; white-space: nowrap; display: inline-block; }
+  .nl-badge.in { background: var(--nl-brand-muted); color: var(--nl-brand-text); }
+  .nl-badge.out { background: #fef3c7; color: #92400e; }
+  .nl-badge.io { background: #dbeafe; color: #1e40af; }
+  .nl-concept { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 13px; }
+  .nl-concept-num { background: var(--nl-brand); color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .nl-highlight { border-left: 3px solid var(--nl-brand); }
+  .nl-change-list { margin: 10px 0; padding-left: 4px; }
+  .nl-change { font-size: 13px; padding: 4px 0; }
+  .nl-change.big { color: var(--nl-brand-text); font-weight: 600; }
+  .nl-change.small { color: var(--nl-text-muted); padding-left: 14px; }
+  b { color: var(--nl-text); }
+  code { font-family: ui-monospace, Menlo, monospace; background: var(--nl-surface); padding: 1px 4px; border-radius: 3px; font-size: 12px; border: 1px solid var(--nl-border); }
+</style>
+</head>
+<body>
+
+<div class="nl-header">
+  <div class="nl-title">FAST-LIO2 源码精读笔记</div>
+  <div class="nl-subtitle">一个月通关计划 · MID360/AVIA 路径 · 逐行带读</div>
+</div>
+
+<div class="nl-steps">
+  <span class="nl-step done">1 目录</span>
+  <span class="nl-step done">2 配置</span>
+  <span class="nl-step done">3 预处理</span>
+  <span class="nl-step active">4 IMU去畸变</span>
+  <span class="nl-step">5 SO3</span>
+  <span class="nl-step">6 状态</span>
+  <span class="nl-step">7 EKF</span>
+  <span class="nl-step">8 ikd树</span>
+  <span class="nl-step">9 主循环</span>
+  <span class="nl-step">10 动手改</span>
+</div>
+
+<div class="nl-section">
+  <div class="nl-section-title">第 4 步:IMU_Processing — UndistortPcl</div>
+  <div class="nl-file">IMU_Processing.hpp:227 · 由 Process(:385 / :421) 调用</div>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📋 参数 1/3:meas <span class="nl-badge in">输入</span> <span style="font-weight:400;font-size:12px;color:var(--nl-text-muted)">MeasureGroup</span></div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:8px">这一帧的数据包,装三样东西</div>
+  <table class="nl-table">
+    <thead><tr><th>字段</th><th>类型</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">meas.lidar</td><td>PointCloudXYZI</td><td>avia_handler 预处理后的点云:已<b>回波过滤+等间隔降采样+去重+去近点</b>,但<b>未去畸变</b>。每个点存 x/y/z/intensity + curvature(复用存帧内时间,单位 ms)</td></tr>
+      <tr><td class="nl-mono">meas.imu</td><td>deque&lt;Imu&gt;</td><td>这帧起止时间内的所有 IMU 测量序列,按时间排序。每个含 <b>linear_acceleration</b>(加速度 3 维)+ <b>angular_velocity</b>(角速度 3 维)+ <b>header.stamp</b>(时间戳)</td></tr>
+      <tr><td class="nl-mono">meas.lidar_beg_time</td><td>double</td><td>这帧点云起始的绝对时间戳(秒)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📋 参数 2/3:kf_state <span class="nl-badge io">输入+输出</span> <span style="font-weight:400;font-size:12px;color:var(--nl-text-muted)">esekf&lt;state_ikfom,12,input_ikfom&gt;</span></div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:8px">EKF 对象,<b>跨帧持续存在</b>。内部装 x_(状态)+ P_(协方差)+ 方法。函数内调 predict 改它(&amp; 引用,改动外部可见)</div>
+
+  <div style="font-size:13px;font-weight:600;margin:10px 0 4px">x_ (state_ikfom) 的 8 个字段 —— 主体:IMU 物理本体,参考系:地图</div>
+  <table class="nl-table">
+    <thead><tr><th>字段</th><th>类型</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">pos</td><td>V3D(3维)</td><td><b>IMU 物理本体</b>在<b>地图坐标系</b>的位置 (x,y,z)</td></tr>
+      <tr><td class="nl-mono">rot</td><td>SO3(3维旋转)</td><td><b>IMU 坐标系 → 地图坐标系</b>的旋转矩阵(车头朝哪)</td></tr>
+      <tr><td class="nl-mono">vel</td><td>V3D</td><td><b>IMU 物理本体</b>在<b>地图坐标系</b>的速度(往哪开多快)</td></tr>
+      <tr><td class="nl-mono">bg</td><td>V3D</td><td><b>IMU 陀螺仪</b>零偏(静止时也输出的小偏差,传感器自身)</td></tr>
+      <tr><td class="nl-mono">ba</td><td>V3D</td><td><b>IMU 加速度计</b>零偏(同上,传感器自身)</td></tr>
+      <tr><td class="nl-mono">grav</td><td>S2(2维)</td><td><b>重力</b>在<b>地图坐标系</b>的方向(重力向量指向哪)</td></tr>
+      <tr><td class="nl-mono">offset_R_L_I</td><td>SO3</td><td><b>雷达坐标系 → IMU 坐标系</b>的旋转外参(雷达装在 IMU 上朝哪)</td></tr>
+      <tr><td class="nl-mono">offset_T_L_I</td><td>V3D</td><td><b>雷达原点</b>在<b>IMU 坐标系</b>的位置(雷达装在 IMU 偏哪)</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:10px 0 4px">P_ 协方差矩阵</div>
+  <div style="font-size:13px">对 x_ 每个值的不确定度,n×n 矩阵。对角线 = 各状态值的方差(越小说明越确定)</div>
+
+  <div style="font-size:13px;font-weight:600;margin:10px 0 4px">方法</div>
+  <table class="nl-table">
+    <thead><tr><th>方法</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">predict(dt, Q, in)</td><td>把状态往前推 dt 秒(前向传播用,函数内 :303 调)</td></tr>
+      <tr><td class="nl-mono">update(...)</td><td>用雷达观测修正状态(主循环 :1060 调,<b>不在本函数内</b>)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📋 参数 3/3:pcl_out <span class="nl-badge out">输出</span> <span style="font-weight:400;font-size:12px;color:var(--nl-text-muted)">PointCloudXYZI</span></div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:8px">去畸变后点云的容器。函数内先把 meas.lidar 拷进来(:237),再就地改写每个点。跑完装的就是成品</div>
+  <table class="nl-table">
+    <thead><tr><th>字段</th><th>含义</th><th>是否改写</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">points[i].x / y / z</td><td>点的坐标。函数跑完后改成去畸变后的坐标(:374-376)</td><td><b>改</b></td></tr>
+      <tr><td class="nl-mono">points[i].intensity</td><td>点的强度(反射率)</td><td>不改</td></tr>
+      <tr><td class="nl-mono">points[i].curvature</td><td>复用存点的帧内时间(ms),用于排序(:238)</td><td>不改</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">🧩 三个核心概念(对应函数三段)</div>
+  <div class="nl-concept"><div class="nl-concept-num">1</div><div><b>状态</b>:IMU 物理本体相对地图的 pos/rot/vel(+传感器零偏/重力/雷达外参),存在 kf_state.x_ 里</div></div>
+  <div class="nl-concept"><div class="nl-concept-num">2</div><div><b>前向传播</b>:用高频 IMU 把状态从帧开头一步步推到帧结尾,每格状态存进 IMUpose 数组(<b>:260-316</b>)</div></div>
+  <div class="nl-concept"><div class="nl-concept-num">3</div><div><b>去畸变</b>:用 IMUpose 里每个时刻的位姿,把点云每个点"挪回"帧结尾那一刻(<b>:330-381</b>)</div></div>
+</div>
+
+<div class="nl-card nl-highlight">
+  <div class="nl-card-title">❓ 前向传播到底算的是什么</div>
+  <div style="font-size:13px;">每推一步,算的是 <b>整盒状态 x_</b>(kf_state 里的 x_),但各项变化速度不同:</div>
+  <div class="nl-change-list">
+    <div class="nl-change big">pos / rot / vel —— 每帧大变(车在动) ← <b>主要推的就是这三个</b></div>
+    <div class="nl-change small">bg / ba —— 几乎不变(陀螺/加速度计零偏是缓变量)</div>
+    <div class="nl-change small">grav —— 几乎不变(重力方向基本稳定)</div>
+    <div class="nl-change small">offset_R_L_I / offset_T_L_I —— 不变(雷达装 IMU 上,位置固定)</div>
+  </div>
+  <div style="font-size:13px;">所以"算的是 pos 还是 vel 还是姿态"——<b>全算,但实际每帧在变的是 pos/rot/vel 三个</b>(IMU 本体相对地图的位姿+速度)。每推完一格,这刻的状态存进 IMUpose,给去畸变用。</div>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📖 逐行解读 · 准备阶段(:229-233)</div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:10px">这一段做前向传播前的准备:把 IMU 序列拼连续、记下三个时间戳</div>
+
+  <pre style="background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;overflow-x:auto;margin:0 0 12px;line-height:1.5"><span style="color:var(--nl-text-muted)">229</span>  auto v_imu = meas.imu;                        <span style="color:var(--nl-text-muted)">// 拷贝这帧的 IMU 序列</span>
+<span style="color:var(--nl-text-muted)">230</span>  v_imu.push_front(last_imu_);                 <span style="color:var(--nl-text-muted)">// 把上一帧最后一个 IMU 插到开头</span>
+<span style="color:var(--nl-text-muted)">231</span>  const double &amp;imu_beg_time = v_imu.front()-&gt;header.stamp.toSec();
+<span style="color:var(--nl-text-muted)">232</span>  const double &amp;imu_end_time = v_imu.back()-&gt;header.stamp.toSec();
+<span style="color:var(--nl-text-muted)">233</span>  const double &amp;pcl_beg_time = meas.lidar_beg_time;</pre>
+
+  <table class="nl-table">
+    <thead><tr><th>行</th><th>在干嘛</th><th>大白话</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">229</td><td>拷贝 IMU 序列</td><td>把这帧的 IMU 序列(meas.imu)拷一份到本地 v_imu。meas.imu 是 sync_packages 打包好的、这帧期间的所有 IMU 测量</td></tr>
+      <tr><td class="nl-mono">230</td><td><b>拼连续</b></td><td>把<b>上一帧最后一个 IMU</b>(last_imu_)插到 v_imu 最开头。为什么?前向传播要从"上一帧结束那一刻"开始推,那一刻的 IMU 就是 last_imu_。插上后时间线连续了:上一帧结尾 → 这帧开头 → 这帧结尾</td></tr>
+      <tr><td class="nl-mono">231</td><td>记开头时间</td><td>imu_beg_time = v_imu 开头的时间。因为插了 last_imu_,所以它其实是<b>上一帧最后一个 IMU 的时间</b>(早于这帧点云开始)</td></tr>
+      <tr><td class="nl-mono">232</td><td>记结尾时间</td><td>imu_end_time = v_imu 结尾的时间,即<b>这帧最后一个 IMU 的时间</b></td></tr>
+      <tr><td class="nl-mono">233</td><td>记点云开始</td><td>pcl_beg_time = 这帧点云的起始时间(从 meas 拿)</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:16px 0 8px;color:var(--nl-brand-text)">📊 时间轴可视化(关键:push_front 让 IMU 时间线跨帧连续)</div>
+  <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px">
+    <rect x="40" y="115" width="180" height="60" fill="var(--nl-surface-muted)" opacity="0.6"/>
+    <rect x="220" y="115" width="540" height="60" fill="var(--nl-surface)" stroke="var(--nl-brand)" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="130" y="108" font-size="11" fill="var(--nl-text-muted)" text-anchor="middle">上一帧</text>
+    <text x="490" y="108" font-size="11" fill="var(--nl-brand-text)" text-anchor="middle">这一帧</text>
+
+    <line x1="220" y1="85" x2="220" y2="245" stroke="var(--nl-border)" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <line x1="40" y1="145" x2="760" y2="145" stroke="var(--nl-border)" stroke-width="2"/>
+    <polygon points="760,145 752,141 752,149" fill="var(--nl-border)"/>
+    <text x="765" y="149" font-size="10" fill="var(--nl-text-muted)">时间</text>
+
+    <circle cx="200" cy="145" r="8" fill="var(--nl-brand)"/>
+    <text x="200" y="128" font-size="10" fill="var(--nl-brand-text)" text-anchor="middle" font-weight="600">last_imu_</text>
+    <text x="200" y="180" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">上一帧最后一个 IMU</text>
+
+    <circle cx="260" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="320" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="380" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="440" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="500" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="560" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="620" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <circle cx="680" cy="145" r="5" fill="var(--nl-text-muted)"/>
+    <text x="470" y="180" font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">meas.imu(这帧所有 IMU 测量,按时间排序)</text>
+
+    <path d="M 200 120 Q 200 80 260 80" fill="none" stroke="var(--nl-brand)" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <polygon points="260,80 254,76 254,84" fill="var(--nl-brand)"/>
+    <text x="230" y="72" font-size="10" fill="var(--nl-brand-text)" text-anchor="middle" font-weight="600">push_front</text>
+    <text x="230" y="62" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">插到 v_imu 开头</text>
+
+    <circle cx="260" cy="145" r="7" fill="none" stroke="var(--nl-brand)" stroke-width="1.5"/>
+
+    <line x1="260" y1="155" x2="260" y2="210" stroke="#2563eb" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="260" y="225" font-size="10" fill="#2563eb" text-anchor="middle" font-weight="600">imu_beg_time</text>
+    <text x="260" y="238" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">= last_imu_ 的时间</text>
+
+    <line x1="680" y1="155" x2="680" y2="210" stroke="#2563eb" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="680" y="225" font-size="10" fill="#2563eb" text-anchor="middle" font-weight="600">imu_end_time</text>
+    <text x="680" y="238" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">= 这帧最后 IMU 的时间</text>
+
+    <line x1="240" y1="115" x2="240" y2="50" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="240" y="42" font-size="10" fill="#dc2626" text-anchor="middle" font-weight="600">pcl_beg_time</text>
+    <text x="240" y="30" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">点云开始</text>
+  </svg>
+
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-top:10px;padding:8px;background:var(--nl-surface);border-left:3px solid var(--nl-brand);border-radius:0 4px 4px 0">
+    <b>一句话:</b>push_front 是为了让 IMU 时间线<b>跨帧连续</b>。前向传播从 last_imu_ 那一刻开始,顺着这帧的 IMU 一个个推到这帧结尾。三个时间戳后面要用:imu_beg_time / imu_end_time 界定 IMU 序列范围,pcl_beg_time 是点云起点(算点偏移时间用它)。
+  </div>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📖 逐行解读 · 排序 + 算结束时间(:235-238)</div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:10px">这一段把点云按时间排好序,并算出点云的结束时间戳(后面去畸变要用)</div>
+
+  <pre style="background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;overflow-x:auto;margin:0 0 12px;line-height:1.5"><span style="color:var(--nl-text-muted)">235</span>  // 根据点云中每个点的时间戳对点云进行重排序
+<span style="color:var(--nl-text-muted)">236</span>  pcl_out = *(meas.lidar);
+<span style="color:var(--nl-text-muted)">237</span>  sort(pcl_out.points.begin(), pcl_out.points.end(), time_list);
+<span style="color:var(--nl-text-muted)">238</span>  const double &amp;pcl_end_time = pcl_beg_time + pcl_out.points.back().curvature / double(1000);</pre>
+
+  <table class="nl-table">
+    <thead><tr><th>行</th><th>在干嘛</th><th>大白话</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">235</td><td>注释</td><td>说明这段要按时间戳重排点云</td></tr>
+      <tr><td class="nl-mono">236</td><td>拷贝点云</td><td>meas.lidar 是个<b>共享指针</b>(shared_ptr),<code>*</code> 解引用拿到它指向的 PointCloudXYZI 对象,赋值给 pcl_out。从此 pcl_out 装着这帧点云(还没去畸变),后面就<b>就地改写 pcl_out 里每个点</b></td></tr>
+      <tr><td class="nl-mono">237</td><td><b>按时间排序</b></td><td>用 <code>time_list</code>(定义在 :32)做比较函数,把 pcl_out.points 按 <code>curvature</code> 字段<b>从小到大</b>排。curvature 在 avia_handler 里被复用存<b>该点相对帧开头的帧内时间(毫秒)</b>。排完点云就按时间先后排列了</td></tr>
+      <tr><td class="nl-mono">238</td><td><b>算结束时间</b></td><td>pcl_end_time = pcl_beg_time + 最后一点的 curvature / 1000。最后一点的 curvature 是<b>帧内最晚时间(ms)</b>,除 1000 转秒,加上帧开头绝对时间 = 帧结尾绝对时间。这个值后面去畸变循环界定"要把点挪回到哪一刻"</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:16px 0 8px;color:var(--nl-brand-text)">📊 可视化:排序前后 + pcl_end_time 的算法</div>
+  <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px">
+
+    <text x="400" y="22" font-size="12" fill="var(--nl-text-muted)" text-anchor="middle" font-weight="600">① 排序前:点在容器里的存储顺序 ≠ 时间顺序</text>
+    <g font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">
+      <text x="120" y="58">curvature</text>
+      <text x="240" y="58">curvature</text>
+      <text x="360" y="58">curvature</text>
+      <text x="480" y="58">curvature</text>
+      <text x="600" y="58">curvature</text>
+    </g>
+    <g>
+      <circle cx="120" cy="80" r="6" fill="#9ca3af"/>
+      <text x="120" y="100" font-size="10" fill="var(--nl-text)" text-anchor="middle">25ms</text>
+      <circle cx="240" cy="80" r="6" fill="#9ca3af"/>
+      <text x="240" y="100" font-size="10" fill="var(--nl-text)" text-anchor="middle">5ms</text>
+      <circle cx="360" cy="80" r="6" fill="#9ca3af"/>
+      <text x="360" y="100" font-size="10" fill="var(--nl-text)" text-anchor="middle">15ms</text>
+      <circle cx="480" cy="80" r="6" fill="#9ca3af"/>
+      <text x="480" y="100" font-size="10" fill="var(--nl-text)" text-anchor="middle">40ms</text>
+      <circle cx="600" cy="80" r="6" fill="#9ca3af"/>
+      <text x="600" y="100" font-size="10" fill="var(--nl-text)" text-anchor="middle">30ms</text>
+    </g>
+
+    <path d="M 360 115 L 360 140" stroke="var(--nl-border)" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="400" y="132" font-size="11" fill="var(--nl-brand-text)" text-anchor="middle" font-weight="600">↓ sort(:237) 按 curvature 升序</text>
+
+    <text x="400" y="160" font-size="12" fill="var(--nl-text-muted)" text-anchor="middle" font-weight="600">② 排序后:按 curvature 从小到大(时间先后)</text>
+    <g font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">
+      <text x="120" y="195">curvature</text>
+      <text x="240" y="195">curvature</text>
+      <text x="360" y="195">curvature</text>
+      <text x="480" y="195">curvature</text>
+      <text x="600" y="195">curvature</text>
+    </g>
+    <g>
+      <circle cx="120" cy="217" r="6" fill="var(--nl-brand)"/>
+      <text x="120" y="237" font-size="10" fill="var(--nl-text)" text-anchor="middle">5ms</text>
+      <circle cx="240" cy="217" r="6" fill="var(--nl-brand)"/>
+      <text x="240" y="237" font-size="10" fill="var(--nl-text)" text-anchor="middle">15ms</text>
+      <circle cx="360" cy="217" r="6" fill="var(--nl-brand)"/>
+      <text x="360" y="237" font-size="10" fill="var(--nl-text)" text-anchor="middle">25ms</text>
+      <circle cx="480" cy="217" r="6" fill="var(--nl-brand)"/>
+      <text x="480" y="237" font-size="10" fill="var(--nl-text)" text-anchor="middle">30ms</text>
+      <circle cx="600" cy="217" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+      <text x="600" y="237" font-size="10" fill="#dc2626" text-anchor="middle" font-weight="700">40ms</text>
+      <text x="600" y="250" font-size="9" fill="#dc2626" text-anchor="middle">.back() 最后一点</text>
+    </g>
+
+    <text x="400" y="278" font-size="12" fill="var(--nl-text-muted)" text-anchor="middle" font-weight="600">③ 时间轴 + pcl_end_time 公式分解</text>
+    <line x1="100" y1="305" x2="700" y2="305" stroke="var(--nl-border)" stroke-width="2"/>
+    <polygon points="700,305 692,301 692,309" fill="var(--nl-border)"/>
+
+    <line x1="100" y1="295" x2="100" y2="325" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="100" y="340" font-size="10" fill="#2563eb" text-anchor="middle" font-weight="600">pcl_beg_time</text>
+    <text x="100" y="352" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">点云开始(绝对秒)</text>
+
+    <line x1="600" y1="295" x2="600" y2="325" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="600" y="340" font-size="10" fill="#dc2626" text-anchor="middle" font-weight="600">pcl_end_time</text>
+    <text x="600" y="352" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">点云结束(绝对秒)</text>
+
+    <path d="M 100 290 L 600 290" stroke="var(--nl-brand)" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="350" y="284" font-size="10" fill="var(--nl-brand-text)" text-anchor="middle">点云这一帧覆盖的时间段 = 最后一点 curvature / 1000 秒</text>
+
+    <text x="400" y="372" font-size="11" fill="var(--nl-text)" text-anchor="middle"><tspan fill="#dc2626" font-weight="700">pcl_end_time</tspan> = <tspan fill="#2563eb" font-weight="700">pcl_beg_time</tspan> + <tspan font-weight="700">curvature(ms)</tspan> / 1000 → 转<b>秒</b>后相加</text>
+  </svg>
+
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-top:10px;padding:8px;background:var(--nl-surface);border-left:3px solid var(--nl-brand);border-radius:0 4px 4px 0">
+    <b>一句话:</b>这一段让点云<b>按时间排好队</b>,并算出<b>点云结束的绝对时间</b> pcl_end_time。排序是为了去畸变时能<b>按时间顺序</b>处理每个点;pcl_end_time 是"把点挪回哪一刻"的<b>目标时刻</b>(帧结尾)。
+  </div>
+</div>
+
+<div class="nl-card">
+  <div class="nl-card-title">📖 逐行解读 · 初始化 IMUpose(:243-248)</div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:10px">这一段准备一个数组 IMUpose,塞进<b>帧开头那一刻</b>的初始状态(后面前向传播会往里继续塞)</div>
+
+  <pre style="background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;overflow-x:auto;margin:0 0 12px;line-height:1.5"><span style="color:var(--nl-text-muted)">243</span>  state_ikfom imu_state = kf_state.get_x();
+<span style="color:var(--nl-text-muted)">244</span>  IMUpose.clear();
+<span style="color:var(--nl-text-muted)">245</span>
+<span style="color:var(--nl-text-muted)">246</span>  //将初始状态加入IMUpose中,包含有时间间隔,上一帧加速度,上一帧角速度,上一帧速度,上一帧位置,上一帧旋转矩阵
+<span style="color:var(--nl-text-muted)">247</span>  IMUpose.push_back(set_pose6d(0.0, acc_s_last, angvel_last, imu_state.vel, imu_state.pos, imu_state.rot.toRotationMatrix()));</pre>
+
+  <table class="nl-table">
+    <thead><tr><th>行</th><th>在干嘛</th><th>大白话</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">243</td><td><b>取后验状态</b></td><td>从 kf_state 里把当前状态 x_(state_ikfom) 拷一份出来,叫 imu_state。这是<b>上一帧 KF 更新完</b>的状态(后验),作为这帧前向传播的<b>起点</b>。包含 pos/rot/vel/bg/ba/grav/offset 等 8 个字段</td></tr>
+      <tr><td class="nl-mono">244</td><td>清空数组</td><td>IMUpose 是个 <code>vector&lt;Pose6D&gt;</code> 成员(:71 定义),存"每个 IMU 时刻的位姿快照"。先清空,准备从头填</td></tr>
+      <tr><td class="nl-mono">246</td><td>注释</td><td>说明塞进去的是<b>初始状态</b>:时间间隔 + 上一帧加速度/角速度 + 当前速度/位置/旋转</td></tr>
+      <tr><td class="nl-mono">247</td><td><b>塞初始状态</b></td><td>调 <code>set_pose6d</code>(定义在 <a href="file:///home/jinyicheng/auto_navigation/FAST_LIO2_noted-main/FAST-LIO/include/common_lib.h#L170-185" style="color:#2563eb">common_lib.h:170</a>)打包成 Pose6D 塞进 IMUpose。6 个参数顺序:<b>(t, acc, gyr, vel, pos, rot)</b>。这一格的 offset_time=<b>0.0</b>(帧开头相对自己)</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:14px 0 8px;color:var(--nl-brand-text)">🔑 :247 的 6 个参数分别来自哪</div>
+  <table class="nl-table">
+    <thead><tr><th>参数位</th><th>字段</th><th>实参</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">1</td><td>offset_time</td><td class="nl-mono">0.0</td><td>常数 0 —— 帧开头相对自己为 0 秒</td></tr>
+      <tr><td class="nl-mono">2</td><td>acc(加速度)</td><td class="nl-mono">acc_s_last</td><td><b>成员变量</b>(:78),存上一帧末尾的世界系加速度。这帧开头还没有本帧数据,先用上一帧的</td></tr>
+      <tr><td class="nl-mono">3</td><td>gyr(角速度)</td><td class="nl-mono">angvel_last</td><td><b>成员变量</b>(:77),存上一帧末尾的角速度。同理先用上一帧的</td></tr>
+      <tr><td class="nl-mono">4</td><td>vel(速度)</td><td class="nl-mono">imu_state.vel</td><td>从 :243 取的 kf_state 后验速度(IMU 本体相对地图)</td></tr>
+      <tr><td class="nl-mono">5</td><td>pos(位置)</td><td class="nl-mono">imu_state.pos</td><td>从 :243 取的 kf_state 后验位置(IMU 本体相对地图)</td></tr>
+      <tr><td class="nl-mono">6</td><td>rot(旋转矩阵)</td><td class="nl-mono">imu_state.rot.toRotationMatrix()</td><td>从 :243 取的 SO3 转成 3×3 矩阵(IMU→地图旋转)</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:16px 0 8px;color:var(--nl-brand-text)">📦 Pose6D 结构定义(IMUpose 每个元素的 6 个字段)</div>
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-bottom:8px">来源:<a href="file:///home/jinyicheng/auto_navigation/FAST_LIO2_noted-main/FAST-LIO/msg/Pose6D.msg" style="color:#2563eb">Pose6D.msg</a> · .msg 注释说"at the Lidar origin",但代码里实际存的是<b> IMU 本体</b>的状态(去畸变公式再经 offset 外参转 Lidar 系)</div>
+  <table class="nl-table">
+    <thead><tr><th>字段</th><th>类型</th><th>.msg 注释含义</th><th>代码里实际存的(:308-315)</th></tr></thead>
+    <tbody>
+      <tr><td class="nl-mono">offset_time</td><td>float64</td><td>相对帧首 Lidar 点的 IMU 测量时间偏移(秒)</td><td>:314 <code>offs_t = tail 时间 - pcl_beg_time</code></td></tr>
+      <tr><td class="nl-mono">acc[3]</td><td>float64[3]</td><td>预积分总加速度(<b>全局系</b>,Lidar 原点)</td><td>:308-312 <code>acc_s_last = rot*(acc_avr - ba) + grav</code> —— 去零偏后转到世界系<b>再加重力</b>(世界系含重力的总加速度)</td></tr>
+      <tr><td class="nl-mono">gyr[3]</td><td>float64[3]</td><td>去零偏角速度(<b>本体系</b>,Lidar 原点)</td><td>:308 <code>angvel_last = angvel_avr - bg</code> —— <b>没乘旋转</b>,留在 IMU 本体系</td></tr>
+      <tr><td class="nl-mono">vel[3]</td><td>float64[3]</td><td>预积分速度(<b>全局系</b>,Lidar 原点)</td><td><code>imu_state.vel</code> —— IMU 本体相对地图的速度</td></tr>
+      <tr><td class="nl-mono">pos[3]</td><td>float64[3]</td><td>预积分位置(<b>全局系</b>,Lidar 原点)</td><td><code>imu_state.pos</code> —— IMU 本体相对地图的位置</td></tr>
+      <tr><td class="nl-mono">rot[9]</td><td>float64[9]</td><td>预积分旋转(<b>全局系</b>,3×3 矩阵展平,Lidar 原点)</td><td><code>imu_state.rot.toRotationMatrix()</code> —— IMU→地图旋转矩阵,9 个数按行展平</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:13px;font-weight:600;margin:16px 0 8px;color:var(--nl-brand-text)">📊 可视化:IMUpose 数组填第一个格子</div>
+  <svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;background:var(--nl-surface);border:1px solid var(--nl-border);border-radius:6px">
+    <text x="400" y="24" font-size="12" fill="var(--nl-text-muted)" text-anchor="middle" font-weight="600">IMUpose 是个 vector,这一段往里塞了第 1 格(后面循环继续塞)</text>
+
+    <rect x="60" y="60" width="120" height="120" fill="var(--nl-brand-muted)" stroke="var(--nl-brand)" stroke-width="2" rx="4"/>
+    <text x="120" y="78" font-size="11" fill="var(--nl-brand-text)" text-anchor="middle" font-weight="700">[0] 第 1 格</text>
+    <text x="120" y="93" font-size="9" fill="var(--nl-text)" text-anchor="middle">offset_time=0.0</text>
+    <line x1="70" y1="100" x2="170" y2="100" stroke="var(--nl-border)" stroke-width="0.5"/>
+    <text x="120" y="112" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">acc = acc_s_last</text>
+    <text x="120" y="125" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">gyr = angvel_last</text>
+    <text x="120" y="138" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">vel = imu_state.vel</text>
+    <text x="120" y="151" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">pos = imu_state.pos</text>
+    <text x="120" y="164" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">rot = imu_state.rot</text>
+
+    <rect x="180" y="60" width="100" height="120" fill="none" stroke="var(--nl-border)" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+    <text x="230" y="125" font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">[1] 待填</text>
+
+    <rect x="280" y="60" width="100" height="120" fill="none" stroke="var(--nl-border)" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+    <text x="330" y="125" font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">[2] 待填</text>
+
+    <rect x="380" y="60" width="100" height="120" fill="none" stroke="var(--nl-border)" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+    <text x="430" y="125" font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">[3] 待填</text>
+
+    <text x="540" y="125" font-size="14" fill="var(--nl-text-muted)" text-anchor="middle">. . .</text>
+
+    <rect x="580" y="60" width="100" height="120" fill="none" stroke="var(--nl-border)" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+    <text x="630" y="125" font-size="10" fill="var(--nl-text-muted)" text-anchor="middle">[N] 待填</text>
+
+    <text x="400" y="200" font-size="10" fill="var(--nl-brand-text)" text-anchor="middle" font-weight="600">↓ 前 1 格已就绪,后面循环(:260)每次 predict 完塞一格</text>
+    <text x="400" y="218" font-size="9" fill="var(--nl-text-muted)" text-anchor="middle">每一格 = 某个 IMU 时刻的"位姿快照"(给去畸变用)</text>
+  </svg>
+
+  <div style="font-size:12px;color:var(--nl-text-muted);margin-top:10px;padding:8px;background:var(--nl-surface);border-left:3px solid var(--nl-brand);border-radius:0 4px 4px 0">
+    <b>一句话:</b>把<b>帧开头那一刻</b>的状态(位置/速度/旋转从 kf_state 拿,加速度/角速度用上一帧的成员变量)打包成 Pose6D,塞进 IMUpose 数组当<b>第 0 格</b>。后面前向传播循环每推一步,就往这个数组继续塞一格。
+  </div>
+</div>
+
+</body>
+</html>
