@@ -61,6 +61,8 @@ class OffboardTakeoff(Node):
         self.n = 0
         self.arming_state = -1
         self.nav_state = -1
+        self.x = NAN
+        self.y = NAN
         self.altitude = NAN
         self.create_timer(TICK, self.tick)
         self.get_logger().info(f'开始，目标高度 {-TARGET_Z:.0f} 米。前 2 秒预热，之后起飞。')
@@ -83,7 +85,7 @@ class OffboardTakeoff(Node):
         if self.n % (PUB_HZ * 2) == 0:           # 每 2 秒打一行进度
             self.get_logger().info(
                 f'[ {self.n * TICK:4.0f}s ] arming_state={self.arming_state} '
-                f'nav_state={self.nav_state} 高度={-self.altitude:.2f}m'
+                f'nav_state={self.nav_state}  x={self.x:.2f}m y={self.y:.2f}m 高度={-self.altitude:.2f}m'
             )
 
     def publish_offboard_control_mode(self):
@@ -123,6 +125,8 @@ class OffboardTakeoff(Node):
         self.nav_state = msg.nav_state
 
     def on_local_pos(self, msg):
+        self.x = msg.x
+        self.y = msg.y
         self.altitude = msg.z
 
     def on_ack(self, msg):

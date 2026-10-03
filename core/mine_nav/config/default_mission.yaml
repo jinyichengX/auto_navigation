@@ -1,0 +1,91 @@
+task_manager:
+  ros__parameters:
+    mode: explore
+    priority: 50
+    fly_alt_enu: 1.2
+    return_home_when_done: true
+    note: "默认井下探索：任意占用图，不绑定十字巷道"
+    area_min_x: -9.0
+    area_min_y: -9.0
+    area_max_x: 9.0
+    area_max_y: 9.0
+    has_goal: false
+    goal_x: 0.0
+    goal_y: 0.0
+    # 禁飞区示例：[xmin, ymin, xmax, ymax, ...]；没有就别写
+    # no_fly_zones: [-1.0, -1.0, 1.0, 1.0]
+
+explorer:
+  ros__parameters:
+    frontier_unknown_need: 1
+    sample_step: 0.4
+    goal_hold_sec: 1.5
+    replan_period: 1.0
+    home_tol: 0.8
+    robot_radius: 0.40
+    # 探索落点按硬半径检查，避免目标贴柱后全局搜不通
+    goal_radius: 0.40
+    nearest_search_radius: 3.0
+    nearest_search_step: 0.25
+    prefer_mid_dist: 4.0
+    visited_clear_radius: 0.8
+    visited_max: 60
+    info_gain_weight: 1.0
+    dist_weight: 0.12
+    # stuck 后先稳住当前目标，至少 8s 再换；真正换点偏好近处
+    stuck_switch_cooldown: 8.0
+    frontier_pullback: 0.70
+    # 井下墙后未知多：邻域贴未知也算前沿；射线开口只加分
+    frontier_ray_range: 2.8
+    frontier_ray_angles: 12
+    # 非法目标冷却 + 仅近处连通检查；中远距离交给全局规划绕
+    invalid_goal_cooldown: 2.0
+    reachable_line_max: 2.2
+    # 过早 done 兜底：贴未知 free / 朝最近未知；地图仍大量未知时禁止回原点
+
+global_planner:
+  ros__parameters:
+    # 硬碰撞半径略收；膨胀别太大，否则巷道红柱会把通道搜死
+    robot_radius: 0.35
+    path_step: 0.5
+    replan_period: 1.0
+    allow_unknown: true
+    unknown_cost: 1.5
+    inflation_extra: 0.05
+    goal_snap_radius: 2.0
+    start_snap_radius: 1.5
+    # 净空主要靠代价推中线，不靠把通道膨胀堵死
+    clear_cost_gain: 1.10
+
+local_controller:
+  ros__parameters:
+    # 贴障更保守：略降速，减少撞墙后高度掉/EKF 炸
+    max_speed: 0.30
+    avoid_speed_scale: 0.55
+    fly_alt_ned: -1.2
+    # hard: 机体真实碰撞；soft: 净空偏好，禁止侧移硬推
+    robot_radius: 0.40
+    soft_radius: 0.55
+    arrive_dist: 0.45
+    hold_sec: 1.0
+    lookahead: 1.6
+    unknown_near: 1.2
+    # 终点冲刺只在“直线无真实占用”时启用，距离再收一点，避免半路穿柱
+    final_approach_dist: 1.0
+    replan_period: 0.25
+    stuck_timeout_sec: 5.0
+    path_stale_sec: 3.0
+    # 任意地图短距采样绕障；硬半径保证能过，软半径只做净空打分
+    sample_radius: 2.4
+    sample_rings: 4
+    sample_angles: 24
+    progress_weight: 1.0
+    detour_weight: 0.35
+    clear_bonus: 0.45
+    # 新路径大掉头先悬停确认，避免贴墙急转撞墙
+    turn_hold_deg: 110.0
+    alt_drop_limit: 0.28
+    min_fly_alt: 0.70
+    # EKF 发散保护：xy_valid=false / 位姿离谱时停跟路径
+    pose_abs_limit: 80.0
+    pose_jump_limit: 2.5

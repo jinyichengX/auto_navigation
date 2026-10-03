@@ -1,0 +1,68 @@
+map_inflation:
+  ros__parameters:
+    input_map_topic: "/projected_map"
+    output_map_topic: "/inflated_map"
+    # 机体半径 + 安全余量；按飞机改，不绑具体巷道
+    inflation_radius: 0.55
+    occ_threshold: 50
+    # false=未知不膨胀；井下未知很多时建议 false，由 RRT 自己决定未知是否可走
+    inflate_unknown: false
+
+rrt_planner:
+  ros__parameters:
+    map_topic: "/inflated_map"
+    odom_topic: "/Odometry"
+    goal_topic: "/goal_pose"
+    path_topic: "/global_path"
+    # 空字符串=跟随地图 frame_id（通常是 camera_init）
+    frame_id: ""
+
+    step_size: 0.40
+    goal_bias: 0.20
+    goal_tolerance: 0.35
+    max_iterations: 4000
+    occ_threshold: 50
+    # 膨胀图上未知仍建议当障碍，避免穿未建区域
+    treat_unknown_as_occ: true
+    start_snap_radius: 1.0
+    goal_snap_radius: 1.5
+    replan_period: 0.5
+    # false=周期重规划（起点随飞机动）；true=只在新目标时规划
+    replan_on_goal_only: false
+    path_yaw_from_segment: true
+
+local_planner:
+  ros__parameters:
+    map_topic: "/inflated_map"
+    odom_topic: "/Odometry"
+    global_path_topic: "/global_path"
+    local_path_topic: "/local_path"
+    frame_id: ""
+    lookahead: 1.6
+    local_horizon: 2.5
+    sample_radius: 1.8
+    sample_angles: 32
+    sample_rings: 4
+    path_step: 0.25
+    replan_period: 0.20
+    arrive_dist: 0.40
+    escape_radius: 1.5
+    occ_threshold: 50
+    treat_unknown_as_occ: true
+    progress_weight: 1.0
+    detour_weight: 0.45
+    clear_bonus: 0.35
+
+path_tracker:
+  ros__parameters:
+    path_topic: "/local_path"
+    global_path_topic: "/global_path"
+    local_pos_topic: "/fmu/out/vehicle_local_position_v1"
+    max_speed: 0.30
+    fly_alt_ned: -1.2
+    arrive_dist: 0.40
+    lookahead: 1.0
+    hold_sec: 2.0
+    path_stale_sec: 5.0
+    pose_abs_limit: 80.0
+    pose_jump_limit: 2.5

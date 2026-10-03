@@ -1,0 +1,25 @@
+建图
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=tunnel_cross PX4_GZ_MODEL_POSE="0,0,0.2" make px4_sitl gz_x500_livox_mid360
+MicroXRCEAgent udp4 -p 8888
+ros2 run px4_control gz_lidar_bridge
+ros2 run px4_control px4_imu_bridge
+ros2 launch fast_lio mapping.launch.py rviz:=false
+ros2 run px4_control fastlio_odom_bridge
+ros2 launch px4_control octomap_mapping.launch.py
+
+2D导航
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=tunnel_cross PX4_GZ_MODEL_POSE="0,0,0.2" make px4_sitl gz_x500_livox_mid360
+MicroXRCEAgent udp4 -p 8888
+ros2 run px4_control gz_lidar_bridge
+ros2 run px4_control px4_imu_bridge
+ros2 launch fast_lio mapping.launch.py rviz:=false
+ros2 run px4_control fastlio_odom_bridge
+ros2 run octomap_server octomap_server_node --ros-args \
+  --params-file ~/auto_navigation/install/px4_control/share/px4_control/config/octomap_tunnel.yaml \
+  -p frame_id:=camera_init \
+  -p latch:=true \
+  -p octomap_path:=/home/jinyicheng/auto_navigation/maps/mine.bt
+ros2 topic pub --once /goal_pose geometry_msgs/PoseStamped \
+"{header: {frame_id: 'camera_init'}, pose: {position: {x: 0.0, y: 5.0, z: 0.0}, orientation: {w: 1.0}}}"
+
+

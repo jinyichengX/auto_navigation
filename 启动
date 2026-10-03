@@ -1,0 +1,322 @@
+# 当前仿真启动手册（无GPS + FAST-LIO 视觉定位）
+
+按终端顺序启动。每个终端都先 source 自己的环境。
+
+## 0. 如果上次仿真异常退出
+```bash
+sudo rm -f /tmp/px4-sock-0
+```
+
+## 1. 终端A：启动 PX4 + Gazebo
+```bash
+cd ~/PX4-Autopilot
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=tunnel_cross PX4_GZ_MODEL_POSE="0,0,0.2" make px4_sitl gz_x500_livox_mid360
+```
+
+说明：
+- 现在用封闭十字巷道 `tunnel_cross`：有底板、顶板、四壁、端头墙和交叉口柱子。
+- 出生点放在交叉口中心 `0,0,0.2`，四周近处都有特征，适合 FAST-LIO。
+- 巷道大约 20x20 m，净高约 3 m，飞的时候别撞柱子和墙。
+- `PX4_GZ_NO_FOLLOW=1` 会关掉相机跟随，避免起飞时被柱子挡住。
+
+如果仿真已经开着、相机还在跟着飞，临时关掉跟随：
+```bash
+gz topic -t /gui/track -m gz.msgs.CameraTrack -p "track_mode: NONE"
+```
+
+等 Gazebo 出来、飞机落地后，在这个 PX4 控制台确认参数：
+```bash
+param show COM_ARM_WO_GPS
+param show SYS_HAS_GPS
+param show SYS_HAS_MAG
+param show EKF2_MAG_TYPE
+param show COM_DISARM_PRFLT
+param show EKF2_HGT_REF
+param show EKF2_GPS_CTRL
+param show EKF2_EV_CTRL
+```
+
+期望值：
+```text
+COM_ARM_WO_GPS = 1
+SYS_HAS_GPS = 0
+SYS_HAS_MAG = 0
+EKF2_MAG_TYPE = 5
+COM_DISARM_PRFLT = 10
+EKF2_HGT_REF = 3
+EKF2_GPS_CTRL = 0
+EKF2_EV_CTRL = 15
+```
+
+如果某项不对，临时改完后保存：
+```bash
+param set 参数名 值
+param save
+```
+
+确认 Gazebo 真值话题已经关掉：
+```bash
+gz topic -l | grep odometry_with_covariance
+```
+期望：没有 `/model/x500_livox_mid360_0/odometry_with_covariance`
+
+## 2. 终端B：启动 MicroXRCEAgent
+```bash
+MicroXRCEAgent udp4 -p 8888
+```
+
+## 3. 终端C：ROS 2 环境
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+```
+
+## 4. 终端D：点云桥
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 run px4_control gz_lidar_bridge
+```
+
+## 5. 终端E：IMU 桥
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 run px4_control px4_imu_bridge
+```
+
+## 6. 终端F：FAST-LIO
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 launch fast_lio mapping.launch.py rviz:=false
+```
+
+可选确认定位输出：
+```bash
+ros2 topic hz /Odometry
+```
+
+## 7. 终端G：FAST-LIO -> 飞控视觉定位桥
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 run px4_control fastlio_odom_bridge
+```
+
+确认飞控已吃到视觉：
+```bash
+ros2 topic echo /fmu/out/estimator_status_flags --qos-reliability best_effort --once
+```
+重点看这些为 true：
+```text
+cs_ev_pos
+cs_ev_yaw
+cs_ev_hgt
+cs_ev_vel
+```
+
+可选看位置：
+```bash
+PYTHONUNBUFFERED=1 ros2 topic echo /fmu/out/vehicle_local_position_v1 --qos-reliability best_effort | grep -E "^(x|y|z):"
+```
+
+## 8. 终端H：3D 体素地图（octomap）
+确认 FAST-LIO 已在出 `/cloud_registered_body` 后启动：
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 launch px4_control octomap_mapping.launch.py
+```
+
+可选检查：
+```bash
+ros2 topic hz /octomap_binary
+ros2 topic hz /projected_map
+```
+
+RViz 里看地图：
+- Fixed Frame 选 `camera_init`
+- 加 `MarkerArray`，话题 `/occupied_cells_vis_array`（3D 障碍体素）
+- 也可加 `Map`，话题 `/projected_map`（俯视可走图）
+
+说明：
+- 吃的是 FAST-LIO 机体点云 `/cloud_registered_body`
+- 地图坐标系是 `camera_init`
+- 会顺手投影一张 2D `/projected_map`，后面避障/探索都能用
+
+## 9. 控制验证
+还是在已 source 的 ROS 终端里跑。
+
+起飞悬停测试：
+```bash
+ros2 run px4_control offboard_takeoff
+```
+
+键盘遥控：
+```bash
+ros2 run px4_control keyboard_teleop
+```
+
+## 10. 巷道自主遍历（航点）
+确认定位正常后，在已 source 的 ROS 终端里跑：
+```bash
+ros2 run px4_control tunnel_tour
+```
+
+说明：
+- 飞机会起飞到约 1.2 米，然后按顺序逛北/东/南/西四条巷道，最后回原点降落。
+- 每个端点大约飞到 7 米处，离端头墙留了安全距离。
+- 到点后会悬停 1 秒再去下一点；不用手动干预。
+- 开着 octomap 时，飞一圈地图会逐渐长出来。
+
+## 11. 带局部避障的遍历
+北巷已经加了一根红色挡路柱子（约北向 3.5 m，并稍微偏东，方便从西侧绕）。
+
+改地图后必须重启仿真才会看到新柱子：
+```bash
+# 先把旧仿真关掉，再清残留
+sudo rm -f /tmp/px4-sock-0
+cd ~/PX4-Autopilot
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=tunnel_cross PX4_GZ_MODEL_POSE="0,0,0.2" make px4_sitl gz_x500_livox_mid360
+```
+
+然后按原来顺序把桥、FAST-LIO、odom 桥、octomap 都开起来，最后跑：
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+ros2 run px4_control tunnel_tour_avoid
+```
+
+说明：
+- 起飞后会先在交叉口悬停约 6 秒建图；最多等 12 秒，超时也会继续飞，不会卡死。
+- 避障看的是 `/projected_map` 占用格，不是颜色：墙、四根立柱、红柱只要 occupied 都算障碍。
+- 绕障方式是走廊飞行，禁止斜着切角：
+  1. 前方挡了：先横移到侧道
+  2. 再沿侧道平行越过
+  3. 横移回中心安全后，再回中心线
+- 侧移量故意收小（约 0.70~0.85 m），避免贴交叉口立柱/侧墙。
+- 日志里出现这些字样就说明正常：
+  - `起飞到位，悬停建图`
+  - `建图等待结束（occ=..., free=...）`
+  - `前方检查 ... | occupied ...`
+  - `检测到障碍(...)，先侧移 / 沿侧道前进`
+  - `前方已通，先回到中心线`
+- 如果起飞悬停时一直是 `occ=0 free=0`，先检查：
+  1. `ros2 topic hz /cloud_registered_body`
+  2. `ros2 topic hz /projected_map`
+  3. octomap 终端有没有报错
+- RViz 可加 `Path` 话题 `/avoid_path` 看当前绕障意图。
+- 撞墙/撞柱后定位会崩，必须整套重启后再测。
+- 这一节是旧的“航点+避障混一起”脚本，新架构请看第 12 节。
+
+## 12. 新架构：C++ 四层栈 `mine_nav`
+整套已经迁到 C++ 功能包 `core/mine_nav`，每层独立目录；算法按**任意未知井下占用图**写，不绑十字巷道。
+
+```
+任务层 task_manager --/mission--> 探索器 explorer --/explore_goal-->
+全局规划器 global_planner --/global_path--> 局部控制器 local_controller --setpoint--> 飞控
+                                              ^
+                                              |
+                                        /projected_map
+```
+
+编译：
+```bash
+cd ~/auto_navigation
+source /opt/ros/humble/setup.bash
+colcon build --base-paths core --packages-select mine_nav
+source install/setup.bash
+```
+
+前面桥、FAST-LIO、odom 桥、octomap 都照旧开着，再开四层：
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+# 建议固定一个干净 DOMAIN，避免 DDS 幽灵节点
+export ROS_DOMAIN_ID=42
+ros2 launch mine_nav mine_nav.launch.py
+```
+
+默认任务参数在 `core/mine_nav/config/default_mission.yaml`：
+- `mode: explore`：探索器在任务区 ∩ 当前已知 free 上找前沿；无图不瞎选
+- `mode: goto` + `has_goal: true` + `goal_x/goal_y`：飞到指定点（不可达会 snap）
+- `mode: return_home` / `abort` / `idle`
+- `area_min_*` / `area_max_*`：作业范围
+- `no_fly_zones`：禁飞区，按 `[xmin, ymin, xmax, ymax, ...]` 写；没有就别写空数组
+- 机体半径默认 `robot_radius: 0.45`；局部 `final_approach_dist: 1.5`（终点冲刺忽略未知）
+
+运行中改任务示例：
+```bash
+ros2 param set /task_manager mode goto
+ros2 param set /task_manager has_goal true
+ros2 param set /task_manager goal_x 4.5
+ros2 param set /task_manager goal_y 4.0
+# 禁飞区：掐断斜向主通道（清空时别写 []，会变成 bool_array；写退化矩形）
+ros2 param set /task_manager no_fly_zones "[0.8,0.4,3.8,4.0]"
+ros2 param set /task_manager no_fly_zones "[0.0,0.0,0.0,0.0]"
+```
+
+看链路是否通：
+```bash
+ros2 topic echo /mission --once
+ros2 topic echo /explore_goal --once
+ros2 topic echo /global_path --once
+ros2 topic echo /local_controller/status --once
+```
+
+没开仿真时，先用假世界做节点级冒烟（默认 irregular；位姿跟随局部 setpoint；飞到哪揭到哪）：
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+export ROS_DOMAIN_ID=42
+# 终端1
+ros2 run mine_nav fake_world.py --ros-args -p map_type:=irregular
+# 需要旧十字回归时：
+# ros2 run mine_nav fake_world.py --ros-args -p map_type:=cross
+# 终端2
+ros2 launch mine_nav mine_nav.launch.py
+```
+自测预期（irregular）：
+- `explore`：连续多个前沿 `arrived`，前沿耗尽后 `explore_done_return_home` → `explore_done_hold_home`
+- 局部用任意方向短距采样绕障，不应长期钉死在 `stuck`
+- `goto (3.5,3.0)` / `goto (4.5,4.0)`：能 `tracking` 到目标附近并 `arrived`
+- 加禁飞后 `goto` 被掐断：日志出现 `A* 失败且直线也不可走（禁飞/障碍），不发穿障路径`，局部停在 `waiting_path`
+- 清空禁飞后同一目标恢复 `tracking` 并到达
+
+说明：
+- 假世界有单实例保护：同一 DOMAIN 下 `/projected_map` 已有发布者会拒启。若拒启或节点幽灵，换 `ROS_DOMAIN_ID`。
+- 旧的 Python `local_controller` / `fake_global_planner` 已删除，不要再跑。
+- 旧脚本 `tunnel_cloud_avoid` 还在，只当对照，正式走四层。
+- 状态看 `/local_controller/status`：`waiting_path` / `tracking` / `avoiding` / `stuck` / `arrived`
+- RViz 可看：`/explore_goal`、`/global_path`、`/local_path`
+- 撞墙/撞柱后定位会崩，必须整套重启后再测。
+
+## 13. 明早仿真实测最短清单
+按这个顺序开，别跳：
+
+1. 终端A：PX4 + Gazebo（第1节）
+2. 终端B：`MicroXRCEAgent udp4 -p 8888`
+3. 终端C~H：点云桥 → IMU 桥 → FAST-LIO → odom 桥 → octomap（第3~8节）
+4. 确认：
+```bash
+source /opt/ros/humble/setup.bash
+source ~/auto_navigation/install/setup.bash
+export ROS_DOMAIN_ID=0   # 跟仿真其它终端保持一致；若有幽灵再整体换
+ros2 topic hz /cloud_registered_body
+ros2 topic hz /fmu/out/vehicle_odometry
+ros2 topic hz /projected_map
+```
+5. 再开四层：
+```bash
+ros2 launch mine_nav mine_nav.launch.py
+```
+6. 先 `explore` 冒烟 1~2 分钟，看 `/local_controller/status` 能进 `tracking`/`arrived`，且位姿在动。
+7. 再测一次 `goto` + 临时禁飞（参数命令见第12节）。
+8. 出事优先看：PX4 控制台、FAST-LIO 是否丢定位、`/projected_map` 有没有 free/occ、局部是不是 `stuck`。
+
+## 备注
+- 现在视觉位置来自 FAST-LIO，不再用 Gazebo 真值。
+- Gazebo 真值插件已在 `x500_livox_mid360/model.sdf` 里注释掉。
+- 改完 model.sdf 后必须重启仿真才生效。
+- 不要用 sudo 跑仿真。
