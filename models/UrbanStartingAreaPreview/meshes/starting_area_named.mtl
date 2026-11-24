@@ -1,0 +1,34 @@
+newmtl Floor
+Kd 0.1 0.9 0.1
+Ka 0.05 0.4 0.05
+d 1.0
+illum 1
+map_Kd ../materials/textures/Floor_Albedo.jpg
+
+newmtl ConcreteTiles
+Kd 1.0 0.7 0.1
+Ka 0.4 0.3 0.05
+d 1.0
+illum 1
+map_Kd ../materials/textures/ConcreteTiles_Albedo.jpg
+
+newmtl Lights
+Kd 1.0 1.0 0.1
+Ka 0.4 0.4 0.05
+d 1.0
+illum 1
+map_Kd ../materials/textures/Lights_Albedo.jpg
+
+newmtl Wall
+Kd 0.1 0.4 1.0
+Ka 0.05 0.2 0.4
+d 1.0
+illum 1
+map_Kd ../materials/textures/Wall_Albedo.jpg
+
+newmtl MetalBrushed
+Kd 1.0 0.1 1.0
+Ka 0.4 0.05 0.4
+d 1.0
+illum 1
+map_Kd ../materials/textures/MetalBrushed_Albedo.jpg

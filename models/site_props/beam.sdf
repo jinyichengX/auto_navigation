@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- 倒伏木梁 0.30 x 3.00 x 0.26，原点在底面中心（放置时 z = 地面） -->
+<sdf version="1.9">
+  <model name="wood_beam">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.13 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 3.00 0.26</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 0.13 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 3.00 0.26</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.30 0.22 0.14 1</ambient>
+          <diffuse>0.44 0.32 0.20 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

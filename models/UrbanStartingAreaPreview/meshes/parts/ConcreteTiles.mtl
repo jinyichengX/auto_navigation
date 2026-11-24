@@ -1,0 +1,5 @@
+newmtl ConcreteTiles
+Kd 1.0 0.7 0.1
+Ka 0.400 0.280 0.040
+d 1.0
+illum 1

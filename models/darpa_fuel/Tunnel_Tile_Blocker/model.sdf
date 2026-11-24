@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="tunnel_tile_blocker">
+    <static>true</static>
+    <link name="link">
+      <pose>0 0 0 0 0 0</pose>
+
+      
+      <collision name="collision_blocker">
+        <pose>0.000 0.000 0.085 0 0.000000 0</pose>
+        <geometry><box><size>0.759 0.759 0.755</size></box></geometry>
+      </collision>
+
+<visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>meshes/tunnel_tile_blocker.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>1.0 1.0 1.0</specular>
+          <pbr>
+            <metal>
+              <albedo_map>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_1/materials/textures/ConstrainedWall_Albedo.jpg</albedo_map>
+              <normal_map>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_1/materials/textures/ConstrainedWall_Normal.jpg</normal_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

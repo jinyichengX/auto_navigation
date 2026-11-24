@@ -223,7 +223,7 @@ void ImuProcess::IMU_init(const MeasureGroup &meas, esekfom::esekf<state_ikfom, 
   last_imu_ = meas.imu.back();                                                 //将最后一帧的imu数据传入last_imu_中，在UndistortPcl使用到了
 }
 
-//正向传播 反向传播 去畸变，这里涉及到了Lidar的去畸变问题
+//正向传播 反向传播 把每个点变换到扫描结束时刻，这里涉及到了Lidar的去畸变问题
 void ImuProcess::UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, PointCloudXYZI &pcl_out)
 {
   auto v_imu = meas.imu;                                            //拿到当前的imu数据

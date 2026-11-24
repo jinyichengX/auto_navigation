@@ -1,0 +1,30 @@
+===[873|Heading 1]===
+附录 A  系统启动与关键参数
+===[874|学位论文正文]===
+本附录给出复现实验所用的启动顺序和关键参数，便于读者复核。
+===[875|Heading 2]===
+A.1 启动顺序
+===[876|Normal]===
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=urban_starting_area_with_pedestrians PX4_GZ_MODEL_POSE="-40.877358,64.956595,1.5" make px4_sitl gz_x500_livox_mid360
+===[877|Normal]===
+MicroXRCEAgent udp4 -p 8888
+===[878|Normal]===
+ros2 run nav3 fastlio2_input_bridge
+===[879|Normal]===
+ros2 launch fast_lio mapping.launch.py rviz:=false use_sim_time:=true
+===[880|Normal]===
+ros2 run nav3 fastlio_odom_bridge --ros-args -p use_sim_time:=true
+===[881|Normal]===
+ros2 run nav3 offboard_control --ros-args -p use_sim_time:=true
+===[882|Normal]===
+ros2 launch px4_control octomap_mapping.launch.py use_sim_time:=true
+===[883|Normal]===
+ros2 run nav3 nbvplanner_explorer --ros-args -p use_sim_time:=true
+===[884|Heading 2]===
+A.2 关键参数
+===[885|表题]===
+表 A-1  主要运行参数
+===[886|Normal]===
+
+===[887|Normal]===
+

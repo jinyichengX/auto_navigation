@@ -8,7 +8,7 @@ import os
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('px4_control')
-    default_params = os.path.join(pkg_share, 'config', 'octomap_tunnel.yaml')
+    default_params = os.path.join(pkg_share, 'config', 'octomap.yaml')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -21,12 +21,18 @@ def generate_launch_description():
             default_value='/cloud_registered_body',
             description='机体坐标系点云（需要有 camera_init -> body 的 TF）',
         ),
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='true',
+            description='Use simulation (Gazebo) clock if true',
+        ),
         Node(
             package='octomap_server',
             executable='octomap_server_node',
             name='octomap_server',
             output='screen',
-            parameters=[LaunchConfiguration('params_file')],
+            parameters=[LaunchConfiguration('params_file'),
+                        {'use_sim_time': LaunchConfiguration('use_sim_time')}],
             remappings=[
                 ('cloud_in', LaunchConfiguration('cloud_topic')),
             ],

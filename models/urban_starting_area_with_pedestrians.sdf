@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Urban Starting Area + 动态行人 + 北侧井下（DARPA SubT）
+  - 大厅北墙开约 4m 门洞，外接 simple_tunnel_03
+  - 使用 Gazebo Harmonic Actor，不依赖 hunav_gazebo_wrapper
+  - 用法：复制到 PX4 worlds 后，用 PX4_GZ_WORLD=urban_starting_area_with_pedestrians 启动
+-->
+<sdf version="1.9">
+  <world name="urban_starting_area_with_pedestrians">
+    <physics type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+    <scene>
+      <grid>true</grid>
+      <ambient>0.55 0.55 0.58 1</ambient>
+      <background>0.65 0.72 0.82 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <light name="sun" type="directional">
+      <pose>0 0 80 0 -0.5 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>1.2</intensity>
+      <direction>0.25 0.35 -1.0</direction>
+      <diffuse>1.0 0.98 0.95 1</diffuse>
+      <specular>0.35 0.35 0.35 1</specular>
+      <attenuation>
+        <range>4000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+    </light>
+
+    <light name="fill" type="directional">
+      <pose>0 0 40 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>0.45</intensity>
+      <direction>-0.3 -0.2 -1.0</direction>
+      <diffuse>0.75 0.80 0.90 1</diffuse>
+      <specular>0.05 0.05 0.05 1</specular>
+      <attenuation>
+        <range>4000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+    </light>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg>8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+
+    <include>
+      <static>true</static>
+      <name>urban_starting_area</name>
+      <!-- Hall center ~ (4.10, 24.75, 7.512); shift so hall center/floor sit at world origin -->
+      <pose>-4.097744 -24.7535095 -7.512 0 0 0</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaNorthPortal/model.sdf</uri>
+    </include>
+
+    <!--
+      仓库（Depot）原尺寸：南墙/西南角横放
+      - yaw=0，约 30.6 x 15.6 m
+      - 相对大厅墙体内缩约 2 m，避免穿出大厅
+      - 覆盖大约 x[-21.7, 8.9], y[-18.9, -3.3]，避开原点行人区
+      - 若仍穿模：优先减小 |x|/|y| 往大厅内侧挪
+    -->
+    <include>
+      <static>true</static>
+      <name>warehouse</name>
+      <pose>-3 2 -0.09 0 0 1.5707963</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/warehouse/model.sdf</uri>
+    </include>
+
+    <!--
+      北侧井下：DARPA SubT simple_tunnel_03（Harmonic 适配）
+      - 原世界入口在 (10,0)，绕 Z +90° 后接到大厅北墙门洞
+      - 真实门洞中心约 x=-0.88，北墙 y≈14.91
+      - 已切开北侧外延 ConcreteTiles + Floor 通道（y≈15.75 / 20.75）
+      - 当前入口约 (-0.88, 14.96, 0）；PX4 worlds 已同步此文件
+      - DARPA 隧道模型已本地化到 models/darpa_fuel，启动不再依赖 Fuel 下载
+    -->
+
+    <!-- 门洞补墙：北墙开洞比隧道口更宽，封两侧缝 -->
+    <model name="mine_portal_fill_west">
+      <static>true</static>
+      <pose>-5.687358 14.956596 1.500000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>2.0 0.4 3.2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>2.0 0.4 3.2</size></box></geometry>
+          <material>
+            <ambient>0.35 0.33 0.30 1</ambient>
+            <diffuse>0.45 0.42 0.38 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="mine_portal_fill_east">
+      <static>true</static>
+      <pose>3.932642 14.956596 1.500000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>2.0 0.4 3.2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>2.0 0.4 3.2</size></box></geometry>
+          <material>
+            <ambient>0.35 0.33 0.30 1</ambient>
+            <diffuse>0.45 0.42 0.38 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="mine_portal_lintel">
+      <static>true</static>
+      <pose>-0.877358 14.956596 3.550000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>5.0 0.4 0.9</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>5.0 0.4 0.9</size></box></geometry>
+          <material>
+            <ambient>0.35 0.33 0.30 1</ambient>
+            <diffuse>0.45 0.42 0.38 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!--
+      东门外出：出东门 -> 左拐北向长廊(x≈17.9~22.9) -> 尽头再左拐西行。
+      从东外墙 x≈22.90 再向西 10 m 处封堵整条西向长廊（y∈[15.75,20.75], z∈[0,5]）。
+      视觉盒与碰撞盒尺寸/位姿完全一致。
+    -->
+    <model name="east_corridor_blocker">
+      <static>true</static>
+      <pose>12.902256 18.250000 2.500000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30 5.00 5.00</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30 5.00 5.00</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.32 0.30 0.28 1</ambient>
+            <diffuse>0.42 0.39 0.35 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 封堵 darpa_tile_6 中部：实体墙，横向铺满通道、纵向 0.3 m 厚 -->
+    <model name="darpa_tile_6_blocker">
+      <static>true</static>
+      <pose>-0.877358 24.956595 1.600000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.000000 0.300000 3.200000</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.000000 0.300000 3.200000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.52 0.48 1</ambient>
+            <diffuse>0.68 0.64 0.58 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 封堵 darpa_tile_15 中部：实体墙，横向铺满通道、纵向 0.3 m 厚 -->
+    <model name="darpa_tile_15_blocker">
+      <static>true</static>
+      <pose>19.122642 124.956595 -3.400000 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.300000 5.000000 3.200000</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.300000 5.000000 3.200000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.52 0.48 1</ambient>
+            <diffuse>0.68 0.64 0.58 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <light name="mine_tunnel_lamp" type="directional">
+      <pose>-0.877358 40.056596 50.000000 0.000000 -0.500000 0.000000</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>0.7</intensity>
+      <direction>0.05 0.15 -1.0</direction>
+      <diffuse>0.80 0.78 0.70 1</diffuse>
+      <specular>0.10 0.10 0.10 1</specular>
+      <attenuation>
+        <range>3000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+    </light>
+
+    <include>
+      <static>true</static>
+      <name>darpa_artifact_origin</name>
+      <pose>-0.877358 14.956596 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Fiducial/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_1</name>
+      <pose>-40.877358 44.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_2</name>
+      <pose>-40.877358 64.956595 0.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_rescue_randy_1</name>
+      <pose>-43.077358 58.956595 0.004000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Rescue_Randy_Sitting/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_3</name>
+      <pose>-40.877358 84.956595 0.000000 0.000000 0.000000 0.000000</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_4</name>
+      <pose>-20.877358 44.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_5</name>
+      <pose>-20.877358 84.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_6</name>
+      <pose>-0.877358 24.956595 0.000000 0.000000 0.000000 0.000000</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_7</name>
+      <pose>-0.877358 44.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_1/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_drill_1</name>
+      <pose>-2.877358 38.956595 0.004000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Black_and_Decker_Cordless_Drill/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_8</name>
+      <pose>-0.877358 64.956595 -5.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_6/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_9</name>
+      <pose>-0.877358 84.956595 -5.000000 0.000000 0.000000 0.000000</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_10</name>
+      <pose>-0.877358 84.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_11</name>
+      <pose>-0.877358 104.956595 -5.000000 0.000000 0.000000 0.000000</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_12</name>
+      <pose>-0.877358 124.956595 -5.000000 0.000000 0.000000 0.000000</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_13</name>
+      <pose>19.122642 44.956595 0.000000 0.000000 0.000000 -1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_extinguisher_1</name>
+      <pose>24.122642 46.956595 0.004000 0.000000 0.000000 0.523599</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Fire_Extinguisher/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_14</name>
+      <pose>19.122642 84.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_15</name>
+      <pose>19.122642 124.956595 -5.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_16</name>
+      <pose>39.122642 44.956595 0.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_17</name>
+      <pose>39.122642 64.956595 0.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_18</name>
+      <pose>39.122642 84.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_1/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_19</name>
+      <pose>39.122642 90.956595 0.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_Blocker/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_20</name>
+      <pose>39.122642 124.956595 -5.000000 0.000000 0.000000 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_5/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_21</name>
+      <pose>59.122642 84.956595 0.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_22</name>
+      <pose>59.122642 104.956595 -5.000000 0.000000 0.000000 3.141592</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_7/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_tile_23</name>
+      <pose>59.122642 124.956595 -5.000000 0.000000 0.000000 -1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Tunnel_Tile_2/model.sdf</uri>
+    </include>
+
+    <include>
+      <static>true</static>
+      <name>darpa_phone_1</name>
+      <pose>59.122642 122.756595 -4.996000 -1.570796 0.000000 2.356194</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Samsung_J8_Black/model.sdf</uri>
+    </include>
+
+    <!--
+      tile_4 / tile_5 巷道内静态障碍物（施工杂物）
+      - tile_4 中心 (-20.877, 44.957)，tile_5 中心 (-20.877, 84.957)，巷道沿 X 向
+      - 木箱堆、油桶、托盘、锥桶、倒伏木梁、竖立木板、混凝土碎块
+      - 所有模型原点在底面，z 直接用巷道地面 0.134
+      - 障碍贴一侧摆放，横向至少留 2.5 m 通行余量
+    -->
+    <include>
+      <name>t4_crate_1</name>
+      <pose>-14.197358 46.406595 0.494 0 0 1.650796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t4_crate_2</name>
+      <pose>-14.947358 46.406595 0.494 0 0 1.520796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t4_crate_3</name>
+      <pose>-14.197358 46.406595 1.214 0 0 1.650796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t4_crate_4</name>
+      <pose>-14.947358 46.406595 1.214 0 0 1.520796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t4_crate_5</name>
+      <pose>-14.572358 46.406595 1.934 0 0 1.630796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t4_drum_1</name>
+      <pose>-17.827358 43.376595 0.574 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/oil_drum.sdf</uri>
+    </include>
+    <include>
+      <name>t4_drum_2</name>
+      <pose>-18.597358 43.376595 0.574 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/oil_drum.sdf</uri>
+    </include>
+    <include>
+      <name>t4_pallet_1</name>
+      <pose>-22.127358 45.576595 0.134 0 0 1.690796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/pallet.sdf</uri>
+    </include>
+    <include>
+      <name>t4_crate_6</name>
+      <pose>-22.127358 45.576595 0.589 0 0 1.870796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_50.sdf</uri>
+    </include>
+    <include>
+      <name>t4_cone_1</name>
+      <pose>-24.727358 44.006595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/traffic_cone.sdf</uri>
+    </include>
+    <include>
+      <name>t4_cone_2</name>
+      <pose>-25.327358 45.156595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/traffic_cone.sdf</uri>
+    </include>
+    <include>
+      <name>t4_board_1</name>
+      <pose>-26.777358 47.006595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/board.sdf</uri>
+    </include>
+    <include>
+      <name>t4_beam_1</name>
+      <pose>-28.427358 43.936595 0.134 0 0 1.670796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/beam.sdf</uri>
+    </include>
+    <include>
+      <name>t4_rubble_1</name>
+      <pose>-11.977358 46.676595 0.134 0 0 2.120796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/rubble.sdf</uri>
+    </include>
+
+    <include>
+      <name>t5_drum_1</name>
+      <pose>-13.327358 83.376595 0.574 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/oil_drum.sdf</uri>
+    </include>
+    <include>
+      <name>t5_drum_2</name>
+      <pose>-14.097358 83.376595 0.574 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/oil_drum.sdf</uri>
+    </include>
+    <include>
+      <name>t5_drum_3</name>
+      <pose>-14.727358 83.406595 0.574 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/oil_drum.sdf</uri>
+    </include>
+    <include>
+      <name>t5_crate_1</name>
+      <pose>-18.177358 86.376595 0.494 0 0 1.670796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t5_crate_2</name>
+      <pose>-18.947358 86.376595 0.494 0 0 1.530796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t5_crate_3</name>
+      <pose>-18.177358 86.376595 1.214 0 0 1.670796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_72.sdf</uri>
+    </include>
+    <include>
+      <name>t5_pallet_1</name>
+      <pose>-22.977358 84.506595 0.134 0 0 1.470796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/pallet.sdf</uri>
+    </include>
+    <include>
+      <name>t5_crate_4</name>
+      <pose>-22.977358 84.506595 0.589 0 0 1.720796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/crate_50.sdf</uri>
+    </include>
+    <include>
+      <name>t5_cone_1</name>
+      <pose>-25.527358 86.006595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/traffic_cone.sdf</uri>
+    </include>
+    <include>
+      <name>t5_cone_2</name>
+      <pose>-26.227358 85.306595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/traffic_cone.sdf</uri>
+    </include>
+    <include>
+      <name>t5_beam_1</name>
+      <pose>-28.577358 83.856595 0.134 0 0 1.450796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/beam.sdf</uri>
+    </include>
+    <include>
+      <name>t5_board_1</name>
+      <pose>-29.777358 82.906595 0.134 0 0 1.570796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/board.sdf</uri>
+    </include>
+    <include>
+      <name>t5_rubble_1</name>
+      <pose>-12.077358 86.636595 0.134 0 0 2.020796</pose>
+      <uri>file:///home/jinyicheng/auto_navigation/models/site_props/rubble.sdf</uri>
+    </include>
+
+    <!--
+      工地工人（动态障碍）：
+      - 继续用 walk.dae 走路动画
+      - Actor 内嵌黄色安全帽 + 橙色马甲，看起来像施工人员
+      - Actor 不受物理碰撞，但 GPU LiDAR/相机可感知
+      - 若安全帽位置偏高/偏低，只改 hardhat link 的 z
+    -->
+    <actor name="worker_x">
+      <skin>
+        <filename>file:///usr/share/gazebo-11/media/models/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>file:///usr/share/gazebo-11/media/models/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+
+      <!-- 橙色马甲（胸口） -->
+      <link name="vest">
+        <pose>0.03 0 0.12 0 0 0</pose>
+        <visual name="vest_visual">
+          <geometry>
+            <box>
+              <size>0.22 0.34 0.36</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1.0 0.45 0.05 1</ambient>
+            <diffuse>1.0 0.50 0.08 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+
+      <!-- 单顶黄色安全帽：帽盔 + 帽檐，避免厚球壳 mesh 看起来像两顶 -->
+      <link name="hardhat">
+        <!-- 相对人体稍微前移，避免前额穿出帽檐 -->
+        <pose>0.07 0 0.55 0 0 0</pose>
+        <visual name="hardhat_dome">
+          <pose>0 0 0.05 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.11</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.80 0.10 1</ambient>
+            <diffuse>1.0 0.85 0.12 1</diffuse>
+            <specular>0.35 0.35 0.25 1</specular>
+          </material>
+        </visual>
+        <visual name="hardhat_brim">
+          <pose>0.02 0 0.01 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.15</radius>
+              <length>0.02</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.95 0.80 0.10 1</ambient>
+            <diffuse>1.0 0.85 0.12 1</diffuse>
+            <specular>0.35 0.35 0.25 1</specular>
+          </material>
+        </visual>
+      </link>
+
+      <script>
+        <loop>true</loop>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.6">
+          <waypoint>
+            <time>0</time>
+            <pose>-3.0 1.5 1.0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>6</time>
+            <pose>3.0 1.5 1.0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>7</time>
+            <pose>3.0 1.5 1.0 0 0 3.1416</pose>
+          </waypoint>
+          <waypoint>
+            <time>13</time>
+            <pose>-3.0 1.5 1.0 0 0 3.1416</pose>
+          </waypoint>
+          <waypoint>
+            <time>14</time>
+            <pose>-3.0 1.5 1.0 0 0 0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <actor name="worker_y">
+      <skin>
+        <filename>file:///usr/share/gazebo-11/media/models/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>file:///usr/share/gazebo-11/media/models/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+
+      <link name="vest">
+        <pose>0.03 0 0.12 0 0 0</pose>
+        <visual name="vest_visual">
+          <geometry>
+            <box>
+              <size>0.22 0.34 0.36</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1.0 0.45 0.05 1</ambient>
+            <diffuse>1.0 0.50 0.08 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+
+      <link name="hardhat">
+        <!-- 相对人体稍微前移，避免前额穿出帽檐 -->
+        <pose>0.07 0 0.55 0 0 0</pose>
+        <visual name="hardhat_dome">
+          <pose>0 0 0.05 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.11</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.95 0.80 0.10 1</ambient>
+            <diffuse>1.0 0.85 0.12 1</diffuse>
+            <specular>0.35 0.35 0.25 1</specular>
+          </material>
+        </visual>
+        <visual name="hardhat_brim">
+          <pose>0.02 0 0.01 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.15</radius>
+              <length>0.02</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.95 0.80 0.10 1</ambient>
+            <diffuse>1.0 0.85 0.12 1</diffuse>
+            <specular>0.35 0.35 0.25 1</specular>
+          </material>
+        </visual>
+      </link>
+
+      <script>
+        <loop>true</loop>
+        <delay_start>2.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk" tension="0.6">
+          <waypoint>
+            <time>0</time>
+            <pose>1.5 -3.0 1.0 0 0 1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>6</time>
+            <pose>1.5 3.0 1.0 0 0 1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>7</time>
+            <pose>1.5 3.0 1.0 0 0 -1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>13</time>
+            <pose>1.5 -3.0 1.0 0 0 -1.5708</pose>
+          </waypoint>
+          <waypoint>
+            <time>14</time>
+            <pose>1.5 -3.0 1.0 0 0 1.5708</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+    <!-- 起飞点实体承载板：局部地面是薄网格（z 0~0.134、含朝向错误三角形），
+         飞行器降落会穿进网格被卡住。这里放一块实心 box 承载板，顶面与网格最高点齐平，
+         保证起飞点一定是实体接触面。 -->
+    <model name="spawn_platform">
+      <static>true</static>
+      <pose>-40.877358 64.956595 -0.066 0 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><box><size>4.0 4.0 0.40</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>4.0 4.0 0.40</size></box></geometry>
+          <material><ambient>0.45 0.45 0.48 1</ambient><diffuse>0.5 0.5 0.55 1</diffuse></material></visual>
+      </link>
+    </model>
+  </world>
+</sdf>

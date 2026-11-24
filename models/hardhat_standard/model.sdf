@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="hardhat_standard">
+    <static>true</static>
+    <link name="base_link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/hardhat_standard/meshes/hardhat_standard.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/hardhat_standard/meshes/hardhat_standard_collision.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

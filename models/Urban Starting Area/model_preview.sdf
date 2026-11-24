@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="urban_starting_area_preview">
+    <static>true</static>
+    <link name="base">
+      <visual name="floor">
+        <geometry>
+          <mesh>
+            <uri>meshes/starting_area.obj</uri>
+            <submesh>
+              <name>Floor-lib</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.55 0.55 0.55 1</ambient>
+          <diffuse>0.8 0.8 0.8 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/Floor_Albedo.jpg</albedo_map>
+              <normal_map>materials/textures/Floor_Normal.jpg</normal_map>
+              <roughness_map>materials/textures/Floor_Roughness.jpg</roughness_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>Urban/Floor_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+
+      <visual name="concrete">
+        <geometry>
+          <mesh>
+            <uri>meshes/starting_area.obj</uri>
+            <submesh>
+              <name>ConcreteTiles-lib</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.72 0.7 0.65 1</ambient>
+          <diffuse>0.85 0.82 0.75 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/ConcreteTiles_Albedo.jpg</albedo_map>
+              <normal_map>materials/textures/ConcreteTiles_Normal.jpg</normal_map>
+              <roughness_map>materials/textures/ConcreteTiles_Roughness.jpg</roughness_map>
+              <metalness_map>materials/textures/ConcreteTiles_Metalness.jpg</metalness_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>Urban/ConcreteTiles_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+
+      <visual name="wall">
+        <geometry>
+          <mesh>
+            <uri>meshes/starting_area.obj</uri>
+            <submesh>
+              <name>Wall-lib</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.45 0.48 0.52 1</ambient>
+          <diffuse>0.6 0.63 0.68 1</diffuse>
+          <specular>0.15 0.15 0.15 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/Wall_Albedo.jpg</albedo_map>
+              <normal_map>materials/textures/Wall_Normal.jpg</normal_map>
+              <roughness_map>materials/textures/Wall_Roughness.jpg</roughness_map>
+              <metalness_map>materials/textures/Wall_Metalness.jpg</metalness_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>Urban/Wall_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+
+      <visual name="metal">
+        <geometry>
+          <mesh>
+            <uri>meshes/starting_area.obj</uri>
+            <submesh>
+              <name>MetalBrushed-lib</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.65 0.68 0.72 1</ambient>
+          <diffuse>0.75 0.78 0.82 1</diffuse>
+          <specular>0.4 0.4 0.4 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/MetalBrushed_Albedo.jpg</albedo_map>
+              <normal_map>materials/textures/MetalBrushed_Normal.jpg</normal_map>
+              <roughness_map>materials/textures/MetalBrushed_Roughness.jpg</roughness_map>
+              <metalness_map>materials/textures/MetalBrushed_Metalness.jpg</metalness_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>Urban/MetalBrushed_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+
+      <visual name="lights">
+        <geometry>
+          <mesh>
+            <uri>meshes/starting_area.obj</uri>
+            <submesh>
+              <name>Lights-lib</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.95 0.95 0.7 1</ambient>
+          <diffuse>1.0 1.0 0.8 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/Lights_Albedo.jpg</albedo_map>
+              <normal_map>materials/textures/Lights_Normal.jpg</normal_map>
+              <roughness_map>materials/textures/Lights_Roughness.jpg</roughness_map>
+              <metalness_map>materials/textures/Lights_Metalness.jpg</metalness_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>Urban/Lights_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

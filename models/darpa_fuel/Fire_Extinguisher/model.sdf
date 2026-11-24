@@ -1,0 +1,28 @@
+<?xml version='1.0' ?>
+<sdf version='1.6'>
+  <model name='Fire Extinguisher'>
+    <static>true</static>
+     <include>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Artifact_Proximity_Detector/model.sdf</uri>
+    </include>
+    <link name='link'>
+      <collision name="collision">
+        <pose>0 0 0.35 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.25 0.25 0.70</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>meshes/extinguisher.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
+    

@@ -1,0 +1,39 @@
+newmtl Floor-lib
+Kd 0.55 0.55 0.55
+Ka 0.330 0.330 0.330
+d 1.0
+illum 1
+map_Kd ../materials/textures/Floor_Albedo.jpg
+map_Bump ../materials/textures/Floor_Normal.jpg
+
+newmtl ConcreteTiles-lib
+Kd 0.72 0.7 0.65
+Ka 0.432 0.420 0.390
+d 1.0
+illum 1
+map_Kd ../materials/textures/ConcreteTiles_Albedo.jpg
+map_Bump ../materials/textures/ConcreteTiles_Normal.jpg
+
+newmtl Lights-lib
+Kd 0.95 0.95 0.7
+Ka 0.570 0.570 0.420
+d 1.0
+illum 1
+map_Kd ../materials/textures/Lights_Albedo.jpg
+map_Bump ../materials/textures/Lights_Normal.jpg
+
+newmtl Wall-lib
+Kd 0.45 0.48 0.52
+Ka 0.270 0.288 0.312
+d 1.0
+illum 1
+map_Kd ../materials/textures/Wall_Albedo.jpg
+map_Bump ../materials/textures/Wall_Normal.jpg
+
+newmtl MetalBrushed-lib
+Kd 0.65 0.68 0.72
+Ka 0.390 0.408 0.432
+d 1.0
+illum 1
+map_Kd ../materials/textures/MetalBrushed_Albedo.jpg
+map_Bump ../materials/textures/MetalBrushed_Normal.jpg

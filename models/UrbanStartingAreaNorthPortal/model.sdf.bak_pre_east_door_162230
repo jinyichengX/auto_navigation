@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="UrbanStartingAreaNorthPortal">
+    <static>true</static>
+    <link name="base">
+      <!--
+        碰撞只保留现实薄壳（全部用 box，避免无正常 mesh 让 ODE segfault）：
+        - 贴地薄地面
+        - 墙体薄盒（北墙留门洞）
+        视觉 mesh 不变。模型还会再平移 (-4.097744, -24.7535095, -7.512)，
+        本地地面 z=7.512 → 世界 z=0。
+      -->
+      <!-- 地面只覆盖大厅主体，北边界停在门洞内侧，避免伸进巷道入口 -->
+      <collision name="collision_floor_ground_box">
+        <pose>4.097744 21.7535095 7.512 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>46.0 36.0 0.04</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- 东墙 -->
+      <collision name="collision_wall_east">
+        <pose>17.540 27.160 9.332 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 25.0 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+      <!-- 西墙（大厅主段） -->
+      <collision name="collision_wall_west">
+        <pose>-7.375 27.160 9.341 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 25.0 3.62</size>
+          </box>
+        </geometry>
+      </collision>
+      <!-- 南墙 -->
+      <collision name="collision_wall_south">
+        <pose>5.125 14.660 9.341 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>25.0 0.30 3.62</size>
+          </box>
+        </geometry>
+      </collision>
+      <!-- 北墙：门洞左右两段；世界坐标开口约 x[-4.70, 2.93]，对准巷道/补墙 -->
+      <collision name="collision_wall_north_west">
+        <pose>-3.987 39.574 9.332 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>6.80 0.30 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="collision_wall_north_east">
+        <pose>12.328 39.574 9.332 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>10.60 0.30 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+      <!-- 西南侧附属墙段 -->
+      <collision name="collision_wall_sw_a">
+        <pose>-18.436 8.086 2.757 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 8.50 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="collision_wall_sw_b">
+        <pose>-13.624 8.136 2.757 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 8.20 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="collision_wall_sw_c">
+        <pose>-15.882 11.980 2.759 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>7.50 0.30 3.64</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="visual_floor">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Floor_north_portal.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Roughness.jpg</roughness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.8</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_metal_brushed">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/MetalBrushed.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Metalness.jpg</metalness_map>
+              <metalness>0.8</metalness>
+              <roughness>0.4</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_concrete_tiles">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/ConcreteTiles_north_portal.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Metalness.jpg</metalness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.85</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_lights">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Lights.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Metalness.jpg</metalness_map>
+              <metalness>0.2</metalness>
+              <roughness>0.6</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_wall">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Wall_north_portal.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Metalness.jpg</metalness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.8</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

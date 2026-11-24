@@ -1,0 +1,377 @@
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793529504.840779190] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×60° pitch=15°, 增益仰角带=[-7°,52°] (yaw无关=1), degressive=0.25, gainRange=1.00, gainEps=0.240, initIters=30
+[WARN] [1793529505.044075368] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[INFO] [1793529505.244077047] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.02,-0.03) / 飞控 (-0.00,-0.02,-0.03) 相差 0.00 m
+[INFO] [1793529505.644109805] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.20m
+[INFO] [1793529507.244112937] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.02,-0.03) / 飞控 (-0.00,-0.02,-0.03) 相差 0.00 m
+[INFO] [1793529507.855531520] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.20m
+[INFO] [1793529509.444094469] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.02,-0.03) / 飞控 (-0.00,-0.02,-0.03) 相差 0.00 m
+[INFO] [1793529510.044121388] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.20m
+[INFO] [1793529511.444103231] [nbvplanner_explorer]: 位置对照: 规划用 (0.00,-0.03,0.32) / 飞控 (-0.01,-0.05,0.41) 相差 0.09 m
+[INFO] [1793529511.884568345] [nbvplanner_explorer]: 地图已知自由体积 290.7 m³ (窗口增长 0.00, 阈值 2.91, 停滞计数 0/2)
+[INFO] [1793529512.472649263] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4594, total_iters=45, loopCount=45
+[INFO] [1793529512.472788163] [nbvplanner_explorer]: 这条边后 16 个点在未知区域 → 只飞到已知边界 (-0.18,-0.49,0.63)
+[INFO] [1793529512.472981663] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.4594, 边点数=10, 边终点 (-0.18,-0.49,0.63)
+[INFO] [1793529512.851698374] [nbvplanner_explorer]: 飞向已发布目标 (-0.14,-0.38,1.02), 剩余 0.41 m
+[INFO] [1793529513.444147093] [nbvplanner_explorer]: 位置对照: 规划用 (-0.04,-0.13,0.86) / 飞控 (-0.04,-0.14,0.89) 相差 0.03 m
+[WARN] [1793529520.434288097] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793529520.560601447] [nbvplanner_explorer]: 锁定全局前沿 (-0.4,7.2,1.4), 距当前 7.5 m, 路径 19 格
+[INFO] [1793529520.576118341] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 7.5 m, 本段 2.5 m
+[INFO] [1793529520.576417041] [nbvplanner_explorer]: 位置对照: 规划用 (-0.09,-0.23,0.85) / 飞控 (-0.08,-0.25,0.88) 相差 0.03 m
+[INFO] [1793529520.669872004] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 7.5 m, 本段 2.5 m
+[INFO] [1793529522.644089489] [nbvplanner_explorer]: 位置对照: 规划用 (-0.01,0.21,1.20) / 飞控 (-0.00,0.24,1.19) 相差 0.03 m
+[INFO] [1793529524.844152798] [nbvplanner_explorer]: 位置对照: 规划用 (0.03,1.53,1.37) / 飞控 (0.03,1.60,1.37) 相差 0.07 m
+[INFO] [1793529525.067352503] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 5.6 m, 本段 2.5 m
+[INFO] [1793529525.693253916] [nbvplanner_explorer]: 地图已知自由体积 630.4 m³ (窗口增长 0.00, 阈值 6.30, 停滞计数 0/2)
+[INFO] [1793529527.044105845] [nbvplanner_explorer]: 位置对照: 规划用 (-0.03,2.30,1.38) / 飞控 (-0.03,2.33,1.39) 相差 0.03 m
+[INFO] [1793529529.244084593] [nbvplanner_explorer]: 位置对照: 规划用 (0.02,3.39,1.41) / 飞控 (0.00,3.41,1.41) 相差 0.03 m
+[INFO] [1793529529.268259293] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 3.9 m, 本段 2.5 m
+[INFO] [1793529531.244093136] [nbvplanner_explorer]: 位置对照: 规划用 (-0.02,4.19,1.41) / 飞控 (-0.02,4.22,1.41) 相差 0.03 m
+[INFO] [1793529533.244104471] [nbvplanner_explorer]: 位置对照: 规划用 (-0.01,4.92,1.40) / 飞控 (-0.01,4.94,1.40) 相差 0.02 m
+[INFO] [1793529533.664204903] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 2.1 m, 本段 2.0 m
+[INFO] [1793529535.244174222] [nbvplanner_explorer]: 位置对照: 规划用 (-0.06,5.84,1.42) / 飞控 (-0.06,5.85,1.41) 相差 0.02 m
+[INFO] [1793529535.683895255] [nbvplanner_explorer]: 地图已知自由体积 651.6 m³ (窗口增长 0.00, 阈值 6.52, 停滞计数 0/2)
+[INFO] [1793529537.444077488] [nbvplanner_explorer]: 位置对照: 规划用 (-0.01,6.49,1.40) / 飞控 (-0.02,6.55,1.41) 相差 0.07 m
+[INFO] [1793529537.454607889] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-0.4,7.2,1.4) 距 0.9 m, 本段 0.9 m
+[INFO] [1793529539.254315425] [nbvplanner_explorer]: 前沿结束 (-0.4,7.2,1.4): 到达 → 交回局部 NBV
+[INFO] [1793529539.444102739] [nbvplanner_explorer]: 位置对照: 规划用 (-0.27,7.15,1.40) / 飞控 (-0.27,7.17,1.40) 相差 0.02 m
+[WARN] [1793529545.627552250] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793529545.710364650] [nbvplanner_explorer]: 锁定全局前沿 (3.6,15.1,1.4), 距当前 8.9 m, 路径 23 格
+[INFO] [1793529545.726158450] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 8.9 m, 本段 2.5 m
+[INFO] [1793529545.726379350] [nbvplanner_explorer]: 位置对照: 规划用 (-0.27,7.15,1.40) / 飞控 (-0.27,7.17,1.40) 相差 0.02 m
+[INFO] [1793529545.768623150] [nbvplanner_explorer]: 地图已知自由体积 659.6 m³ (窗口增长 0.00, 阈值 6.60, 停滞计数 0/2)
+[INFO] [1793529545.795966150] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 8.9 m, 本段 2.5 m
+[WARN] [1793529547.051477151] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529547.844085959] [nbvplanner_explorer]: 位置对照: 规划用 (-0.26,7.60,1.33) / 飞控 (-0.24,7.60,1.37) 相差 0.05 m
+[INFO] [1793529549.844119510] [nbvplanner_explorer]: 位置对照: 规划用 (-0.18,8.20,1.42) / 飞控 (-0.18,8.20,1.45) 相差 0.03 m
+[INFO] [1793529551.466649851] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 7.1 m, 本段 2.5 m
+[INFO] [1793529552.044087366] [nbvplanner_explorer]: 位置对照: 规划用 (-0.27,9.41,1.38) / 飞控 (-0.27,9.43,1.39) 相差 0.02 m
+[INFO] [1793529554.244083422] [nbvplanner_explorer]: 位置对照: 规划用 (-0.20,10.00,1.41) / 飞控 (-0.22,10.01,1.40) 相差 0.02 m
+[INFO] [1793529555.673463663] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 5.8 m, 本段 2.5 m
+[INFO] [1793529556.079028889] [nbvplanner_explorer]: 地图已知自由体积 685.2 m³ (窗口增长 0.00, 阈值 6.85, 停滞计数 0/2)
+[INFO] [1793529556.244088300] [nbvplanner_explorer]: 位置对照: 规划用 (-0.23,11.17,1.40) / 飞控 (-0.23,11.18,1.39) 相差 0.01 m
+[INFO] [1793529558.444080344] [nbvplanner_explorer]: 位置对照: 规划用 (-0.25,11.77,1.38) / 飞控 (-0.24,11.83,1.39) 相差 0.06 m
+[INFO] [1793529560.444102375] [nbvplanner_explorer]: 位置对照: 规划用 (0.05,12.66,1.46) / 飞控 (0.06,12.66,1.41) 相差 0.05 m
+[INFO] [1793529560.868040703] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 4.1 m, 本段 2.5 m
+[INFO] [1793529562.644158819] [nbvplanner_explorer]: 位置对照: 规划用 (0.55,13.17,1.49) / 飞控 (0.59,13.19,1.52) 相差 0.05 m
+[INFO] [1793529564.844079216] [nbvplanner_explorer]: 位置对照: 规划用 (1.33,13.98,1.34) / 飞控 (1.35,14.00,1.52) 相差 0.19 m
+[INFO] [1793529566.088202650] [nbvplanner_explorer]: 地图已知自由体积 742.8 m³ (窗口增长 0.00, 阈值 7.43, 停滞计数 0/2)
+[INFO] [1793529566.105915051] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 1.9 m, 本段 1.7 m
+[INFO] [1793529566.844116572] [nbvplanner_explorer]: 位置对照: 规划用 (1.78,14.44,1.43) / 飞控 (1.83,14.47,1.40) 相差 0.06 m
+[WARN] [1793529567.451237789] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529569.044125933] [nbvplanner_explorer]: 位置对照: 规划用 (2.25,14.89,1.48) / 飞控 (2.23,14.87,1.48) 相差 0.03 m
+[INFO] [1793529570.652528078] [nbvplanner_explorer]: 沿前沿推进: 前沿 (3.6,15.1,1.4) 距 1.0 m, 本段 0.5 m
+[INFO] [1793529571.244143395] [nbvplanner_explorer]: 位置对照: 规划用 (2.79,15.47,1.26) / 飞控 (2.80,15.48,1.57) 相差 0.31 m
+[INFO] [1793529572.251392627] [nbvplanner_explorer]: 前沿结束 (3.6,15.1,1.4): 路径走到头 → 交回局部 NBV
+[WARN] [1793529578.072920223] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793529578.132750525] [nbvplanner_explorer]: 锁定全局前沿 (7.3,17.8,1.4), 距当前 4.9 m, 路径 14 格
+[INFO] [1793529578.152814726] [nbvplanner_explorer]: 位置对照: 规划用 (2.91,15.49,1.32) / 飞控 (2.94,15.52,1.33) 相差 0.04 m
+[INFO] [1793529578.193962827] [nbvplanner_explorer]: 地图已知自由体积 776.4 m³ (窗口增长 0.00, 阈值 7.76, 停滞计数 0/2)
+[INFO] [1793529578.224807328] [nbvplanner_explorer]: 沿前沿推进: 前沿 (7.3,17.8,1.4) 距 4.9 m, 本段 2.5 m
+[WARN] [1793529579.451446469] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529580.244101181] [nbvplanner_explorer]: 位置对照: 规划用 (2.65,15.78,1.25) / 飞控 (2.60,15.78,1.59) 相差 0.35 m
+[INFO] [1793529582.444085904] [nbvplanner_explorer]: 位置对照: 规划用 (2.88,16.50,1.36) / 飞控 (2.87,16.49,1.35) 相差 0.02 m
+[INFO] [1793529584.444124525] [nbvplanner_explorer]: 位置对照: 规划用 (3.92,17.32,1.41) / 飞控 (3.90,17.29,1.42) 相差 0.03 m
+[INFO] [1793529584.469584825] [nbvplanner_explorer]: 沿前沿推进: 前沿 (7.3,17.8,1.4) 距 3.4 m, 本段 2.5 m
+[WARN] [1793529586.051307441] [nbvplanner_explorer]: 这条边的剩余部分 (到 6.26,18.12,1.41) 已被占据 → 立即作废
+[INFO] [1793529586.644091448] [nbvplanner_explorer]: 位置对照: 规划用 (4.50,17.25,1.43) / 飞控 (4.51,17.28,1.43) 相差 0.03 m
+[INFO] [1793529587.051562052] [nbvplanner_explorer]: 前沿结束 (7.3,17.8,1.4): 路径走到头 → 交回局部 NBV
+[WARN] [1793529593.096152998] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793529593.170102998] [nbvplanner_explorer]: 锁定全局前沿 (12.0,18.5,1.4), 距当前 7.6 m, 路径 20 格
+[INFO] [1793529593.189492498] [nbvplanner_explorer]: 沿前沿推进: 前沿 (12.0,18.5,1.4) 距 7.6 m, 本段 2.4 m
+[INFO] [1793529593.189625798] [nbvplanner_explorer]: 位置对照: 规划用 (4.49,17.22,1.43) / 飞控 (4.52,17.22,1.43) 相差 0.02 m
+[INFO] [1793529593.258808699] [nbvplanner_explorer]: 地图已知自由体积 929.3 m³ (窗口增长 0.00, 阈值 9.29, 停滞计数 0/2)
+[INFO] [1793529593.285486499] [nbvplanner_explorer]: 沿前沿推进: 前沿 (12.0,18.5,1.4) 距 7.6 m, 本段 2.4 m
+[WARN] [1793529594.476434308] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529595.244131413] [nbvplanner_explorer]: 位置对照: 规划用 (4.48,17.63,1.44) / 飞控 (4.47,17.62,1.44) 相差 0.01 m
+[INFO] [1793529597.444136132] [nbvplanner_explorer]: 位置对照: 规划用 (4.91,18.13,1.45) / 飞控 (4.91,18.13,1.45) 相差 0.01 m
+[INFO] [1793529599.644116852] [nbvplanner_explorer]: 位置对照: 规划用 (6.07,18.53,1.46) / 飞控 (6.05,18.51,1.45) 相差 0.02 m
+[INFO] [1793529599.674229453] [nbvplanner_explorer]: 沿前沿推进: 前沿 (12.0,18.5,1.4) 距 5.9 m, 本段 2.5 m
+[INFO] [1793529601.864892972] [nbvplanner_explorer]: 位置对照: 规划用 (6.77,18.44,1.46) / 飞控 (6.80,18.44,1.47) 相差 0.03 m
+[INFO] [1793529603.513512087] [nbvplanner_explorer]: 地图已知自由体积 1054.8 m³ (窗口增长 0.00, 阈值 10.55, 停滞计数 0/2)
+[INFO] [1793529604.044195892] [nbvplanner_explorer]: 位置对照: 规划用 (7.86,18.46,1.45) / 飞控 (7.83,18.46,1.46) 相差 0.03 m
+[INFO] [1793529604.073937092] [nbvplanner_explorer]: 沿前沿推进: 前沿 (12.0,18.5,1.4) 距 4.1 m, 本段 2.5 m
+[ERROR] [1793529604.272393794] [nbvplanner_explorer]: 近距障碍：机身盒已与占据格重叠 (当前位置 7.93,18.46,1.44)；最近占据格 (7.93,18.16,1.74) 相对机体偏移 (0.00,-0.30,0.30)，距离 0.42
+[INFO] [1793529604.272463894] [nbvplanner_explorer]: 前沿结束 (12.0,18.5,1.4): 近距障碍 → 交回局部 NBV
+[WARN] [1793529604.272725594] [nbvplanner_explorer]: 近距障碍：沿净空方向 (0.00,0.71,-0.71) 挪 0.6 m
+[INFO] [1793529604.850878099] [nbvplanner_explorer]: 飞向已发布目标 (7.86,18.46,1.45), 剩余 0.40 m
+[WARN] [1793529605.850748208] [nbvplanner_explorer]: 目标 (7.86,18.46,1.45) 已被占据，作废并重规划
+[WARN] [1793529611.238746057] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793529611.282239157] [nbvplanner_explorer]: 锁定全局前沿 (18.6,19.2,1.4), 距当前 10.6 m, 路径 28 格
+[INFO] [1793529611.302903657] [nbvplanner_explorer]: 位置对照: 规划用 (8.04,18.51,1.44) / 飞控 (8.07,18.51,1.43) 相差 0.03 m
+[WARN] [1793529611.386555258] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529611.408594758] [nbvplanner_explorer]: 沿前沿推进: 前沿 (18.6,19.2,1.4) 距 10.6 m, 本段 2.5 m
+[WARN] [1793529612.651362668] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793529613.444124474] [nbvplanner_explorer]: 位置对照: 规划用 (7.84,18.80,1.41) / 飞控 (7.86,18.79,1.43) 相差 0.03 m
+[INFO] [1793529615.644068890] [nbvplanner_explorer]: 位置对照: 规划用 (8.76,19.24,1.39) / 飞控 (8.78,19.25,1.40) 相差 0.03 m
+[INFO] [1793529616.512971496] [nbvplanner_explorer]: 地图已知自由体积 1106.4 m³ (窗口增长 0.00, 阈值 11.06, 停滞计数 0/2)
+[INFO] [1793529617.267620002] [nbvplanner_explorer]: 沿前沿推进: 前沿 (18.6,19.2,1.4) 距 8.9 m, 本段 2.5 m
+[INFO] [1793529617.644078404] [nbvplanner_explorer]: 位置对照: 规划用 (9.88,19.37,1.44) / 飞控 (9.94,19.37,1.42) 相差 0.06 m
+[INFO] [1793529619.644084319] [nbvplanner_explorer]: 位置对照: 规划用 (10.41,19.17,1.44) / 飞控 (10.42,19.16,1.43) 相差 0.02 m
+[INFO] [1793529621.644101827] [nbvplanner_explorer]: 位置对照: 规划用 (11.47,19.26,1.30) / 飞控 (11.50,19.23,2.62) 相差 1.32 m
+[INFO] [1793529621.669558227] [nbvplanner_explorer]: 沿前沿推进: 前沿 (18.6,19.2,1.4) 距 7.2 m, 本段 2.5 m
+[INFO] [1793529622.844123932] [nbvplanner_explorer]: 起飞中... z=0.03 → 1.40m
+[INFO] [1793529623.644146835] [nbvplanner_explorer]: 位置对照: 规划用 (12.35,19.38,-0.18) / 飞控 (12.43,18.59,2.11) 相差 2.42 m
+[ERROR] [1793529623.857571236] [nbvplanner_explorer]: 近距障碍：机身盒已与占据格重叠 (当前位置 12.45,18.30,0.95)；最近占据格 (12.45,17.90,1.15) 相对机体偏移 (0.00,-0.40,0.20)，距离 0.45
+[INFO] [1793529623.857661136] [nbvplanner_explorer]: 前沿结束 (18.6,19.2,1.4): 近距障碍 → 交回局部 NBV
+[WARN] [1793529624.051232837] [nbvplanner_explorer]: 近距障碍：沿净空方向 (0.00,0.83,-0.55) 挪 0.6 m
+[INFO] [1793529624.844104440] [nbvplanner_explorer]: 起飞中... z=0.10 → 1.40m
+^C[INFO] [1793529625.543316042] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ 
+cd /home/jinyicheng/auto_navigation
+colcon build --packages-select nav3 --symlink-install
+source install/setup.bash
+ros2 run nav3 nbvplanner_explorer
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ cd /home/jinyicheng/auto_navigation
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ colcon build --packages-select nav3 --symlink-install
+Starting >>> nav3    
+Finished <<< nav3 [10.2s]                      
+
+Summary: 1 package finished [10.7s]
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ source install/setup.bash
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793530695.014954645] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×60° pitch=15°, 增益仰角带=[-7°,52°] (yaw无关=1), degressive=0.25, gainRange=1.00, gainEps=0.240, initIters=30, v_max=0.40
+[WARN] [1793530695.218235145] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530698.218245937] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530701.418195630] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530704.618245131] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530707.818194531] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530710.818233229] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530714.018227624] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=0)
+[WARN] [1793530717.218243020] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=1)
+[INFO] [1793530717.418189119] [nbvplanner_explorer]: 位置对照: 规划用 (0.00,-0.01,-0.02) / 飞控 (0.00,-0.01,-0.03) 相差 0.00 m
+[INFO] [1793530717.818203917] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.20m
+[INFO] [1793530719.618237110] [nbvplanner_explorer]: 位置对照: 规划用 (0.00,-0.01,-0.02) / 飞控 (0.00,-0.01,-0.02) 相差 0.00 m
+[INFO] [1793530719.818320709] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.20m
+[INFO] [1793530721.818190601] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.01,-0.03) / 飞控 (-0.00,-0.01,-0.02) 相差 0.00 m
+[INFO] [1793530722.018190900] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.20m
+[INFO] [1793530723.818256993] [nbvplanner_explorer]: 位置对照: 规划用 (0.00,-0.01,-0.02) / 飞控 (-0.00,-0.01,-0.02) 相差 0.00 m
+[INFO] [1793530724.018204092] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.20m
+[INFO] [1793530725.820494483] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.00,-0.02) / 飞控 (0.00,0.00,-0.02) 相差 0.01 m
+[INFO] [1793530726.018247582] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.20m
+[INFO] [1793530728.018233569] [nbvplanner_explorer]: 位置对照: 规划用 (0.00,-0.01,-0.02) / 飞控 (0.00,-0.01,-0.02) 相差 0.00 m
+[INFO] [1793530728.018370269] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.20m
+[INFO] [1793530730.218266154] [nbvplanner_explorer]: 位置对照: 规划用 (-0.01,0.04,0.00) / 飞控 (-0.00,-0.01,0.09) 相差 0.10 m
+[INFO] [1793530730.218348854] [nbvplanner_explorer]: 起飞中... z=0.00 → 1.20m
+[INFO] [1793530731.276028047] [nbvplanner_explorer]: 地图已知自由体积 383.8 m³ (窗口增长 0.00, 阈值 3.84, 停滞计数 0/2)
+[INFO] [1793530731.820266143] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3142, total_iters=56, loopCount=56
+[INFO] [1793530731.820581943] [nbvplanner_explorer]: 这条边后 30 个点在未知区域 → 只飞到已知边界 (-0.10,-0.27,0.68)
+[INFO] [1793530731.820713643] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.3142, 边点数=9, 边终点 (-0.10,-0.27,0.68)
+[INFO] [1793530732.025861142] [nbvplanner_explorer]: 飞向已发布目标 (-0.08,-0.24,0.75), 剩余 0.28 m
+[INFO] [1793530732.218283941] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.02,0.91) / 飞控 (-0.01,-0.01,0.89) 相差 0.02 m
+[WARN] [1793530739.936854493] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530740.068969593] [nbvplanner_explorer]: 锁定全局前沿 (-1.4,11.6,1.4), 距当前 11.7 m, 路径 29 格
+[INFO] [1793530740.092559592] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 11.7 m, 本段 2.5 m
+[INFO] [1793530740.092687892] [nbvplanner_explorer]: 位置对照: 规划用 (-0.00,-0.07,0.75) / 飞控 (-0.02,-0.09,0.77) 相差 0.04 m
+[INFO] [1793530740.199696692] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 11.7 m, 本段 2.5 m
+[WARN] [1793530741.427921079] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793530742.218208563] [nbvplanner_explorer]: 位置对照: 规划用 (-0.11,0.17,0.86) / 飞控 (-0.12,0.23,0.87) 相差 0.07 m
+[INFO] [1793530744.418291321] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,0.72,1.00) / 飞控 (-0.18,0.72,1.02) 相差 0.02 m
+[INFO] [1793530745.275074304] [nbvplanner_explorer]: 地图已知自由体积 628.2 m³ (窗口增长 0.00, 阈值 6.28, 停滞计数 0/2)
+[INFO] [1793530746.618190378] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,1.51,1.12) / 飞控 (-0.15,1.52,1.13) 相差 0.02 m
+[INFO] [1793530747.856597254] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 9.7 m, 本段 2.5 m
+[INFO] [1793530748.818180635] [nbvplanner_explorer]: 位置对照: 规划用 (-0.20,2.37,1.28) / 飞控 (-0.20,2.52,1.30) 相差 0.15 m
+[INFO] [1793530750.818255424] [nbvplanner_explorer]: 位置对照: 规划用 (-0.15,2.83,1.36) / 飞控 (-0.16,2.90,1.38) 相差 0.07 m
+[INFO] [1793530753.018231016] [nbvplanner_explorer]: 位置对照: 规划用 (-0.07,3.32,1.37) / 飞控 (-0.08,3.36,1.39) 相差 0.04 m
+[INFO] [1793530754.451956311] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 7.9 m, 本段 2.5 m
+[INFO] [1793530755.218233408] [nbvplanner_explorer]: 位置对照: 规划用 (-0.27,4.22,1.39) / 飞控 (-0.22,4.20,1.40) 相差 0.06 m
+[INFO] [1793530755.269515608] [nbvplanner_explorer]: 地图已知自由体积 637.9 m³ (窗口增长 0.00, 阈值 6.38, 停滞计数 0/2)
+[INFO] [1793530757.418167100] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,4.61,1.43) / 飞控 (-0.16,4.65,1.41) 相差 0.04 m
+[INFO] [1793530759.418220797] [nbvplanner_explorer]: 位置对照: 规划用 (-0.21,5.22,1.38) / 飞控 (-0.21,5.22,1.39) 相差 0.01 m
+[INFO] [1793530761.058463695] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 5.9 m, 本段 2.5 m
+[INFO] [1793530761.418253894] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,5.96,1.41) / 飞控 (-0.17,5.98,1.41) 相差 0.02 m
+[INFO] [1793530763.618208691] [nbvplanner_explorer]: 位置对照: 规划用 (-0.16,6.51,1.43) / 飞控 (-0.18,6.51,1.41) 相差 0.03 m
+[INFO] [1793530765.460825085] [nbvplanner_explorer]: 地图已知自由体积 650.1 m³ (窗口增长 0.00, 阈值 6.50, 停滞计数 0/2)
+[INFO] [1793530765.618234284] [nbvplanner_explorer]: 位置对照: 规划用 (-0.18,7.00,1.41) / 飞控 (-0.15,7.01,1.42) 相差 0.03 m
+[INFO] [1793530767.653003666] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 3.9 m, 本段 2.5 m
+[INFO] [1793530767.818215665] [nbvplanner_explorer]: 位置对照: 规划用 (-0.15,7.91,1.39) / 飞控 (-0.14,7.94,1.47) 相差 0.09 m
+[INFO] [1793530769.818218047] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,8.35,1.38) / 飞控 (-0.17,8.42,1.40) 相差 0.07 m
+[INFO] [1793530771.818275930] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,8.86,1.45) / 飞控 (-0.16,8.88,1.44) 相差 0.03 m
+[INFO] [1793530774.029775310] [nbvplanner_explorer]: 位置对照: 规划用 (-0.17,9.81,1.48) / 飞控 (-0.19,9.87,1.41) 相差 0.09 m
+[INFO] [1793530774.435942906] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 2.0 m, 本段 1.4 m
+[INFO] [1793530775.862134094] [nbvplanner_explorer]: 地图已知自由体积 676.5 m³ (窗口增长 0.00, 阈值 6.76, 停滞计数 0/2)
+[INFO] [1793530776.218187290] [nbvplanner_explorer]: 位置对照: 规划用 (-0.19,10.32,1.47) / 飞控 (-0.21,10.37,1.47) 相差 0.06 m
+[INFO] [1793530778.218224972] [nbvplanner_explorer]: 位置对照: 规划用 (-0.51,10.62,1.44) / 飞控 (-0.58,10.71,1.46) 相差 0.11 m
+[INFO] [1793530778.428950071] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-1.4,11.6,1.4) 距 1.1 m, 本段 0.5 m
+[INFO] [1793530780.418204253] [nbvplanner_explorer]: 位置对照: 规划用 (-0.96,11.12,1.34) / 飞控 (-0.97,11.12,1.48) 相差 0.14 m
+[INFO] [1793530781.426808546] [nbvplanner_explorer]: 前沿结束 (-1.4,11.6,1.4): 路径走到头 → 交回局部 NBV
+[INFO] [1793530781.864334645] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2558, total_iters=24, loopCount=24
+[INFO] [1793530781.866272145] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.2558, 边点数=39, 边终点 (0.19,12.12,1.24)
+[INFO] [1793530782.418226543] [nbvplanner_explorer]: 位置对照: 规划用 (-0.87,11.23,1.27) / 飞控 (-0.89,11.19,1.29) 相差 0.05 m
+[INFO] [1793530784.418252338] [nbvplanner_explorer]: 位置对照: 规划用 (-0.49,11.47,1.44) / 飞控 (-0.47,11.48,1.42) 相差 0.02 m
+[INFO] [1793530785.631628834] [nbvplanner_explorer]: 飞向已发布目标 (0.17,12.10,1.40), 剩余 0.40 m
+[INFO] [1793530786.060323333] [nbvplanner_explorer]: 地图已知自由体积 713.2 m³ (窗口增长 0.00, 阈值 7.13, 停滞计数 0/2)
+[INFO] [1793530786.755925531] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3875, total_iters=29, loopCount=29
+[INFO] [1793530786.757591831] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.3875, 边点数=39, 边终点 (0.93,13.28,1.27)
+[INFO] [1793530786.757744331] [nbvplanner_explorer]: 位置对照: 规划用 (0.05,12.07,1.42) / 飞控 (0.05,12.06,1.40) 相差 0.02 m
+[INFO] [1793530788.818218026] [nbvplanner_explorer]: 位置对照: 规划用 (0.30,12.47,1.40) / 飞控 (0.31,12.49,1.40) 相差 0.02 m
+[INFO] [1793530790.225691922] [nbvplanner_explorer]: 飞向已发布目标 (0.92,13.26,1.40), 剩余 0.54 m
+[INFO] [1793530790.818274420] [nbvplanner_explorer]: 位置对照: 规划用 (0.71,12.99,1.39) / 飞控 (0.82,13.14,1.39) 相差 0.18 m
+[INFO] [1793530792.004862416] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.5617, total_iters=20, loopCount=20
+[INFO] [1793530792.006519816] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.5617, 边点数=39, 边终点 (1.35,14.66,1.33)
+[WARN] [1793530792.627325114] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793530792.627470114] [nbvplanner_explorer]: 飞向已发布目标 (1.06,13.64,1.39), 剩余 0.34 m
+[INFO] [1793530793.018211113] [nbvplanner_explorer]: 位置对照: 规划用 (0.96,13.32,1.25) / 飞控 (0.97,13.27,1.43) 相差 0.19 m
+[INFO] [1793530794.562784708] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6792, total_iters=12, loopCount=12
+[INFO] [1793530794.564644308] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.6792, 边点数=39, 边终点 (1.84,14.76,1.33)
+[INFO] [1793530795.018256907] [nbvplanner_explorer]: 位置对照: 规划用 (1.08,13.74,1.39) / 飞控 (1.09,13.74,1.41) 相差 0.02 m
+[INFO] [1793530796.463176902] [nbvplanner_explorer]: 地图已知自由体积 736.1 m³ (窗口增长 0.00, 阈值 7.36, 停滞计数 0/2)
+[INFO] [1793530797.218275395] [nbvplanner_explorer]: 位置对照: 规划用 (1.49,14.18,1.38) / 飞控 (1.51,14.22,1.39) 相差 0.04 m
+[INFO] [1793530797.425686987] [nbvplanner_explorer]: 飞向已发布目标 (1.81,14.71,1.40), 剩余 0.61 m
+[INFO] [1793530798.768178336] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9032, total_iters=12, loopCount=12
+[INFO] [1793530798.769763536] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.9032, 边点数=39, 边终点 (2.37,15.83,1.37)
+[INFO] [1793530799.238272918] [nbvplanner_explorer]: 位置对照: 规划用 (1.86,14.83,1.33) / 飞控 (1.85,14.83,1.59) 相差 0.26 m
+[INFO] [1793530801.418239435] [nbvplanner_explorer]: 位置对照: 规划用 (2.11,15.27,1.28) / 飞控 (2.13,15.27,1.47) 相差 0.19 m
+[INFO] [1793530801.825952819] [nbvplanner_explorer]: 飞向已发布目标 (2.36,15.81,1.36), 剩余 0.46 m
+[INFO] [1793530802.679266987] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=40, bestGain=0.2588, total_iters=67, loopCount=67
+[INFO] [1793530802.681718987] [nbvplanner_explorer]: 规划 OK: counter=40, bestGain=0.2588, 边点数=39, 边终点 (3.37,16.65,1.37)
+[INFO] [1793530803.423858158] [nbvplanner_explorer]: 位置对照: 规划用 (2.37,15.81,1.28) / 飞控 (2.38,15.82,1.29) 相差 0.02 m
+[INFO] [1793530805.618198090] [nbvplanner_explorer]: 位置对照: 规划用 (2.88,16.10,1.42) / 飞控 (2.89,16.12,1.42) 相差 0.02 m
+[INFO] [1793530806.225432084] [nbvplanner_explorer]: 飞向已发布目标 (3.33,16.61,1.40), 剩余 0.51 m
+[INFO] [1793530806.667126580] [nbvplanner_explorer]: 地图已知自由体积 791.9 m³ (窗口增长 0.00, 阈值 7.92, 停滞计数 0/2)
+[INFO] [1793530807.743623869] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2927, total_iters=34, loopCount=34
+[INFO] [1793530807.745340569] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.2927, 边点数=39, 边终点 (4.54,17.22,1.35)
+[INFO] [1793530807.745455569] [nbvplanner_explorer]: 位置对照: 规划用 (3.25,16.47,1.27) / 飞控 (3.23,16.45,1.57) 相差 0.30 m
+[WARN] [1793530808.226560965] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793530808.226691665] [nbvplanner_explorer]: 飞向已发布目标 (3.63,16.69,1.33), 剩余 0.28 m
+[WARN] [1793530815.791591964] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530815.880886220] [nbvplanner_explorer]: 锁定全局前沿 (9.3,18.3,1.4), 距当前 6.2 m, 路径 16 格
+[INFO] [1793530815.908697106] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 6.2 m, 本段 2.5 m
+[INFO] [1793530815.908843406] [nbvplanner_explorer]: 位置对照: 规划用 (3.41,16.59,1.36) / 飞控 (3.42,16.60,1.33) 相差 0.04 m
+[INFO] [1793530815.957645581] [nbvplanner_explorer]: 地图已知自由体积 822.1 m³ (窗口增长 0.00, 阈值 8.22, 停滞计数 0/2)
+[WARN] [1793530815.965205577] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793530815.996267962] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 6.2 m, 本段 2.5 m
+[WARN] [1793530817.226848944] [nbvplanner_explorer]: 这条边的剩余部分 (到 5.17,18.35,1.40) 已被占据 → 立即作废
+[INFO] [1793530818.018316850] [nbvplanner_explorer]: 位置对照: 规划用 (3.44,16.65,1.48) / 飞控 (3.43,16.70,1.47) 相差 0.05 m
+[INFO] [1793530820.218236645] [nbvplanner_explorer]: 位置对照: 规划用 (3.24,17.10,1.37) / 飞控 (3.22,17.09,1.39) 相差 0.04 m
+[INFO] [1793530822.218241438] [nbvplanner_explorer]: 位置对照: 规划用 (3.80,17.48,1.23) / 飞控 (3.86,17.50,1.40) 相差 0.18 m
+[INFO] [1793530824.418254030] [nbvplanner_explorer]: 位置对照: 规划用 (4.46,17.86,1.46) / 飞控 (4.46,17.87,1.42) 相差 0.04 m
+[INFO] [1793530824.849221229] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 4.9 m, 本段 1.8 m
+[INFO] [1793530826.086831724] [nbvplanner_explorer]: 地图已知自由体积 949.3 m³ (窗口增长 0.00, 阈值 9.49, 停滞计数 0/2)
+[INFO] [1793530826.618229722] [nbvplanner_explorer]: 位置对照: 规划用 (4.81,18.06,1.48) / 飞控 (4.85,18.04,1.49) 相差 0.04 m
+[WARN] [1793530827.826502118] [nbvplanner_explorer]: 这条边的剩余部分 (到 6.27,18.27,1.47) 已被占据 → 立即作废
+[INFO] [1793530827.833824018] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 4.3 m, 本段 1.0 m
+[INFO] [1793530828.818178814] [nbvplanner_explorer]: 位置对照: 规划用 (5.27,17.89,1.44) / 飞控 (5.27,17.87,1.46) 相差 0.02 m
+[INFO] [1793530830.832576698] [nbvplanner_explorer]: 位置对照: 规划用 (5.49,18.24,1.48) / 飞控 (5.52,18.26,1.48) 相差 0.03 m
+[INFO] [1793530831.056580896] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 3.8 m, 本段 2.5 m
+[INFO] [1793530833.018213179] [nbvplanner_explorer]: 位置对照: 规划用 (6.03,18.28,1.46) / 飞控 (6.03,18.29,1.48) 相差 0.02 m
+[INFO] [1793530835.218197560] [nbvplanner_explorer]: 位置对照: 规划用 (6.52,18.70,1.45) / 飞控 (6.54,18.67,1.47) 相差 0.05 m
+[INFO] [1793530836.291453051] [nbvplanner_explorer]: 地图已知自由体积 1029.7 m³ (窗口增长 0.00, 阈值 10.30, 停滞计数 0/2)
+[INFO] [1793530837.418214840] [nbvplanner_explorer]: 位置对照: 规划用 (7.37,18.68,1.07) / 飞控 (7.38,18.66,1.08) 相差 0.03 m
+[INFO] [1793530838.033663732] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 1.8 m, 本段 1.2 m
+[INFO] [1793530839.618207011] [nbvplanner_explorer]: 位置对照: 规划用 (8.07,18.84,1.41) / 飞控 (8.09,18.83,1.38) 相差 0.03 m
+[INFO] [1793530841.302104289] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 1.1 m, 本段 0.4 m
+[INFO] [1793530841.818249683] [nbvplanner_explorer]: 位置对照: 规划用 (8.47,18.68,1.02) / 飞控 (8.51,18.69,1.16) 相差 0.15 m
+[INFO] [1793530843.627581359] [nbvplanner_explorer]: 沿前沿推进: 前沿 (9.3,18.3,1.4) 距 0.6 m, 本段 0.4 m
+[INFO] [1793530844.018182054] [nbvplanner_explorer]: 位置对照: 规划用 (8.94,18.79,1.20) / 飞控 (9.00,18.80,1.21) 相差 0.07 m
+[WARN] [1793530844.225158651] [nbvplanner_explorer]: 这条边的剩余部分 (到 9.32,18.74,1.37) 已被占据 → 立即作废
+[ERROR] [1793530844.824882744] [nbvplanner_explorer]: 近距障碍：机身盒已与占据格重叠 (当前位置 9.07,18.75,1.36)；最近占据格 (9.07,18.35,1.76) 相对机体偏移 (0.00,-0.40,0.40)，距离 0.57
+[INFO] [1793530844.825005644] [nbvplanner_explorer]: 前沿结束 (9.3,18.3,1.4): 近距障碍 → 交回局部 NBV
+[WARN] [1793530844.825247744] [nbvplanner_explorer]: 近距障碍：沿净空方向 (0.00,0.71,-0.71) 挪 0.6 m
+[ERROR] [1793530845.431991535] [nbvplanner_explorer]: 近距障碍：机身盒已与占据格重叠 (当前位置 9.06,18.72,1.38)；最近占据格 (9.06,18.32,1.78) 相对机体偏移 (0.00,-0.40,0.40)，距离 0.57
+[WARN] [1793530845.825087429] [nbvplanner_explorer]: 近距障碍：沿净空方向 (0.00,0.71,-0.71) 挪 0.6 m
+[INFO] [1793530846.024921827] [nbvplanner_explorer]: 飞向已发布目标 (9.05,19.22,1.40), 剩余 0.39 m
+[INFO] [1793530846.218242524] [nbvplanner_explorer]: 位置对照: 规划用 (9.02,18.87,1.19) / 飞控 (9.04,18.88,1.97) 相差 0.78 m
+[ERROR] [1793530846.218370924] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.78 m → 停止探索，按飞控位置悬停
+[ERROR] [1793530847.418186506] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.88 m → 停止探索，按飞控位置悬停
+[INFO] [1793530848.418179292] [nbvplanner_explorer]: 位置对照: 规划用 (9.01,19.24,1.00) / 飞控 (9.01,19.27,1.90) 相差 0.90 m
+[ERROR] [1793530848.418242692] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.90 m → 停止探索，按飞控位置悬停
+[ERROR] [1793530849.618252574] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.91 m → 停止探索，按飞控位置悬停
+[INFO] [1793530850.418262262] [nbvplanner_explorer]: 位置对照: 规划用 (8.98,19.16,0.97) / 飞控 (8.98,19.16,1.88) 相差 0.91 m
+[ERROR] [1793530850.818278057] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.91 m → 停止探索，按飞控位置悬停
+[INFO] [1793530851.496467247] [nbvplanner_explorer]: 地图已知自由体积 1113.2 m³ (窗口增长 0.00, 阈值 11.13, 停滞计数 0/2)
+[WARN] [1793530851.504894847] [nbvplanner_explorer]: 目标 5.6s 未到达 (剩余 0.46m, 预算 4.1s) → 丢弃重规划
+[WARN] [1793530857.179008363] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530857.268476361] [nbvplanner_explorer]: 锁定全局前沿 (20.6,18.8,1.4), 距当前 11.6 m, 路径 29 格
+[INFO] [1793530857.294097161] [nbvplanner_explorer]: 沿前沿推进: 前沿 (20.6,18.8,1.4) 距 11.6 m, 本段 2.5 m
+[INFO] [1793530857.294344661] [nbvplanner_explorer]: 位置对照: 规划用 (8.99,19.15,0.95) / 飞控 (8.99,19.14,0.99) 相差 0.04 m
+[WARN] [1793530857.376034760] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793530857.404106359] [nbvplanner_explorer]: 沿前沿推进: 前沿 (20.6,18.8,1.4) 距 11.6 m, 本段 2.5 m
+[ERROR] [1793530858.018258050] [nbvplanner_explorer]: FAST-LIO 与飞控位置相差 0.62 m → 停止探索，按飞控位置悬停
+[WARN] [1793530858.633470641] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[WARN] [1793530858.633530741] [nbvplanner_explorer]: 15s 内净位移不足 1.1m (当前位置 9.13,19.16,0.87) → 转全局前沿
+[INFO] [1793530858.633547741] [nbvplanner_explorer]: 前沿结束 (20.6,18.8,1.4): 15s 无净位移 → 交回局部 NBV
+[INFO] [1793530858.707274740] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530865.791718035] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530865.791862935] [nbvplanner_explorer]: 位置对照: 规划用 (9.13,19.16,0.87) / 飞控 (9.14,19.15,1.32) 相差 0.45 m
+[INFO] [1793530865.866689834] [nbvplanner_explorer]: 地图已知自由体积 1118.7 m³ (窗口增长 0.00, 阈值 11.19, 停滞计数 0/2)
+[WARN] [1793530872.863088429] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530872.936875128] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530872.972044527] [nbvplanner_explorer]: 位置对照: 规划用 (9.12,19.23,0.74) / 飞控 (9.14,19.13,0.91) 相差 0.20 m
+[WARN] [1793530880.692627610] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530880.790321308] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530880.826973008] [nbvplanner_explorer]: 位置对照: 规划用 (9.09,19.11,0.94) / 飞控 (9.14,19.13,0.91) 相差 0.06 m
+[INFO] [1793530880.908644507] [nbvplanner_explorer]: 地图已知自由体积 1156.4 m³ (窗口增长 637.09, 阈值 11.56, 停滞计数 0/2)
+[WARN] [1793530880.916437307] [nbvplanner_explorer]: 15s 内净位移不足 1.1m (当前位置 9.09,19.11,0.94) → 转全局前沿
+[INFO] [1793530880.993717205] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530887.049906016] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530887.083371115] [nbvplanner_explorer]: 位置对照: 规划用 (9.10,19.30,0.78) / 飞控 (9.14,19.24,0.85) 相差 0.10 m
+[WARN] [1793530892.526478336] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530892.592244935] [nbvplanner_explorer]: 没有可达前沿（候选 2 个，可用 2 个）→ 本轮悬停
+[INFO] [1793530892.626556834] [nbvplanner_explorer]: 位置对照: 规划用 (9.05,19.07,0.98) / 飞控 (9.14,19.24,0.85) 相差 0.24 m
+[INFO] [1793530892.709692333] [nbvplanner_explorer]: 地图已知自由体积 1165.3 m³ (窗口增长 532.31, 阈值 11.65, 停滞计数 0/2)
+[WARN] [1793530898.604699253] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530898.728287952] [nbvplanner_explorer]: 没有可达前沿（候选 3 个，可用 3 个）→ 本轮悬停
+[INFO] [1793530898.766100051] [nbvplanner_explorer]: 位置对照: 规划用 (9.16,19.38,0.59) / 飞控 (9.13,19.25,0.86) 相差 0.30 m
+[WARN] [1793530898.905438849] [nbvplanner_explorer]: 15s 内净位移不足 1.2m (当前位置 9.14,19.28,0.90) → 转全局前沿
+[INFO] [1793530898.970350849] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530905.983020859] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530905.983196659] [nbvplanner_explorer]: 位置对照: 规划用 (9.14,19.28,0.90) / 飞控 (9.13,19.25,0.87) 相差 0.04 m
+[INFO] [1793530906.056764458] [nbvplanner_explorer]: 地图已知自由体积 1168.6 m³ (窗口增长 526.93, 阈值 11.69, 停滞计数 0/2)
+[WARN] [1793530913.121384058] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530913.191307847] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530913.227463240] [nbvplanner_explorer]: 位置对照: 规划用 (9.10,19.27,0.86) / 飞控 (9.16,19.25,0.85) 相差 0.06 m
+[WARN] [1793530920.240881351] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530920.306752455] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530920.340507457] [nbvplanner_explorer]: 位置对照: 规划用 (9.13,19.23,0.70) / 飞控 (9.16,19.25,0.85) 相差 0.15 m
+[INFO] [1793530920.422941162] [nbvplanner_explorer]: 地图已知自由体积 1182.5 m³ (窗口增长 517.94, 阈值 11.82, 停滞计数 0/2)
+[WARN] [1793530920.430878462] [nbvplanner_explorer]: 15s 内净位移不足 1.3m (当前位置 9.13,19.23,0.70) → 转全局前沿
+[INFO] [1793530920.589144972] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530927.732529455] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530927.766921059] [nbvplanner_explorer]: 位置对照: 规划用 (9.08,19.24,0.93) / 飞控 (9.12,19.26,0.91) 相差 0.04 m
+[WARN] [1793530933.399257033] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530933.578578653] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530933.615230457] [nbvplanner_explorer]: 位置对照: 规划用 (9.14,19.21,0.84) / 飞控 (9.12,19.26,0.91) 相差 0.10 m
+[INFO] [1793530933.697213066] [nbvplanner_explorer]: 地图已知自由体积 1184.8 m³ (窗口增长 494.31, 阈值 11.85, 停滞计数 0/2)
+[WARN] [1793530940.724394457] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530940.881306674] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530940.918797978] [nbvplanner_explorer]: 位置对照: 规划用 (9.14,19.30,1.01) / 飞控 (9.11,19.31,1.00) 相差 0.03 m
+[WARN] [1793530941.001925288] [nbvplanner_explorer]: 15s 内净位移不足 1.1m (当前位置 9.14,19.30,1.01) → 转全局前沿
+[INFO] [1793530941.056143694] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530947.923322989] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530947.956523390] [nbvplanner_explorer]: 位置对照: 规划用 (9.02,19.15,0.47) / 飞控 (9.11,19.31,1.00) 相差 0.56 m
+[INFO] [1793530948.092942293] [nbvplanner_explorer]: 地图已知自由体积 1187.8 m³ (窗口增长 469.97, 阈值 11.88, 停滞计数 0/2)
+[WARN] [1793530953.694338379] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530953.753071477] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530953.753268877] [nbvplanner_explorer]: 位置对照: 规划用 (9.09,19.30,0.85) / 飞控 (9.08,19.32,0.88) 相差 0.04 m
+[WARN] [1793530959.307367782] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530959.365491983] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530959.399378583] [nbvplanner_explorer]: 位置对照: 规划用 (9.11,19.32,0.91) / 飞控 (9.07,19.32,0.91) 相差 0.04 m
+[INFO] [1793530959.474070083] [nbvplanner_explorer]: 地图已知自由体积 1191.8 m³ (窗口增长 435.09, 阈值 11.92, 停滞计数 0/2)
+[WARN] [1793530959.482932084] [nbvplanner_explorer]: 15s 内净位移不足 1.2m (当前位置 9.11,19.32,0.91) → 转全局前沿
+[INFO] [1793530959.533641884] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530965.759417218] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530965.797509117] [nbvplanner_explorer]: 位置对照: 规划用 (9.10,19.30,0.79) / 飞控 (9.07,19.32,0.91) 相差 0.13 m
+[WARN] [1793530971.509721812] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530971.571556710] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530971.602391609] [nbvplanner_explorer]: 位置对照: 规划用 (9.14,19.34,0.92) / 飞控 (9.04,19.43,1.02) 相差 0.17 m
+[INFO] [1793530971.675829507] [nbvplanner_explorer]: 地图已知自由体积 1194.2 m³ (窗口增长 372.04, 阈值 11.94, 停滞计数 0/2)
+[WARN] [1793530977.962970680] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530978.033112878] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530978.067696676] [nbvplanner_explorer]: 位置对照: 规划用 (9.13,19.34,0.84) / 飞控 (9.04,19.43,1.02) 相差 0.21 m
+[WARN] [1793530978.154118173] [nbvplanner_explorer]: 15s 内净位移不足 1.3m (当前位置 9.13,19.34,0.84) → 转全局前沿
+[INFO] [1793530978.220008071] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[WARN] [1793530984.315795775] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530984.347794676] [nbvplanner_explorer]: 位置对照: 规划用 (9.21,19.33,0.95) / 飞控 (9.12,19.34,1.01) 相差 0.11 m
+[INFO] [1793530984.426834876] [nbvplanner_explorer]: 地图已知自由体积 1196.1 m³ (窗口增长 246.80, 阈值 11.96, 停滞计数 0/2)
+[WARN] [1793530990.401262678] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530990.552772775] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 1 个）→ 本轮悬停
+[INFO] [1793530990.585399474] [nbvplanner_explorer]: 位置对照: 规划用 (9.11,19.31,0.21) / 飞控 (9.12,19.34,1.01) 相差 0.81 m
+[WARN] [1793530996.851210641] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793530996.918352840] [nbvplanner_explorer]: 没有可达前沿（候选 2 个，可用 2 个）→ 本轮悬停
+[INFO] [1793530996.918588740] [nbvplanner_explorer]: 位置对照: 规划用 (9.20,19.38,0.71) / 飞控 (9.20,19.37,0.70) 相差 0.01 m
+[INFO] [1793530996.989419538] [nbvplanner_explorer]: 地图已知自由体积 1196.8 m³ (窗口增长 167.06, 阈值 11.97, 停滞计数 0/2)
+[WARN] [1793530996.997018438] [nbvplanner_explorer]: 15s 内净位移不足 1.4m (当前位置 9.20,19.38,0.71) → 转全局前沿
+[INFO] [1793530997.064379937] [nbvplanner_explorer]: 没有可达前沿（候选 2 个，可用 2 个）→ 本轮悬停
+[WARN] [1793531003.411600044] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793531003.439678044] [nbvplanner_explorer]: 位置对照: 规划用 (9.14,19.30,0.10) / 飞控 (9.18,19.36,0.55) 相差 0.46 m

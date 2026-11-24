@@ -1,0 +1,5 @@
+newmtl Lights
+Kd 1.0 1.0 0.15
+Ka 0.400 0.400 0.060
+d 1.0
+illum 1

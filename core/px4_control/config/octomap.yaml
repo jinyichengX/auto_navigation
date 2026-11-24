@@ -1,0 +1,33 @@
+/**:
+  ros__parameters:
+    # 地图坐标系：跟 FAST-LIO 一致
+    frame_id: camera_init
+    base_frame_id: body
+
+    # 体素边长，巷道小地图用 0.1 m 够用
+    resolution: 0.15
+
+    # 只吃附近点，加快建图
+    sensor_model.max_range: 70.0
+
+    # # 建图时先丢掉地板附近和顶板附近，墙/柱子更干净
+    # # FAST-LIO 的 z 大致是起飞点高度为 0
+    # point_cloud_min_z: 0.2
+    # point_cloud_max_z: 2.5
+
+    # # 投影成 2D 可走图时，也只看飞行高度附近
+    # occupancy_min_z: 0.3
+    # occupancy_max_z: 2.0
+
+    filter_ground_plane: false
+    # 必须关掉。filter_speckles 会删掉"孤立的小占据簇"，而掠射角打出来的侧墙
+    # 正好就是稀疏几粒点——关掉前它们在图上被整片抹掉，墙要到飞机贴上去、
+    # 点云变密之后才出现（日志里就是"目标突然变占据 → 转全局前沿 → 里程计发散"）。
+    # 仿真点云本来没有噪声，这个过滤没有任何收益。
+    filter_speckles: false
+    compress_map: true
+    latch: false
+    # 打开 free 格：这样 /projected_map 才能区分“可走”和“未知”
+    publish_free_space: true
+    # false：每帧完整投影 2D；true 在当前仿真里会出现 projected_map 全未知
+    incremental_2D_projection: false

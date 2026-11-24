@@ -96,7 +96,7 @@ class GzLidarBridge(Node):
     def find_topic(self):
         """话题名形如 /world/<world>/model/<model>/link/livox_link/sensor/livox_mid360_lidar/scan/points"""
         for t in self.gz.topic_list():
-            if 'livox_mid360' in t and t.endswith('/points'):
+            if 'livox_mid360_lidar' in t and t.endswith('/points'):
                 return t
         return None
 

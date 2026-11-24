@@ -1,0 +1,98 @@
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793515630.731922117] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×60° pitch=15°, 增益仰角带=[-45°,15°] (yaw无关=1), degressive=0.25, gainRange=1.00, gainEps=0.240, initIters=30
+[WARN] [1793515630.934094617] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=1)
+[INFO] [1793515631.134240518] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.6m
+[INFO] [1793515633.334170425] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.6m
+[WARN] [1793515641.508821243] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[WARN] [1793515649.517780962] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[WARN] [1793515649.941884963] [nbvplanner_explorer]: 15s 内净位移不足 1.5m (当前位置 -0.10,0.05,1.47) → 转全局前沿
+[WARN] [1793515657.682614924] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793515657.759356525] [nbvplanner_explorer]: 锁定全局前沿 (1.2,10.1,1.5), 距当前 10.1 m, 路径 19 格
+[INFO] [1793515657.769352425] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 10.1 m, 本段 1.5 m
+[INFO] [1793515661.752829140] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 9.2 m, 本段 1.5 m
+[INFO] [1793515665.755775534] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 8.2 m, 本段 1.5 m
+[INFO] [1793515669.553071228] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 7.2 m, 本段 1.5 m
+[INFO] [1793515673.352461922] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 6.3 m, 本段 1.5 m
+[INFO] [1793515677.352420316] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 5.3 m, 本段 1.5 m
+[INFO] [1793515681.352047509] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 4.3 m, 本段 1.5 m
+[INFO] [1793515685.354886501] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 3.4 m, 本段 1.5 m
+[INFO] [1793515689.551968689] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 2.5 m, 本段 1.5 m
+[INFO] [1793515693.751656783] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 1.4 m, 本段 1.4 m
+[INFO] [1793515697.943959283] [nbvplanner_explorer]: 沿前沿推进: 前沿 (1.2,10.1,1.5) 距 0.5 m, 本段 0.6 m
+[INFO] [1793515699.344835083] [nbvplanner_explorer]: 前沿结束 (1.2,10.1,1.5): 到达 → 交回局部 NBV
+[INFO] [1793515699.981345683] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4627, total_iters=44, loopCount=44
+[INFO] [1793515699.983085383] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.4627, 边点数=39, 边终点 (0.14,11.39,1.65)
+[INFO] [1793515703.941583387] [nbvplanner_explorer]: 飞向已发布目标 (0.16,11.37,1.65), 剩余 0.43 m
+[INFO] [1793515704.979495388] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3404, total_iters=59, loopCount=59
+[INFO] [1793515704.981202188] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.3404, 边点数=39, 边终点 (0.86,12.56,1.76)
+[INFO] [1793515708.941835992] [nbvplanner_explorer]: 飞向已发布目标 (0.85,12.54,1.76), 剩余 0.48 m
+[INFO] [1793515710.617581293] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6274, total_iters=32, loopCount=32
+[INFO] [1793515710.619400293] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.6274, 边点数=39, 边终点 (1.63,13.60,1.76)
+[INFO] [1793515714.541414595] [nbvplanner_explorer]: 飞向已发布目标 (1.62,13.58,1.76), 剩余 0.51 m
+[INFO] [1793515716.247340076] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9060, total_iters=16, loopCount=16
+[INFO] [1793515716.249720076] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.9060, 边点数=39, 边终点 (1.47,14.93,1.77)
+[INFO] [1793515720.141383127] [nbvplanner_explorer]: 飞向已发布目标 (1.47,14.87,1.77), 剩余 0.50 m
+[INFO] [1793515721.068227391] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=39, bestGain=0.2477, total_iters=90, loopCount=90
+[INFO] [1793515721.070242491] [nbvplanner_explorer]: 规划 OK: counter=39, bestGain=0.2477, 边点数=39, 边终点 (2.39,15.81,1.79)
+[INFO] [1793515724.941591313] [nbvplanner_explorer]: 飞向已发布目标 (2.35,15.76,1.79), 剩余 0.49 m
+[INFO] [1793515726.391087921] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3931, total_iters=36, loopCount=36
+[INFO] [1793515726.392885621] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.3931, 边点数=39, 边终点 (3.30,16.69,1.79)
+[WARN] [1793515727.342811761] [nbvplanner_explorer]: 这条边的剩余部分 (到 3.30,16.69,1.79) 已被占据 → 立即作废
+[INFO] [1793515728.232387604] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4375, total_iters=16, loopCount=16
+[INFO] [1793515728.234275004] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.4375, 边点数=39, 边终点 (3.19,17.14,1.81)
+[INFO] [1793515732.141684680] [nbvplanner_explorer]: 飞向已发布目标 (3.18,17.13,1.55), 剩余 0.42 m
+[INFO] [1793515735.208129376] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=101, bestGain=0.2589, total_iters=252, loopCount=252
+[INFO] [1793515735.210150076] [nbvplanner_explorer]: 规划 OK: counter=101, bestGain=0.2589, 边点数=39, 边终点 (4.05,18.10,1.78)
+[WARN] [1793515736.542548075] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793515736.542822075] [nbvplanner_explorer]: 飞向已发布目标 (3.37,17.30,1.61), 剩余 0.33 m
+[INFO] [1793515737.715722373] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4121, total_iters=23, loopCount=23
+[INFO] [1793515737.717488073] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.4121, 边点数=39, 边终点 (4.36,18.07,1.71)
+[INFO] [1793515741.542295663] [nbvplanner_explorer]: 飞向已发布目标 (4.31,18.03,1.44), 剩余 0.43 m
+[WARN] [1793515748.583435584] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793515748.639628880] [nbvplanner_explorer]: 锁定全局前沿 (10.6,18.6,1.4), 距当前 6.5 m, 路径 16 格
+[INFO] [1793515748.654499079] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 6.5 m, 本段 1.5 m
+[INFO] [1793515752.960662189] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 5.4 m, 本段 1.5 m
+[INFO] [1793515757.153808688] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 4.7 m, 本段 1.5 m
+[INFO] [1793515759.534259870] [nbvplanner_explorer]: 起飞中... z=0.36 → 1.6m
+[INFO] [1793515761.738681153] [nbvplanner_explorer]: 起飞中... z=0.31 → 1.6m
+[INFO] [1793515763.934148536] [nbvplanner_explorer]: 起飞中... z=0.37 → 1.6m
+[INFO] [1793515765.934162428] [nbvplanner_explorer]: 起飞中... z=0.43 → 1.6m
+[INFO] [1793515768.139185419] [nbvplanner_explorer]: 起飞中... z=0.45 → 1.6m
+[INFO] [1793515768.357432718] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 4.2 m, 本段 1.5 m
+[INFO] [1793515772.561604252] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 3.0 m, 本段 1.5 m
+[INFO] [1793515776.751428956] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 2.3 m, 本段 1.4 m
+[INFO] [1793515779.134145708] [nbvplanner_explorer]: 起飞中... z=0.42 → 1.6m
+[INFO] [1793515781.134268594] [nbvplanner_explorer]: 起飞中... z=-0.73 → 1.6m
+[INFO] [1793515783.334191377] [nbvplanner_explorer]: 起飞中... z=-0.66 → 1.6m
+[INFO] [1793515784.753749966] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 1.8 m, 本段 1.0 m
+[WARN] [1793515784.941645165] [nbvplanner_explorer]: 这条边的剩余部分 (到 9.70,18.40,0.93) 已被占据 → 立即作废
+[WARN] [1793515786.341829954] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[WARN] [1793515790.342973247] [nbvplanner_explorer]: 这条边的剩余部分 (到 10.49,18.62,1.01) 已被占据 → 立即作废
+[INFO] [1793515790.549407948] [nbvplanner_explorer]: 沿前沿推进: 前沿 (10.6,18.6,1.4) 距 0.7 m, 本段 0.3 m
+[WARN] [1793515791.541318550] [nbvplanner_explorer]: 这条边的剩余部分 (到 10.34,18.65,1.07) 已被占据 → 立即作废
+[INFO] [1793515791.945095250] [nbvplanner_explorer]: 前沿结束 (10.6,18.6,1.4): 到达 → 交回局部 NBV
+[WARN] [1793515798.791810492] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793515799.534207976] [nbvplanner_explorer]: 起飞中... z=0.31 → 1.6m
+[INFO] [1793515801.734291428] [nbvplanner_explorer]: 起飞中... z=-0.93 → 1.6m
+[INFO] [1793515803.934266675] [nbvplanner_explorer]: 起飞中... z=-0.93 → 1.6m
+[WARN] [1793515806.147545719] [nbvplanner_explorer]: 15s 内净位移不足 0.8m (当前位置 10.37,18.45,0.77) → 转全局前沿
+[WARN] [1793515812.435785272] [nbvplanner_explorer]: 局部 RRT 到 cutoffIterations=200 仍无增益 → 转全局前沿
+[INFO] [1793515812.479877777] [nbvplanner_explorer]: 没有可达前沿（候选 1 个，可用 0 个）→ 本轮悬停
+[INFO] [1793515813.933964310] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8034, total_iters=39, loopCount=39
+[INFO] [1793515813.934089111] [nbvplanner_explorer]: 这条边后 24 个点在未知区域 → 只飞到已知边界 (7.28,24.27,4.96)
+[INFO] [1793515813.934374911] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.8034, 边点数=15, 边终点 (7.28,24.27,4.96)
+[WARN] [1793515815.142189922] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793515815.142373322] [nbvplanner_explorer]: 飞向已发布目标 (7.32,24.41,5.14), 剩余 0.35 m
+[INFO] [1793515817.342023624] [nbvplanner_explorer]: 飞向已发布目标 (7.32,24.41,5.14), 剩余 0.35 m
+[WARN] [1793515818.742049553] [nbvplanner_explorer]: 目标 3.8s 未到达 (剩余 0.35m, 预算 3.8s) → 丢弃重规划
+[INFO] [1793515819.295201604] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7382, total_iters=34, loopCount=34
+[INFO] [1793515819.295316204] [nbvplanner_explorer]: 这条边后 23 个点在未知区域 → 只飞到已知边界 (7.54,24.22,4.92)
+[INFO] [1793515819.295592304] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.7382, 边点数=16, 边终点 (7.54,24.22,4.92)
+[WARN] [1793515820.541894189] [nbvplanner_explorer]: 沿这条边 1.2 s 位移不足 0.2 m → 作废并重新规划
+[INFO] [1793515820.542064489] [nbvplanner_explorer]: 飞向已发布目标 (7.50,24.39,5.14), 剩余 0.36 m
+[INFO] [1793515822.542225385] [nbvplanner_explorer]: 飞向已发布目标 (7.50,24.39,5.14), 剩余 0.36 m
+[WARN] [1793515824.142733562] [nbvplanner_explorer]: 目标 3.8s 未到达 (剩余 0.36m, 预算 3.8s) → 丢弃重规划
+[INFO] [1793515825.079575607] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7331, total_iters=15, loopCount=15
+[INFO] [1793515825.079683207] [nbvplanner_explorer]: 这条边后 24 个点在未知区域 → 只飞到已知边界 (7.74,24.34,4.97)
+[INFO] [1793515825.079937707] [nbvplanner_explorer]: 规划 OK: counter=30, bestGain=0.7331, 边点数=15, 边终点 (7.74,24.34,4.97)
+^C[INFO] [1793515825.589677732] [rclcpp]: signal_handler(SIGINT/SIGTERM)

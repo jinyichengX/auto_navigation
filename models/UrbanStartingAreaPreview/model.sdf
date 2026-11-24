@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="UrbanStartingAreaPreview">
+    <static>true</static>
+    <link name="base">
+      
+      
+      
+      
+
+      <visual name="visual_floor">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Floor.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Floor_Roughness.jpg</roughness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.8</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_metal_brushed">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/MetalBrushed.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/MetalBrushed_Metalness.jpg</metalness_map>
+              <metalness>0.8</metalness>
+              <roughness>0.4</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_concrete_tiles">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/ConcreteTiles.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/ConcreteTiles_Metalness.jpg</metalness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.85</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_lights">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Lights.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Lights_Metalness.jpg</metalness_map>
+              <metalness>0.2</metalness>
+              <roughness>0.6</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <visual name="visual_wall">
+        <geometry>
+          <mesh>
+            <uri>file:///home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/meshes/parts/Wall.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>1.0 1.0 1.0 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Albedo.jpg</albedo_map>
+              <normal_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Normal.jpg</normal_map>
+              <roughness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Roughness.jpg</roughness_map>
+              <metalness_map>/home/jinyicheng/auto_navigation/models/UrbanStartingAreaPreview/materials/textures/Wall_Metalness.jpg</metalness_map>
+              <metalness>0.0</metalness>
+              <roughness>0.8</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

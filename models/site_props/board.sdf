@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!-- 竖立木板 1.30 x 0.06 x 1.55（厚 x 宽 x 高），原点在底面中心（放置时 z = 地面） -->
+<sdf version="1.9">
+  <model name="plywood_board">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.775 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.06 1.30 1.55</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="panel">
+        <pose>0 0 0.775 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.06 1.30 1.55</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.30 0.22 0.14 1</ambient>
+          <diffuse>0.44 0.32 0.20 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+      <visual name="batten_0">
+        <pose>0.045 -0.58 0.775 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.09 1.55</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.26 0.18 0.11 1</ambient>
+          <diffuse>0.38 0.27 0.16 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+      <visual name="batten_1">
+        <pose>0.045 0.58 0.775 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.09 1.55</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.26 0.18 0.11 1</ambient>
+          <diffuse>0.38 0.27 0.16 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

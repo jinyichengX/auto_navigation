@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="black_and_decker_cordless_drill">
+    <static>true</static>
+    <include>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Artifact_Proximity_Detector/model.sdf</uri>
+   </include>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.10 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.35 0.15 0.20</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>meshes/drill.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

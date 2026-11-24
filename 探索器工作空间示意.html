@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NBVP · bbx 工作空间示意</title>
+<style>
+  :root {
+    --bg: #06090e;
+    --bg-soft: #0a111a;
+    --ink: #e7eef7;
+    --muted: #8a99ac;
+    --line: rgba(255, 255, 255, 0.09);
+    --cyan: #58e6c8;
+    --box: #6fe7ff;
+    --amber: #f0b45a;
+    --red: #ef6b6b;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(1200px 700px at 22% 12%, rgba(38, 82, 104, 0.20), transparent 60%),
+      radial-gradient(900px 600px at 80% 80%, rgba(34, 63, 88, 0.12), transparent 65%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header.top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 30px 32px 18px;
+    animation: rise 0.6s ease-out both;
+  }
+  .brand {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    font-family: var(--mono);
+  }
+  h1 {
+    margin: 10px 0 0;
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    max-width: 430px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    padding-bottom: 4px;
+  }
+  .lede b { color: var(--ink); font-weight: 500; }
+
+  main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 318px;
+    gap: 22px;
+    padding: 0 32px;
+    height: min(66vh, 700px);
+    min-height: 460px;
+    animation: rise 0.7s 0.05s ease-out both;
+  }
+
+  .stage {
+    position: relative;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #04070b;
+  }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  canvas.dragging { cursor: grabbing; }
+
+  .hud {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 8px 26px;
+    pointer-events: none;
+  }
+  .hud .k {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .hud .v {
+    margin-top: 3px;
+    font-size: 17px;
+    font-family: var(--mono);
+    color: var(--ink);
+  }
+  .hud .v small { font-size: 11px; color: var(--muted); }
+
+  .legend {
+    position: absolute;
+    left: 18px;
+    bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    pointer-events: none;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.in { background: var(--cyan); box-shadow: 0 0 8px rgba(88,230,200,0.7); }
+  .dot.out { background: rgba(239,107,107,0.55); }
+  .dot.soft { background: var(--amber); }
+  .dot.gain { background: transparent; border: 1px dashed var(--amber); width: 9px; height: 9px; }
+  .dot.sphere { background: transparent; border: 1px dashed rgba(111,231,255,0.55); width: 9px; height: 9px; }
+
+  .hint {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    font-size: 11px;
+    color: rgba(138, 153, 172, 0.75);
+    font-family: var(--mono);
+    pointer-events: none;
+  }
+
+  aside.panel {
+    border-left: 1px solid var(--line);
+    padding-left: 22px;
+    overflow-y: auto;
+    animation: rise 0.7s 0.1s ease-out both;
+  }
+  aside.panel::-webkit-scrollbar { width: 6px; }
+  aside.panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+  .panel-title {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin: 2px 0 14px;
+  }
+  .control {
+    padding: 13px 0 15px;
+    border-bottom: 1px solid var(--line);
+  }
+  .control:last-of-type { border-bottom: none; }
+  .control .row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 9px;
+  }
+  .control label { font-size: 13px; color: var(--ink); }
+  .control .val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+  }
+  .control .note {
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 22px;
+    background: transparent;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    background: rgba(255,255,255,0.14);
+    border-radius: 2px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px; height: 13px;
+    margin-top: -5.5px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px rgba(88,230,200,0.55);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 2px; background: rgba(255,255,255,0.14); border-radius: 2px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--bg);
+  }
+
+  .seg {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .seg button {
+    flex: 1;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 12px;
+    padding: 8px 6px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button.active { background: rgba(88,230,200,0.12); color: var(--cyan); }
+
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .check input { accent-color: var(--cyan); }
+
+  .actions { display: flex; gap: 9px; margin-top: 14px; }
+  .btn {
+    flex: 1;
+    appearance: none;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.025);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 9px 10px;
+    font-size: 12px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  }
+  .btn:hover { border-color: rgba(88,230,200,0.45); background: rgba(88,230,200,0.06); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { border-color: rgba(88,230,200,0.35); color: var(--cyan); }
+
+  section.notes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 26px;
+    padding: 26px 32px 34px;
+    border-top: 1px solid var(--line);
+    margin-top: 24px;
+    animation: rise 0.7s 0.16s ease-out both;
+  }
+  section.notes article { min-width: 0; }
+  section.notes h2 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  section.notes h2 span {
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 11px;
+    margin-right: 7px;
+  }
+  section.notes p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  section.notes code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(231,238,247,0.85);
+    background: rgba(255,255,255,0.04);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  footer {
+    padding: 0 32px 26px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1.7;
+    color: rgba(138,153,172,0.7);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+  @media (max-width: 900px) {
+    header.top { flex-direction: column; align-items: flex-start; padding: 22px 18px 14px; }
+    main { grid-template-columns: 1fr; height: auto; padding: 0 18px; }
+    .stage { height: 56vh; min-height: 360px; }
+    aside.panel { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; padding-top: 16px; }
+    section.notes { grid-template-columns: 1fr 1fr; padding: 22px 18px 28px; }
+    footer { padding: 0 18px 22px; }
+  }
+  @media (max-width: 560px) {
+    section.notes { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <div class="brand">NBVP · bbx workspace</div>
+    <h1>这个盒子，决定探索器<br />这一轮能看多远</h1>
+  </div>
+  <p class="lede">
+    每轮规划前，盒子会围绕飞机重新放置：水平 <b>±R</b>、竖直 <b>±ZR</b>。
+    RRT 只在盒子里采样，增益也只统计盒子里的未知体素。
+  </p>
+</header>
+
+<main>
+  <div class="stage" id="stage">
+    <canvas id="scene"></canvas>
+    <div class="hud">
+      <div>
+        <div class="k">盒内采样</div>
+        <div class="v" id="statIn">0<small> 点</small></div>
+      </div>
+      <div>
+        <div class="k" id="statOutLabel">盒外丢弃</div>
+        <div class="v" id="statOut">0<small> 点</small></div>
+      </div>
+      <div>
+        <div class="k">采样球半径</div>
+        <div class="v" id="statDiag">0<small> m</small></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot in"></i>盒内：参与采样/增益</span>
+      <span><i class="dot out"></i>盒外：硬边界丢弃</span>
+      <span><i class="dot soft"></i>盒外：软边界保留，但增益为 0</span>
+      <span><i class="dot sphere"></i>采样球：半径 = 盒子对角线</span>
+      <span><i class="dot gain"></i>gainRange 增益范围</span>
+    </div>
+    <div class="hint">拖拽旋转 · 滚轮缩放</div>
+  </div>
+
+  <aside class="panel">
+    <div class="panel-title">参数</div>
+
+    <div class="control">
+      <div class="row">
+        <label>视野</label>
+        <span class="val" id="fitVal">采样球</span>
+      </div>
+      <div class="seg" id="fitSeg">
+        <button type="button" data-fit="sphere" class="active">采样球</button>
+        <button type="button" data-fit="box">盒子</button>
+      </div>
+      <div class="note">采样球半径恒等于盒子对角线，通常比盒子大得多；“盒子”视野只放大到盒子。</div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="radius">水平半径 R</label>
+        <span class="val" id="radiusVal">10 m</span>
+      </div>
+      <input type="range" id="radius" min="5" max="20" step="1" value="10" />
+      <div class="note">对应 <code>workspace/radius</code>。盒子水平方向为 ±R。</div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="zradius">竖直半径 ZR</label>
+        <span class="val" id="zradiusVal">5 m</span>
+      </div>
+      <input type="range" id="zradius" min="2" max="10" step="1" value="5" />
+      <div class="note">对应 <code>workspace/z_radius</code>。盒子竖直方向为 ±ZR。</div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="samples">采样点数</label>
+        <span class="val" id="samplesVal">300</span>
+      </div>
+      <input type="range" id="samples" min="80" max="600" step="20" value="300" />
+      <div class="note">只在“半径等于盒子对角线”的球里撒点，和作者 <code>iterate()</code> 一致。</div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="gainRange">增益半径</label>
+        <span class="val" id="gainVal">1.50 m</span>
+      </div>
+      <input type="range" id="gainRange" min="0.5" max="3" step="0.25" value="1.5" />
+      <div class="note">对应 <code>nbvp/gain/range</code>。只有盒子内的未知体素会加分。</div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label>边界模式</label>
+        <span class="val" id="softVal">硬边界</span>
+      </div>
+      <div class="seg" id="softSeg">
+        <button type="button" data-soft="false" class="active">硬边界 false</button>
+        <button type="button" data-soft="true">软边界 true</button>
+      </div>
+      <div class="note">
+        硬边界：盒子外采样直接丢弃。软边界：采样保留，但盒子外没有增益；想看得更远请调大 R。
+      </div>
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="dronePos">飞机位置</label>
+        <span class="val" id="droneVal">0.0 m</span>
+      </div>
+      <input type="range" id="dronePos" min="-1" max="1" step="0.01" value="0" />
+      <div class="note">盒子始终以飞机为中心；拖动可看“盒子跟着飞机走”。</div>
+    </div>
+
+    <div class="control">
+      <label class="check">
+        <input type="checkbox" id="showMargin" />
+        显示机体盒余量（采样边界再缩进半个机体盒）
+      </label>
+      <div class="actions">
+        <button class="btn" id="resample">重新采样</button>
+        <button class="btn primary" id="walk">让飞机走</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<section class="notes">
+  <article>
+    <h2><span>01</span>盒子是什么</h2>
+    <p>
+      一个以飞机为中心的三维窗口。它不是地图边界，也不是飞行安全边界；它只是这一轮规划“往前看”的范围。
+    </p>
+  </article>
+  <article>
+    <h2><span>02</span>采样</h2>
+    <p>
+      RRT 在半径等于盒子对角线的球里随机撒点。硬边界下，落在盒子外的点直接被丢弃，所以球很大、盒子很小，大部分点都会出界。
+    </p>
+  </article>
+  <article>
+    <h2><span>03</span>增益</h2>
+    <p>
+      增益是候选点能看到的未知体素数量。体素遍历被盒子边界截断：盒子外的未知空间即使看得见，也不计入增益。
+    </p>
+  </article>
+  <article>
+    <h2><span>04</span>每轮重设</h2>
+    <p>
+      飞机飞完第一段后，盒子以新的当前位置重新放置，再建树、再采样。飞机走一步，窗口跟一步。
+    </p>
+  </article>
+</section>
+
+<footer>
+  对应实现：<code>beginPlan()</code> 设置 minX…maxZ；<code>RrtTree::iterate()</code> 球内采样；<code>RrtTree::gain()</code> 盒内增益统计。
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("scene");
+  const ctx = canvas.getContext("2d");
+  const stage = document.getElementById("stage");
+
+  const state = {
+    R: 10,
+    ZR: 5,
+    count: 300,
+    gainRange: 1.5,
+    soft: false,
+    showMargin: false,
+    droneNorm: 0,
+    droneX: 0,
+    yaw: -0.72,
+    pitch: 0.36,
+    zoom: 1,
+    viewFit: "sphere",
+    samples: [],
+    seed: 20261122,
+    dash: 0,
+    walk: null,
+    stats: { in: 0, out: 0, soft: 0, diag: 0 },
+  };
+
+  // 机体安全盒的一半（x/y/z），与作者 0.5 * boundingBox_ 的语义一致。
+  const halfBody = { x: 0.25, y: 0.25, z: 0.15 };
+
+  // ---------- 随机采样 ----------
+  function mulberry32(a) {
+    return function () {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function diagonal() {
+    return Math.sqrt(8 * state.R * state.R + 4 * state.ZR * state.ZR);
+  }
+
+  function regenerate() {
+    const rand = mulberry32(state.seed);
+    const diag = diagonal();
+    const out = [];
+    let guard = 0;
+    const limit = state.count * 400;
+    while (out.length < state.count && guard < limit) {
+      guard++;
+      const x = (rand() * 2 - 1) * diag;
+      const y = (rand() * 2 - 1) * diag;
+      const z = (rand() * 2 - 1) * diag;
+      if (x * x + y * y + z * z > diag * diag) continue;
+      out.push({ x: x, y: y, z: z });
+    }
+    state.samples = out;
+    classify();
+    draw();
+  }
+
+  function classify() {
+    const ix = state.R - halfBody.x;
+    const iy = state.R - halfBody.y;
+    const iz = state.ZR - halfBody.z;
+    let nIn = 0;
+    let nOut = 0;
+    let nSoft = 0;
+    for (const s of state.samples) {
+      const inside =
+        Math.abs(s.x) <= ix && Math.abs(s.y) <= iy && Math.abs(s.z) <= iz;
+      if (inside) nIn++;
+      else if (state.soft) nSoft++;
+      else nOut++;
+    }
+    state.stats = { in: nIn, out: nOut, soft: nSoft, diag: diagonal() };
+    document.getElementById("statIn").innerHTML =
+      nIn + '<small> 点</small>';
+    document.getElementById("statOutLabel").textContent = state.soft
+      ? "盒外保留"
+      : "盒外丢弃";
+    document.getElementById("statOut").innerHTML =
+      (state.soft ? nSoft : nOut) + '<small> 点</small>';
+    document.getElementById("statDiag").innerHTML =
+      diagonal().toFixed(1) + '<small> m</small>';
+  }
+
+  // ---------- 投影 ----------
+  function makeView(w, h) {
+    const diag = Math.sqrt(8 * state.R * state.R + 4 * state.ZR * state.ZR);
+    const base =
+      state.viewFit === "sphere"
+        ? 2.15 * diag
+        : Math.max(2.9 * state.R, 2.7 * state.ZR);
+    const scale = (Math.min(w, h) / base) * 0.92 * state.zoom;
+    return {
+      yaw: state.yaw,
+      pitch: state.pitch,
+      scale: scale,
+      cx: w * 0.5,
+      cy: h * 0.52,
+    };
+  }
+
+  function project(p, view) {
+    const cy = Math.cos(view.yaw);
+    const sy = Math.sin(view.yaw);
+    const x1 = p.x * cy - p.y * sy;
+    const y1 = p.x * sy + p.y * cy;
+    const z1 = p.z;
+    const cp = Math.cos(view.pitch);
+    const sp = Math.sin(view.pitch);
+    const y2 = y1 * cp - z1 * sp;
+    const z2 = y1 * sp + z1 * cp;
+    return {
+      x: view.cx + x1 * view.scale,
+      y: view.cy - z2 * view.scale,
+      depth: y2,
+    };
+  }
+
+  // ---------- 绘制 ----------
+  function drawBackground(w, h) {
+    ctx.clearRect(0, 0, w, h);
+    const g = ctx.createRadialGradient(
+      w * 0.35,
+      h * 0.38,
+      0,
+      w * 0.5,
+      h * 0.5,
+      Math.max(w, h) * 0.75
+    );
+    g.addColorStop(0, "rgba(24, 54, 68, 0.30)");
+    g.addColorStop(0.55, "rgba(10, 20, 30, 0.16)");
+    g.addColorStop(1, "rgba(4, 7, 11, 0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function drawMovementPath(view) {
+    const a = project({ x: -0.45 * state.R, y: 0, z: 0 }, view);
+    const b = project({ x: 0.45 * state.R, y: 0, z: 0 }, view);
+    ctx.save();
+    ctx.setLineDash([2, 7]);
+    ctx.strokeStyle = "rgba(255,255,255,0.10)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawAxes(view) {
+    const len = state.R * 0.55;
+    const o = project({ x: 0, y: 0, z: 0 }, view);
+    const axes = [
+      { p: { x: len, y: 0, z: 0 }, c: "rgba(255,122,122,0.75)", t: "X" },
+      { p: { x: 0, y: len, z: 0 }, c: "rgba(123,220,138,0.75)", t: "Y" },
+      { p: { x: 0, y: 0, z: len }, c: "rgba(122,168,255,0.80)", t: "Z" },
+    ];
+    for (const a of axes) {
+      const q = project(a.p, view);
+      ctx.strokeStyle = a.c;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(o.x, o.y);
+      ctx.lineTo(q.x, q.y);
+      ctx.stroke();
+      ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.fillStyle = a.c;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(a.t, q.x + (q.x - o.x) * 0.08, q.y + (q.y - o.y) * 0.08);
+    }
+  }
+
+  function boxCorners(center, r, zr) {
+    return [
+      { x: center.x - r, y: center.y - r, z: center.z - zr },
+      { x: center.x + r, y: center.y - r, z: center.z - zr },
+      { x: center.x + r, y: center.y + r, z: center.z - zr },
+      { x: center.x - r, y: center.y + r, z: center.z - zr },
+      { x: center.x - r, y: center.y - r, z: center.z + zr },
+      { x: center.x + r, y: center.y - r, z: center.z + zr },
+      { x: center.x + r, y: center.y + r, z: center.z + zr },
+      { x: center.x - r, y: center.y + r, z: center.z + zr },
+    ];
+  }
+
+  const BOX_EDGES = [
+    [0, 1], [1, 2], [2, 3], [3, 0],
+    [4, 5], [5, 6], [6, 7], [7, 4],
+    [0, 4], [1, 5], [2, 6], [3, 7],
+  ];
+
+  function drawBox(view, center, r, zr, opts) {
+    const corners = boxCorners(center, r, zr).map((p) => project(p, view));
+    ctx.save();
+    if (opts && opts.dashed) {
+      ctx.setLineDash([4, 6]);
+      ctx.lineDashOffset = -state.dash;
+      ctx.strokeStyle = opts.color;
+      ctx.lineWidth = 1;
+    } else {
+      ctx.strokeStyle = opts.color;
+      ctx.lineWidth = 1.5;
+    }
+    ctx.beginPath();
+    for (const [a, b] of BOX_EDGES) {
+      ctx.moveTo(corners[a].x, corners[a].y);
+      ctx.lineTo(corners[b].x, corners[b].y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawSamplingSphere(view, pr, r) {
+    if (r < 6) return;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(pr.x, pr.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(111, 231, 255, 0.02)";
+    ctx.fill();
+    ctx.setLineDash([2, 10]);
+    ctx.lineDashOffset = -state.dash * 0.35;
+    ctx.strokeStyle = "rgba(111, 231, 255, 0.26)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = "10.5px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = "rgba(111, 231, 255, 0.78)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    ctx.fillText("采样球", pr.x, Math.max(12, pr.y - r - 7));
+    ctx.restore();
+  }
+
+  function drawGainSphere(view, pr) {
+    const r = state.gainRange * view.scale;
+    if (r < 4) return;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(pr.x, pr.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(240, 180, 90, 0.055)";
+    ctx.fill();
+    ctx.setLineDash([3, 5]);
+    ctx.lineDashOffset = -state.dash * 0.6;
+    ctx.strokeStyle = "rgba(240, 180, 90, 0.52)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = "10.5px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = "rgba(240, 180, 90, 0.92)";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    const lx = Math.min(pr.x + r + 9, view.cx * 2 - 118);
+    ctx.fillText("gainRange " + state.gainRange.toFixed(2) + " m", lx, pr.y);
+    ctx.restore();
+  }
+
+  function drawPoint(it) {
+    const pr = it.pr;
+    ctx.save();
+    if (it.kind === "in") {
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, 4.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(88, 230, 200, 0.12)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, 2.1, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(88, 230, 200, 0.92)";
+      ctx.fill();
+    } else if (it.kind === "soft") {
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, 2.0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(240, 180, 90, 0.55)";
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(239, 107, 107, 0.22)";
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawDrone(pr) {
+    const s = 11;
+    ctx.save();
+    ctx.translate(pr.x, pr.y);
+    ctx.strokeStyle = "rgba(230, 244, 255, 0.88)";
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(-s, -s);
+    ctx.lineTo(s, s);
+    ctx.moveTo(s, -s);
+    ctx.lineTo(-s, s);
+    ctx.stroke();
+    for (const p of [[-s, -s], [s, -s], [s, s], [-s, s]]) {
+      ctx.beginPath();
+      ctx.arc(p[0], p[1], 3.1, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(7, 11, 17, 0.92)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(230, 244, 255, 0.82)";
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(0, 0, 3.2, 0, Math.PI * 2);
+    ctx.fillStyle = "#58e6c8";
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = "10.5px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = "rgba(160, 176, 196, 0.9)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText("飞机 / 盒子中心", pr.x, pr.y + 20);
+    ctx.restore();
+  }
+
+  function draw() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (!w || !h) return;
+    drawBackground(w, h);
+
+    const view = makeView(w, h);
+    const center = { x: state.droneX, y: 0, z: 0 };
+    const R = state.R;
+    const ZR = state.ZR;
+
+    drawMovementPath(view);
+    drawAxes(view);
+
+    // 盒内/盒外分类
+    const ix = R - halfBody.x;
+    const iy = R - halfBody.y;
+    const iz = ZR - halfBody.z;
+    const items = [];
+    for (const s of state.samples) {
+      const p = { x: center.x + s.x, y: center.y + s.y, z: center.z + s.z };
+      const inside =
+        Math.abs(s.x) <= ix && Math.abs(s.y) <= iy && Math.abs(s.z) <= iz;
+      const kind = inside ? "in" : state.soft ? "soft" : "out";
+      items.push({ pr: project(p, view), kind: kind, s: s });
+    }
+    items.sort((a, b) => b.pr.depth - a.pr.depth);
+
+    const centerPr = project(center, view);
+
+    // 采样球：半径 = 盒子对角线。切到“盒子”视野时不画，避免整圈在画布外。
+    if (state.viewFit === "sphere") {
+      drawSamplingSphere(view, centerPr, diagonal() * view.scale);
+    }
+
+    // 外框
+    drawBox(view, center, R, ZR, { color: "rgba(111, 231, 255, 0.78)" });
+    if (state.showMargin && ix > 0 && iz > 0) {
+      drawBox(view, center, ix, iz, {
+        dashed: true,
+        color: "rgba(255, 255, 255, 0.20)",
+      });
+    }
+
+    // 取一个盒内、最靠 +x 的候选点，展示 gainRange
+    let candidate = null;
+    for (const it of items) {
+      if (it.kind === "in" && (!candidate || it.s.x > candidate.s.x)) {
+        candidate = it;
+      }
+    }
+    if (candidate) drawGainSphere(view, candidate.pr);
+
+    for (const it of items) drawPoint(it);
+
+    drawDrone(centerPr);
+    // 盒子尺寸标注在左上角 HUD 下方
+    ctx.save();
+    ctx.font = "10.5px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = "rgba(138,153,172,0.8)";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText(
+      "盒子 " + (2 * R).toFixed(0) + " × " + (2 * R).toFixed(0) + " × " + (2 * ZR).toFixed(0) + " m",
+      18,
+      92
+    );
+    ctx.fillText(
+      state.soft ? "softBounds = true" : "softBounds = false",
+      18,
+      108
+    );
+    ctx.restore();
+  }
+
+  // ---------- 交互 ----------
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  canvas.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    canvas.classList.add("dragging");
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    state.yaw += dx * 0.008;
+    state.pitch = Math.max(-0.15, Math.min(1.15, state.pitch + dy * 0.006));
+    draw();
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    canvas.classList.remove("dragging");
+    try { canvas.releasePointerCapture(e.pointerId); } catch (err) {}
+  }
+  canvas.addEventListener("pointerup", endDrag);
+  canvas.addEventListener("pointercancel", endDrag);
+
+  canvas.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      const k = Math.exp(-e.deltaY * 0.001);
+      state.zoom = Math.max(0.6, Math.min(2.0, state.zoom * k));
+      draw();
+    },
+    { passive: false }
+  );
+
+  // 控件
+  const radiusEl = document.getElementById("radius");
+  const zradiusEl = document.getElementById("zradius");
+  const samplesEl = document.getElementById("samples");
+  const gainEl = document.getElementById("gainRange");
+  const droneEl = document.getElementById("dronePos");
+
+  radiusEl.addEventListener("input", () => {
+    state.R = Number(radiusEl.value);
+    document.getElementById("radiusVal").textContent = state.R + " m";
+    regenerate();
+    updateDrone();
+  });
+  zradiusEl.addEventListener("input", () => {
+    state.ZR = Number(zradiusEl.value);
+    document.getElementById("zradiusVal").textContent = state.ZR + " m";
+    regenerate();
+  });
+  samplesEl.addEventListener("input", () => {
+    state.count = Number(samplesEl.value);
+    document.getElementById("samplesVal").textContent = state.count;
+    regenerate();
+  });
+  gainEl.addEventListener("input", () => {
+    state.gainRange = Number(gainEl.value);
+    document.getElementById("gainVal").textContent = state.gainRange.toFixed(2) + " m";
+    draw();
+  });
+
+  document.getElementById("fitSeg").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-fit]");
+    if (!btn) return;
+    state.viewFit = btn.dataset.fit;
+    for (const b of document.querySelectorAll("#fitSeg button")) {
+      b.classList.toggle("active", b === btn);
+    }
+    document.getElementById("fitVal").textContent =
+      state.viewFit === "sphere" ? "采样球" : "盒子";
+    draw();
+  });
+
+  document.getElementById("softSeg").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-soft]");
+    if (!btn) return;
+    state.soft = btn.dataset.soft === "true";
+    for (const b of document.querySelectorAll("#softSeg button")) {
+      b.classList.toggle("active", b === btn);
+    }
+    document.getElementById("softVal").textContent = state.soft ? "软边界" : "硬边界";
+    classify();
+    draw();
+  });
+
+  document.getElementById("showMargin").addEventListener("change", (e) => {
+    state.showMargin = e.target.checked;
+    draw();
+  });
+
+  function updateDrone() {
+    state.droneX = state.droneNorm * 0.45 * state.R;
+    document.getElementById("droneVal").textContent =
+      (state.droneX >= 0 ? "+" : "") + state.droneX.toFixed(1) + " m";
+  }
+  droneEl.addEventListener("input", () => {
+    state.droneNorm = Number(droneEl.value);
+    state.walk = null;
+    updateDrone();
+    draw();
+  });
+
+  document.getElementById("resample").addEventListener("click", () => {
+    state.seed = (state.seed + 1) | 0;
+    regenerate();
+  });
+
+  document.getElementById("walk").addEventListener("click", () => {
+    const from = state.droneNorm;
+    const to = from > 0.4 ? -0.85 : 0.85;
+    state.walk = {
+      t0: performance.now(),
+      dur: 2600,
+      from: from,
+      to: to,
+    };
+  });
+
+  // 动画：虚线流动 + 让飞机走
+  function loop(now) {
+    state.dash = (state.dash + 0.45) % 1000;
+    if (state.walk) {
+      const t = Math.min(1, (now - state.walk.t0) / state.walk.dur);
+      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      state.droneNorm = state.walk.from + (state.walk.to - state.walk.from) * e;
+      droneEl.value = String(state.droneNorm);
+      updateDrone();
+      if (t >= 1) state.walk = null;
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  // 尺寸
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  new ResizeObserver(resize).observe(stage);
+  window.addEventListener("resize", resize);
+
+  // 初始化
+  updateDrone();
+  regenerate();
+  resize();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+newmtl MetalBrushed
+Kd 1.0 0.15 1.0
+Ka 0.400 0.060 0.400
+d 1.0
+illum 1

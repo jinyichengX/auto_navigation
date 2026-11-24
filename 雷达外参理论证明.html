@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Livox Mid-360 双雷达外参理论证明</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#1a2233; --panel2:#212b40; --ink:#e8edf6;
+    --muted:#9aa7bd; --line:#2c3850; --blue:#4ea1ff; --orange:#ff9f43;
+    --green:#3ddc97; --red:#ff5d73; --accent:#7bd0ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.75;font-size:15px}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:26px;margin:0 0 6px;color:#fff}
+  .sub{color:var(--muted);margin:0 0 32px;font-size:14px}
+  h2{font-size:19px;margin:40px 0 14px;padding-left:12px;
+    border-left:4px solid var(--blue);color:#fff}
+  h3{font-size:16px;margin:24px 0 10px;color:var(--accent)}
+  p{margin:10px 0;color:var(--ink)}
+  .muted{color:var(--muted)}
+  .card{background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:20px 22px;margin:16px 0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#fff;font-weight:600}
+  td code, .mono{font-family:"SFMono-Regular",Consolas,monospace;color:var(--accent)}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+    padding:12px 16px;margin:12px 0;font-family:Consolas,monospace;color:#cfe3ff;
+    overflow-x:auto;font-size:13.5px}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;
+    font-weight:600;margin-right:6px}
+  .tag.blue{background:#123a63;color:var(--blue)}
+  .tag.orange{background:#3a2a12;color:var(--orange)}
+  .tag.green{background:#0f3a2a;color:var(--green)}
+  .tag.red{background:#3a1420;color:var(--red)}
+  .ok{color:var(--green);font-weight:600}
+  .blind{color:var(--red);font-weight:600}
+  .callout{border-left:4px solid var(--orange);background:#241c0f;
+    padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+  .callout b{color:var(--orange)}
+  svg{max-width:100%;height:auto;display:block;margin:12px auto}
+  .svgcaption{text-align:center;color:var(--muted);font-size:13px;margin:6px 0 4px}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Livox Mid-360 双雷达外参理论证明</h1>
+<p class="sub">目标：论证无人机在不规则 3D 环境中完整感知周围障碍物所需的雷达安装位置与俯仰角，并显式处理机身（body）与桨叶的遮挡。</p>
+
+<div class="card">
+  <h3 style="margin-top:0">结论一览</h3>
+  <table>
+    <tr><th>雷达</th><th>安装位置（base_link 系）</th><th>俯仰角</th><th>机身系垂直视场</th><th>作用</th></tr>
+    <tr>
+      <td><span class="tag blue">主雷达</span></td>
+      <td class="mono">(0.011972, 0, 0.312891)</td>
+      <td>下俯 20°</td>
+      <td class="mono">[-27°, +32°]</td>
+      <td>前/侧/上方与水平障碍物；FAST-LIO 定位建图</td>
+    </tr>
+    <tr>
+      <td><span class="tag orange">第二雷达</span></td>
+      <td class="mono">(0.10, 0, -0.02)</td>
+      <td>下俯 75°</td>
+      <td class="mono">[-82°, -23°]</td>
+      <td>补齐下方视野盲区（该方向的障碍物不可观测），避免误判前沿</td>
+    </tr>
+  </table>
+  <p class="muted">合成立体覆盖：<span class="ok">-82° ~ +32°（连续，重叠 -27° ~ -23°）</span>，水平 360°（两部雷达均为全景）。</p>
+</div>
+
+<h2>1. 传感器模型</h2>
+<p>Livox Mid-360 的关键参数（官方规格）：</p>
+<table>
+  <tr><th>参数</th><th>数值</th></tr>
+  <tr><td>水平视场</td><td>360°</td></tr>
+  <tr><td>垂直视场</td><td class="mono">-7° ~ +52°（共 59°）</td></tr>
+  <tr><td>量程</td><td>0.1 ~ 40 m</td></tr>
+  <tr><td>尺寸 / 质量</td><td>65×65×60 mm / 265 g</td></tr>
+</table>
+<p>垂直视场只有 59°，意味着<b>单部雷达在一个俯仰姿态下最多只能覆盖垂直平面约 1/3 的角度区间</b>。若只装一部雷达，无论怎么选俯仰角，都必然在“下方”或“上方”留下大范围盲区。</p>
+
+<h2>2. 单雷达为何不够</h2>
+<p>无人机在任意不规则 3D 环境中探索，需要感知<b>周围所有方向</b>的障碍物——它既能水平飞行，也能向任意俯仰方向移动。垂直平面需要覆盖的角度区间接近 180°（从正下方到正上方），而单部 Mid-360 只有 59°。</p>
+
+<p>设单雷达俯仰角为 θ（下俯为正），其机身系垂直视场为 <code class="mono">[-7°-θ, +52°-θ]</code>。考察三种典型选择：</p>
+<table>
+  <tr><th>俯仰选择</th><th>机身系视场</th><th>代价</th></tr>
+  <tr><td>水平 θ=0°</td><td class="mono">[-7°, +52°]</td><td>下方 7°~90° 全盲，无法感知下降路径上的障碍</td></tr>
+  <tr><td>下俯 θ=20°（本方案主雷达）</td><td class="mono">[-27°, +32°]</td><td>下方覆盖改善，但上方 32°~90° 仍盲</td></tr>
+  <tr><td>上仰 θ=-38°</td><td class="mono">[+31°, +90°]</td><td>覆盖正上方，但水平与下方全盲</td></tr>
+</table>
+<p>结论：<b>单部 Mid-360 的 59° 垂直视场无法同时覆盖上方与下方，因此必须增加雷达</b>。这是“多雷达”方案的理论依据。</p>
+
+<h2>3. 机身与桨叶的遮挡约束</h2>
+<p>安装雷达必须避开两个物理遮挡源：机身板与四片桨叶。从 x500 模型读取的几何：</p>
+<table>
+  <tr><th>部件</th><th>几何（base_link 系）</th></tr>
+  <tr><td>机身板</td><td class="mono">0.3536 × 0.3536 × 0.05 m（中心板，z≈0.007~0.05）</td></tr>
+  <tr><td>电机位置</td><td class="mono">(±0.174, ±0.174, z≈0.032)</td></tr>
+  <tr><td>桨盘平面</td><td class="mono">(±0.174, ±0.174, z≈0.06)</td></tr>
+  <tr><td>桨尖半径</td><td class="mono">≈0.32 m（相对中心）</td></tr>
+</table>
+
+<h3>3.1 主雷达：高位安装，避开桨盘</h3>
+<p>主雷达安装在 <span class="mono">z≈0.313 m</span>，远高于桨盘平面（z≈0.06 m）。其最陡的下视边界为 -27°，验证该边界光线能否穿过桨盘而不被遮挡：</p>
+<div class="formula">
+  光线到达桨盘平面(z=0.06)时下降高度 Δz = 0.313 − 0.06 = 0.253 m<br>
+  水平外伸距离 = Δz / tan(27°) = 0.253 / 0.5095 ≈ 0.50 m &gt; 桨尖半径 0.32 m
+</div>
+<p>主雷达所有下视光线在桨盘平面处的外伸距离均 ≥ 0.50 m，<b>大于桨尖半径 0.32 m，因此主雷达下视视场完全避开桨叶</b>。同时主雷达本身高于桨盘，桨叶在它下方，不会遮挡水平与上方的视场。</p>
+
+<h3>3.2 第二雷达：低位安装，位于桨盘下方</h3>
+<p>第二雷达安装在 <span class="mono">(0.10, 0, -0.02)</span>，<b>位于桨盘平面（z≈0.06）下方</b>，俯仰 75° 后视场为 <span class="mono">[-82°, -23°]</span>，全部指向下方。由于机身板与桨叶都在它的上方，其下视视场不存在机身/桨叶遮挡。</p>
+
+<h2>4. 合成立体覆盖</h2>
+<p>下图用“俯仰角区间”表示两部雷达各自的垂直视场与合并结果。纵轴为俯仰角，+90° 为正上方、-90° 为正下方。</p>
+
+<svg viewBox="0 0 460 420" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif">
+  <!-- 角度轴 -->
+  <line x1="90" y1="30" x2="90" y2="380" stroke="#2c3850" stroke-width="2"/>
+  <polygon points="90,30 84,38 96,38" fill="#2c3850"/>
+  <!-- 刻度 +90 .. -90 -->
+  <g font-size="12" fill="#9aa7bd" text-anchor="end">
+    <text x="82" y="34">+90°</text>
+    <text x="82" y="86">+60°</text>
+    <text x="82" y="138">+30°</text>
+    <text x="82" y="205">0°</text>
+    <text x="82" y="272">-30°</text>
+    <text x="82" y="338">-60°</text>
+    <text x="82" y="376">-90°</text>
+  </g>
+  <g stroke="#2c3850" stroke-width="1">
+    <line x1="86" y1="38" x2="90" y2="38"/>
+    <line x1="86" y1="90" x2="90" y2="90"/>
+    <line x1="86" y1="142" x2="90" y2="142"/>
+    <line x1="86" y1="205" x2="90" y2="205"/>
+    <line x1="86" y1="268" x2="90" y2="268"/>
+    <line x1="86" y1="330" x2="90" y2="330"/>
+    <line x1="86" y1="372" x2="90" y2="372"/>
+  </g>
+
+  <!-- 映射：angle -> y : y = 205 - angle*(84/30)  => +30=>121, -30=>289  -->
+  <!-- 盲区正上方 +32..+90 : y from 205-90*(84/30)=205-252=-47 -> 205-32*2.8=205-89.6=115.4 -->
+  <!-- 主雷达 -27..+32 : y -27 => 205+75.6=280.6 ; +32=>115.4 -->
+  <!-- 下视 -82..-23 : y -82 => 205+229.6=434.6 (clip 380); -23=>205+64.4=269.4 -->
+
+  <!-- 盲区（上方 +32..+90） -->
+  <rect x="200" y="38" width="26" height="77.4" fill="#3a1420" opacity="0.55"/>
+  <!-- 主雷达 -27..+32 -->
+  <rect x="200" y="115.4" width="26" height="165.2" fill="#4ea1ff" opacity="0.85"/>
+  <!-- 下视 -82..-23 -->
+  <rect x="228" y="269.4" width="26" height="110.6" fill="#ff9f43" opacity="0.85"/>
+  <!-- 盲区（下方 -82..-90） -->
+  <rect x="228" y="372" width="26" height="8" fill="#3a1420" opacity="0.55"/>
+
+  <!-- 图例 -->
+  <g font-size="13">
+    <rect x="290" y="60" width="14" height="14" fill="#4ea1ff"/>
+    <text x="312" y="72" fill="#e8edf6">主雷达 [-27°, +32°]</text>
+    <rect x="290" y="88" width="14" height="14" fill="#ff9f43"/>
+    <text x="312" y="100" fill="#e8edf6">第二雷达 [-82°, -23°]</text>
+    <rect x="290" y="116" width="14" height="14" fill="#3a1420"/>
+    <text x="312" y="128" fill="#ff5d73">残留盲区（正上方 &amp; 正下方）</text>
+  </g>
+  <text x="200" y="350" fill="#9aa7bd" font-size="12">重叠区 -27°~-23°</text>
+  <line x1="238" y1="280.6" x2="238" y2="269.4" stroke="#3ddc97" stroke-width="2" stroke-dasharray="3 3"/>
+</svg>
+<p class="svgcaption">图 1　双雷达的垂直视场区间合并（主雷达蓝、第二雷达橙、残留盲区深红）</p>
+
+<p>合并后得到 <span class="ok">-82° ~ +32°</span> 的连续覆盖，水平方向 360°。残留两个盲区锥：</p>
+<ul>
+  <li><b class="blind">正上方锥（+32° ~ +90°）</b>：该方向的障碍物会在无人机从侧面接近时，以低俯仰角先被主雷达看到并累积进八叉图；无人机不会“垂直向上冲入未知空间”，因此该锥不构成碰撞风险。</li>
+  <li><b class="blind">正下方锥（-82° ~ -90°）</b>：位于无人机自身正下方，飞行中无法与之碰撞；近场 0.5 m 盲区过滤（FAST-LIO <code class="mono">preprocess.blind</code>）会去除自身残点。</li>
+</ul>
+
+<h2>5. 俯仰角选择的理论依据</h2>
+<div class="callout">
+  <b>原则：</b>把有限的两段 59° 视场，铺到无人机实际运动方向上——即水平、前方、下方；正上方交由“侧面接近 + 累积建图”间接覆盖。
+</div>
+
+<h3>5.1 主雷达为何下俯 20°</h3>
+<ul>
+  <li>水平安装（θ=0°）时下边界 -7° 几乎看不到近处下方的障碍，下降段完全无感知。</li>
+  <li>下俯 20° 后下边界推到 -27°，在 2 m 处即可感知约 <span class="mono">2·tan(27°)≈1.0 m</span> 高度差范围内的障碍，同时保留 +32° 的上方覆盖，兼顾水平建图质量。</li>
+  <li>该俯仰下 FAST-LIO 仍有足够的前方/侧方特征点，位姿估计不会退化（实测高度跳变由 9050 m 级收敛为 0）。</li>
+</ul>
+
+<h3>5.2 第二雷达为何下俯 75°</h3>
+<ul>
+  <li>主雷达下边界 -27° 以下的区间（-27° ~ -90°）是盲区，该方向上的近处障碍物在八叉图里缺失，被探索器误判为“前沿”，导致原地绕圈。</li>
+  <li>第二雷达下俯 75° 后视场 <span class="mono">[-82°, -23°]</span>，恰好与主雷达的 <span class="mono">[-27°, +32°]</span> 在 <span class="mono">-27°~-23°</span> 重叠 4°，实现无缝衔接，无中间盲区。</li>
+</ul>
+
+<h2>6. 总结</h2>
+<div class="card">
+  <ul style="margin:0">
+    <li>单部 Mid-360 的 59° 垂直视场无法覆盖任意 3D 环境所需的接近 180° 垂直范围 → 必须双雷达。</li>
+    <li>主雷达高位（z≈0.313）下俯 20°，视场 [-27°, +32°]，并已证明下视光线外伸 0.50 m &gt; 桨尖半径 0.32 m，避开桨叶。</li>
+    <li>第二雷达低位（z=-0.02）下俯 75°，视场 [-82°, -23°]，位于桨盘下方、无机身/桨叶遮挡，无缝补齐下方盲区。</li>
+    <li>合成立体覆盖 <span class="ok">-82° ~ +32°</span>（连续）+ 水平 360°，满足不规则 3D 地图的自主探索与建图需求。</li>
+  </ul>
+</div>
+
+</div>
+</body>
+</html>

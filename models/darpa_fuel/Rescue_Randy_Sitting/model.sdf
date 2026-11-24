@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="rescue_randy_sitting">
+    <static>true</static>
+    <include>
+      <uri>file:///home/jinyicheng/auto_navigation/models/darpa_fuel/Artifact_Proximity_Detector/model.sdf</uri>
+   </include>
+    <link name="link">
+      <pose>0 0 -0.623996 0 0 0</pose>
+      <collision name="collision">
+        <pose>0 0 0.55 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.60 0.70 1.10</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>meshes/rescue_randy.dae</uri>
+          </mesh>
+        </geometry>
+        <plugin
+          filename="ignition-gazebo-thermal-system"
+          name="ignition::gazebo::systems::Thermal">
+          <heat_signature>materials/textures/RescueRandy_Thermal.png</heat_signature>
+          <max_temp>305</max_temp>
+        </plugin>
+      </visual>
+    </link>
+  </model>
+</sdf>

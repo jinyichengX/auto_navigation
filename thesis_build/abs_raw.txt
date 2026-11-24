@@ -1,0 +1,32 @@
+===[58|Heading 1]===
+摘  要
+===[59|学位论文正文]===
+针对卫星导航拒止、环境未知且存在动态障碍条件下的无人机自主探索问题，本文设计并实现了一套基于FAST-LIO2、OctoMap与NBVP的无人机自主探索系统。系统以PX4 SITL和Gazebo为仿真平台，搭载Livox Mid-360激光雷达，构建了从传感器数据接入、激光惯性里程计、三维占据栅格建图、NBVP视点规划到OFFBOARD飞行控制的完整数据链路。针对仿真时间与系统时间不一致、PX4外部视觉时间戳不匹配、雷达安装外参与机体碰撞盒不一致等工程问题，完成了时间基统一、坐标变换和参数标定。
+===[60|学位论文正文]===
+针对Mid-360竖直视场有限、正下方存在盲区，而NBVP将未知栅格视为可通行所导致的目标点落入未知空间问题，提出一种整段机体包围盒known-free边检查方法。该方法沿RRT边逐截面检查机体包围盒，只有整段均不经过unknown或occupied栅格时才允许扩展，从而在保留未知区域增益的同时避免飞机飞入未观测空间。为提高长边执行稳定性，分析了路径点推进速度与PX4位置控制之间的关系，给出了执行参数配置原则。
+===[61|学位论文正文]===
+在城市含行人场景中的实验表明：在workspace为40 m/20 m、extension_range为5 m、v_max为2 m/s的配置下，系统能够连续规划并覆盖场景中50%以上的可通行区域；与v_max=0.2 m/s的配置相比，长边执行时的控制振荡显著减小。实验还复现了两类失效：v_max过小导致的目标滞后与姿态振荡，以及低空段LIO突变导致的OFFBOARD失效。上述结果验证了系统设计的可行性，也为后续动态障碍规避和多传感器融合提供了实验依据。
+===[62|学位论文正文]===
+本文的主要工作包括：搭建PX4/Gazebo与ROS 2仿真环境，完成Mid-360数据接入、FAST-LIO2建图、OctoMap占据栅格和NBVP视点规划的集成；分析并统一仿真时间、PX4时间戳和ROS时间，校准雷达外参与静态TF；针对360°雷达的竖直视场与下方盲区，设计整段机体包围盒known-free边检查；通过三组典型实验分析v_max、extension_range和工作空间对探索稳定性与覆盖率的影响，并复现控制振荡、低空LIO突变和回溯路径膨胀三类问题。实验结果表明，所提方法能够避开通往未知空间的目标点，在城市场景中实现连续自主探索；同时，单一LIO和一次性OFFBOARD请求仍是系统鲁棒性的主要短板，需要通过近距保护、失效恢复和多传感器融合进一步改进。
+===[63|学位论文正文]===
+全文包含图12幅、表12个，引用参考文献48篇。
+===[64|学位论文正文]===
+关键词：无人机；自主探索；FAST-LIO；NBVP；OctoMap
+===[65|Normal]===
+
+===[66|Heading 1]===
+Abstract
+===[67|学位论文正文]===
+Aiming at the problem of autonomous UAV exploration in GNSS-denied, unknown and dynamic environments, this thesis designs and implements an autonomous exploration system based on FAST-LIO2, OctoMap and NBVP. The system uses PX4 SITL and Gazebo as the simulation platform and is equipped with a Livox Mid-360 LiDAR. A complete data link is constructed, including sensor data acquisition, LiDAR-inertial odometry, 3D occupancy mapping, NBVP viewpoint planning and OFFBOARD flight control. To address engineering issues such as the inconsistency between simulation time and system time, the mismatch of PX4 external-vision timestamps, and the inconsistency among the LiDAR extrinsic, static TF and body collision box, time-base unification, coordinate transformation and parameter calibration are carried out.
+===[68|学位论文正文]===
+Since the Mid-360 has a limited vertical field of view and a blind zone directly below, while NBVP treats unknown cells as traversable, a known-free edge checking method based on sweeping the whole body bounding box is proposed. The method checks the body box section by section along each RRT edge and only allows expansion when the entire edge is free of unknown or occupied cells, so that the gain of unknown regions is preserved while the vehicle is prevented from flying into unobserved space. To improve the stability of long-edge execution, the relationship between waypoint advancing speed and PX4 position control is analyzed, and a parameter configuration principle is given.
+===[69|学位论文正文]===
+Experiments in an urban scene with pedestrians show that, with a 40 m/20 m workspace, a 5 m extension range and a 2 m/s waypoint speed, the system can continuously plan and cover more than 50% of the traversable area. Compared with the configuration of 0.2 m/s, the control oscillation during long-edge execution is significantly reduced. Two failure modes are reproduced: target lag and attitude oscillation caused by a too-small v_max, and OFFBOARD failure caused by a sudden LIO jump at low altitude. The results verify the feasibility of the system and provide an experimental basis for dynamic obstacle avoidance and multi-sensor fusion.
+===[70|学位论文正文]===
+The main work includes: building the PX4/Gazebo and ROS 2 simulation environment; integrating Mid-360 data acquisition, FAST-LIO2 mapping, OctoMap occupancy mapping and NBVP viewpoint planning; unifying simulation time, PX4 timestamps and ROS time; calibrating the LiDAR extrinsic and static TF; designing the whole-body known-free edge check for the vertical field of view and downward blind zone of the 360° LiDAR; and analyzing the effects of v_max, extension_range and workspace on exploration stability and coverage through three typical experiments. The results show that the proposed method can avoid targets in unknown space and achieve continuous autonomous exploration in urban scenes, while a single LIO and one-shot OFFBOARD request remain the main weaknesses, which should be improved by near-range protection, failure recovery and multi-sensor fusion.
+===[71|学位论文正文]===
+The thesis contains 12 figures, 12 tables and 48 references.
+===[72|学位论文正文]===
+Keywords: UAV; autonomous exploration; FAST-LIO; NBVP; OctoMap
+===[73|Normal]===
+

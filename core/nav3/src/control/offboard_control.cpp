@@ -25,27 +25,31 @@ public:
     // use_target_yaw_ = this->declare_parameter<bool>("use_target_yaw", false);
 
     offboard_mode_pub_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
-            "/fmu/in/offboard_control_mode", px4Qos());
-            
+            "/fmu/in/offboard_control_mode", px4InQos());
+
     setpoint_pub_ = this->create_publisher<px4_msgs::msg::TrajectorySetpoint>(
-            "/fmu/in/trajectory_setpoint", px4Qos());
+            "/fmu/in/trajectory_setpoint", px4InQos());
 
     command_pub_ = this->create_publisher<px4_msgs::msg::VehicleCommand>(
-            "/fmu/in/vehicle_command", px4Qos());
+            "/fmu/in/vehicle_command", px4InQos());
 
     target_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
         "target_pose", rclcpp::QoS(10),
-        [this](const geometry_msgs::msg::PoseStamped::SharedPtr msg) { TargetPoseCallback(msg); });
+        [this](const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
+            target_pose_ = *msg;
+            have_target_ = true;
+        });
 
     local_pos_sub_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
-            "/fmu/out/vehicle_local_position_v1", px4Qos(),
+            "/fmu/out/vehicle_local_position_v1", px4OutQos(),
             [this](const px4_msgs::msg::VehicleLocalPosition::SharedPtr msg) {
                 local_pos_ = *msg;
+                px4_time_us_ = msg->timestamp;
                 has_local_pos_ = true;
             });
 
     status_sub_ = this->create_subscription<px4_msgs::msg::VehicleStatus>(
-            "/fmu/out/vehicle_status_v1", px4Qos(),
+            "/fmu/out/vehicle_status_v1", px4OutQos(),
             [this](const px4_msgs::msg::VehicleStatus::SharedPtr msg) { VehicleStatusCallback(msg); });
 
     timer_ = this->create_wall_timer(std::chrono::milliseconds(20),   // 50 Hz
@@ -57,9 +61,15 @@ public:
   }
 
 private:
-  static rclcpp::QoS px4Qos()
+  static rclcpp::QoS px4InQos()
   {
-    return rclcpp::QoS(rclcpp::KeepLast(10)).best_effort();
+    return rclcpp::QoS(rclcpp::KeepLast(1)).best_effort();
+  }
+
+  static rclcpp::QoS px4OutQos()
+  {
+    // /fmu/out/* 通常是 best_effort + transient_local
+    return rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().transient_local();
   }
 
   void VehicleStatusCallback(const px4_msgs::msg::VehicleStatus::SharedPtr msg)
@@ -80,21 +90,6 @@ private:
     }
   }
 
-  void TargetPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
-  {
-    // // ENU -> NED: 北=ENU.y, 东=ENU.x, 地=-ENU.z
-    // setpoint_[0] = static_cast<float>(msg->pose.position.y);
-    // setpoint_[1] = static_cast<float>(msg->pose.position.x);
-    // setpoint_[2] = static_cast<float>(-msg->pose.position.z);
-
-    // // ENU(FLU) 偏航角 -> NED 航向角 (以正北为 0, 顺时针为正)
-    // const auto & q = msg->pose.orientation;
-    // const double yaw_enu = std::atan2(
-    //     2.0 * (q.w * q.z + q.x * q.y),
-    //     1.0 - 2.0 * (q.y * q.y + q.z * q.z));
-    // setpoint_yaw_ = normalizeAngle(kPi / 2.0 - yaw_enu);
-  }
-
   void TimerCallback(void)
   {
     if (!has_local_pos_) {
@@ -104,7 +99,6 @@ private:
     }
 
     PublishOffboardControlMode();
-    PublishSetpoint();
 
     if (auto_offboard_ && !offboard_requested_ && counter_ > 50) {
         SetOffboardMode();
@@ -125,6 +119,40 @@ private:
     }
 
     ++counter_;
+
+    // 没有收到目标时原地保持，避免默认 (0,0,0)/90° 把飞机拉走。
+    if (!have_target_) {
+        const float yaw_ned = std::isfinite(local_pos_.heading)
+            ? local_pos_.heading
+            : 0.0f;
+        PublishSetpoint(local_pos_.x, local_pos_.y, local_pos_.z, yaw_ned);
+        return;
+    }
+
+    //fly to target position
+    //get target position
+    const double tar_x = target_pose_.pose.position.x;
+    const double tar_y = target_pose_.pose.position.y;
+    const double tar_z = target_pose_.pose.position.z;
+    //convert to NED position
+    const double tar_ned_x = tar_y;
+    const double tar_ned_y = tar_x;
+    const double tar_ned_z = -tar_z;
+
+    // 从 ENU 四元数提取 yaw，并转换为 PX4 NED yaw
+    const auto &q = target_pose_.pose.orientation;
+    const double yaw_enu = std::atan2(
+        2.0 * (q.w * q.z + q.x * q.y),
+        1.0 - 2.0 * (q.y * q.y + q.z * q.z));
+
+    const double yaw_ned = M_PI_2 - yaw_enu;
+
+    // publish setpoint
+    PublishSetpoint(
+        static_cast<float>(tar_ned_x),
+        static_cast<float>(tar_ned_y),
+        static_cast<float>(tar_ned_z),
+        static_cast<float>(yaw_ned));
   }
 
   void PublishOffboardControlMode(void)
@@ -140,19 +168,19 @@ private:
     offboard_mode_pub_->publish(msg);
   }
 
-  void PublishSetpoint(void)
+  void PublishSetpoint(float x, float y, float z, float yaw)
   {
     const float nan = std::numeric_limits<float>::quiet_NaN();
     px4_msgs::msg::TrajectorySetpoint msg{};
     msg.timestamp = NowUs();
     // msg.position = {setpoint_[0], setpoint_[1], setpoint_[2]};
-    msg.position = {0, 0, -1.5};
+    msg.position = {x, y, z};
     // 未参与控制的维度置 NaN, 由 PX4 自行保持
     msg.velocity = {nan, nan, nan};
     msg.acceleration = {nan, nan, nan};
     msg.jerk = {nan, nan, nan};
     // msg.yaw = use_target_yaw_ ? static_cast<float>(setpoint_yaw_) : nan;
-    msg.yaw = 3.14;
+    msg.yaw = yaw;
     msg.yawspeed = nan;
     setpoint_pub_->publish(msg);
   }
@@ -188,7 +216,12 @@ private:
     command_pub_->publish(cmd);
   }
 
-  uint64_t NowUs(void) const{return static_cast<uint64_t>(this->now().nanoseconds() / 1000);}
+  uint64_t NowUs(void) const{
+    // 命令时间戳必须用 PX4 自己的时基；墙钟会被当成"未来数据"。
+    return px4_time_us_ > 0
+        ? px4_time_us_
+        : static_cast<uint64_t>(this->now().nanoseconds() / 1000);
+  }
   rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr offboard_mode_pub_;
   rclcpp::Publisher<px4_msgs::msg::TrajectorySetpoint>::SharedPtr setpoint_pub_;
   rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr command_pub_;
@@ -196,11 +229,13 @@ private:
   rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr local_pos_sub_;
   rclcpp::Subscription<px4_msgs::msg::VehicleStatus>::SharedPtr status_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
-  
+  geometry_msgs::msg::PoseStamped target_pose_{}; //最新的目标点
   px4_msgs::msg::VehicleLocalPosition local_pos_{};
   px4_msgs::msg::VehicleStatus status_{};
+  uint64_t px4_time_us_{0};
   bool has_local_pos_ = false;
   bool has_status_ = false;
+  bool have_target_ = false;
 
   uint8_t last_nav_state_ = 255;
   uint8_t last_arming_state_ = 255;
@@ -213,8 +248,8 @@ private:
 
 int main(int argc, char * argv[])
 {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<OffboardControl>());
-    rclcpp::shutdown();
-    return 0;
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<OffboardControl>());
+  rclcpp::shutdown();
+  return 0;
 }

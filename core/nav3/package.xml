@@ -4,7 +4,7 @@
   <name>nav3</name>
   <version>0.1.0</version>
   <description>
-    正式导航工程：分层架构起步包（control / planning / map 等）。
+    正式导航工程：分层架构起步包（control / planning / map / bridge 等）。
   </description>
   <maintainer email="jinyicheng@example.com">jinyicheng</maintainer>
   <license>MIT</license>
@@ -15,8 +15,19 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2_ros</depend>
   <depend>px4_msgs</depend>
+  <depend>octomap</depend>
+  <depend>octomap_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>visualization_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>eigen</depend>
+  <depend>libopencv-dev</depend>
 
+  <exec_depend>octomap_server</exec_depend>
   <exec_depend>launch_ros</exec_depend>
 
   <export>

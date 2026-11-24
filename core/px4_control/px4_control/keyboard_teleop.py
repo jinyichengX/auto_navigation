@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""键盘遥控飞行（Offboard 速度控制）
+"""键盘遥控（与 offboard_control 配合工作）
+
+启动清单里的 offboard_control 负责：切 OFFBOARD、解锁、并把 /target_pose
+换算成飞控位置指令。本节点只做一件事——把按键换算成 /target_pose 目标点，
+不改飞控模式、不解锁、不直接发飞控指令，因此两者不会抢同一个输入口。
 
 按键：
-  w / s   前进 / 后退
-  a / d   左移 / 右移
+  w / s   机头前进 / 后退
+  a / d   机头左移 / 右移
+  q / e   左旋 / 右旋（偏航）
   r / f   上升 / 下降
-  空格    立刻停住
-  l       降落并上锁，然后退出
+  空格    立刻停住（含偏航）
 
 按住不放会持续飞（靠键盘自动重复），松开约 0.5 秒后自动停下。
-活动范围限制在水平 ±3.5 米、高度 0.4~3.0 米（walls 世界的墙在 4.5 米处）。
+目标点按当前机头朝向积分，水平速度不再固定世界轴。
 """
 import math
 import select
@@ -20,37 +24,25 @@ import tty
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy, HistoryPolicy
-from px4_msgs.msg import (
-    OffboardControlMode,
-    TrajectorySetpoint,
-    VehicleCommand,
-    VehicleStatus,
-    VehicleCommandAck,
-    VehicleLocalPosition,
-)
+from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry
+from px4_msgs.msg import VehicleLocalPosition, VehicleStatus
 
 NAN = float('nan')
 PUB_HZ = 20
 TICK = 1.0 / PUB_HZ
 
-SPEED = 2.0           # m/s，按键时给的目标速度
+SPEED = 2.0           # m/s，按键时给的目标速度（机体系）
+YAW_RATE = 0.8        # rad/s，q/e 偏航角速度
 DECAY = 0.88          # 每个 tick 衰减系数：松手后约 0.5 秒停住
-LIMIT_XY = 3.5        # 水平活动范围 ±3.5 米
-LIMIT_ALT_MAX = 3.0   # 最高 3 米
-LIMIT_ALT_MIN = 0.4   # 最低 0.4 米
-TAKEOFF_SPEED = 0.5   # 起飞爬升速度 m/s
-TAKEOFF_ALT = 1.5     # 爬到该高度后转入遥控
-LAND_TIMEOUT = 12.0   # 发降落命令后等多久再上锁
-
-RESULT_NAME = {0: 'ACCEPTED 已接受', 1: 'TEMPORARILY_REJECTED 暂时拒绝',
-               2: 'DENIED 拒绝', 3: 'UNSUPPORTED 不支持此命令', 4: 'FAILED 执行失败'}
 
 BANNER = """
 ==================== 键盘遥控 ====================
-  w / s   前进 / 后退        a / d   左移 / 右移
-  r / f   上升 / 下降        空格    立刻停住
-  l       降落并上锁退出
-按住不放持续飞，松开自动停。结束请按 l，不要按 Ctrl+C。
+  w / s   机头前进 / 后退    a / d   机头左移 / 右移
+  q / e   左旋 / 右旋        r / f   上升 / 下降
+  空格    立刻停住
+本节点只发 /target_pose，切模式/解锁由 offboard_control 负责。
+按住不放持续飞，松开自动停。结束按 Ctrl+C。
 ==================================================
 """
 
@@ -72,26 +64,42 @@ class KeyboardTeleop(Node):
             depth=1,
         )
 
-        self.cmd_pub = self.create_publisher(VehicleCommand, '/fmu/in/vehicle_command', qos_in)
-        self.mode_pub = self.create_publisher(OffboardControlMode, '/fmu/in/offboard_control_mode', qos_in)
-        self.sp_pub = self.create_publisher(TrajectorySetpoint, '/fmu/in/trajectory_setpoint', qos_in)
+        # offboard_control 订阅 /target_pose 并负责真正控制飞控
+        self.target_pub = self.create_publisher(PoseStamped, '/target_pose', 10)
 
-        self.create_subscription(VehicleStatus, '/fmu/out/vehicle_status_v1', self.on_status, qos_out)
-        self.create_subscription(VehicleCommandAck, '/fmu/out/vehicle_command_ack', self.on_ack, qos_out)
         self.create_subscription(VehicleLocalPosition, '/fmu/out/vehicle_local_position_v1',
                                  self.on_local_pos, qos_out)
+        self.create_subscription(VehicleStatus, '/fmu/out/vehicle_status_v1',
+                                 self.on_status, qos_out)
+        self.create_subscription(Odometry, '/Odometry', self.on_flio_odom, 10)
 
         self.n = 0
-        self.phase = 'preheat'          # preheat -> takeoff -> teleop -> landing
-        self.vel = [0.0, 0.0, 0.0]      # 当前速度指令（NED）
-        self.arming_state = -1
-        self.nav_state = -1
+        self.body_vel = [0.0, 0.0, 0.0]  # 机体系速度指令：前/右/下（FRD）
+        self.yawspeed = 0.0             # NED 偏航角速度：正=右转
+
+        # 当前位姿（PX4 local，NED）
         self.x = NAN
         self.y = NAN
         self.z = NAN
-        self.land_tick = None
-        self.disarm_sent = False
-        self.done = False
+        self.heading = 0.0
+        self.heading_valid = False
+        self.have_pos = False
+        self.arming_state = -1
+        self.nav_state = -1
+
+        # 目标点（ENU：东/北/上）
+        self.tgt_east = 0.0
+        self.tgt_north = 0.0
+        self.tgt_up = 0.0
+        self.tgt_yaw_ned = 0.0
+        self.target_ready = False
+
+        # FAST-LIO2 里程计（ENU：x 东、y 北、z 上）
+        self.flio_x = NAN
+        self.flio_y = NAN
+        self.flio_z = NAN
+        self.flio_yaw = NAN
+        self.flio_count = 0
 
         self.create_timer(TICK, self.tick)
 
@@ -100,128 +108,114 @@ class KeyboardTeleop(Node):
         self.n += 1
         elapsed = self.n * TICK
 
-        if self.phase == 'preheat' and elapsed >= 2.0:
-            self.get_logger().info('切换到 OFFBOARD 模式，并解锁，开始爬升')
-            self.send_command(100001, 14.0)      # VEHICLE_CMD_SET_NAV_STATE, nav_state=14
-            self.send_command(400, 1.0)          # 解锁
-            self.phase = 'takeoff'
+        if self.have_pos and not self.target_ready:
+            # 用当前位姿初始化目标点，避免第一帧把飞机拉去 (0,0,0)
+            self.tgt_east = self.y            # NED y = 东
+            self.tgt_north = self.x           # NED x = 北
+            self.tgt_up = -self.z             # NED z 向下，取负得向上
+            self.tgt_yaw_ned = self.heading
+            self.target_ready = True
 
-        if self.phase == 'takeoff':
-            self.vel = [0.0, 0.0, -TAKEOFF_SPEED]     # NED: z 负 = 上升
-            if not math.isnan(self.z) and -self.z >= TAKEOFF_ALT:
-                self.phase = 'teleop'
-                self.vel = [0.0, 0.0, 0.0]
-                self.get_logger().info(f'已升到 {-self.z:.2f} 米，现在可以遥控了')
+        if self.target_ready:
+            # 按键速度 → 目标点积分（机身系 → NED）
+            c = math.cos(self.tgt_yaw_ned)
+            s = math.sin(self.tgt_yaw_ned)
+            vx, vy, vz = self.body_vel
+            dn = vx * c - vy * s          # 北向
+            de = vx * s + vy * c          # 东向
+            self.tgt_north += dn * TICK
+            self.tgt_east += de * TICK
+            self.tgt_up -= vz * TICK      # NED z 向下，速度正=下降
+            self.tgt_yaw_ned += self.yawspeed * TICK
+            self.publish_target()
 
-        elif self.phase == 'teleop':
-            self.vel = [v * DECAY for v in self.vel]  # 松手衰减，实现"松开就停"
-            self.clamp_vel()
-
-        elif self.phase == 'landing':
-            self.vel = [0.0, 0.0, 0.0]
-            if not self.disarm_sent and self.land_tick is not None \
-                    and (self.n - self.land_tick) * TICK >= LAND_TIMEOUT:
-                self.disarm_sent = True
-                self.get_logger().info('发送上锁命令')
-                self.send_command(400, 0.0, param2=21196.0)
-                self.done = True
-
-        self.publish_offboard_control_mode()
-        self.publish_trajectory_setpoint()
+        # 松手衰减
+        self.body_vel = [v * DECAY for v in self.body_vel]
+        self.yawspeed *= DECAY
 
         if self.n % (PUB_HZ * 2) == 0:
+            yaw_deg = math.degrees(self.heading) if self.heading_valid else float('nan')
             self.get_logger().info(
-                f'[ {elapsed:5.0f}s | {self.phase:8s} ] '
+                f'[ {elapsed:5.0f}s ] '
                 f'位置 x={self.x:5.2f} y={self.y:5.2f} 高度={-self.z:4.2f}m | '
-                f'速度 vx={self.vel[0]:5.2f} vy={self.vel[1]:5.2f} vz={self.vel[2]:5.2f}'
-                f'  armed={self.arming_state} nav={self.nav_state}'
+                f'机头={yaw_deg:6.1f}deg | '
+                f'机体系 vx={self.body_vel[0]:5.2f} vy={self.body_vel[1]:5.2f} vz={self.body_vel[2]:5.2f} | '
+                f'目标 东={self.tgt_east:5.2f} 北={self.tgt_north:5.2f} 高={self.tgt_up:4.2f} '
+                f'armed={self.arming_state} nav={self.nav_state}'
             )
+            if self.flio_count > 0:
+                d_east = self.flio_x - self.y      # LIO 东 - 飞控东(NED y)
+                d_north = self.flio_y - self.x     # LIO 北 - 飞控北(NED x)
+                d_up = self.flio_z - (-self.z)     # LIO 高 - 飞控高
+                self.get_logger().info(
+                    f'    LIO x={self.flio_x:6.2f} y={self.flio_y:6.2f} z={self.flio_z:5.2f} '
+                    f'yaw={math.degrees(self.flio_yaw):6.1f}deg '
+                    f'| 与飞控差 东={d_east:5.2f} 北={d_north:5.2f} 高={d_up:5.2f} '
+                    f'| LIO帧数={self.flio_count}'
+                )
+            else:
+                self.get_logger().warn('    LIO 未收到 /Odometry（FAST-LIO2 是否在运行？）')
 
-    def clamp_vel(self):
-        """别飞出安全范围，也别撞墙"""
-        vx, vy, vz = self.vel
-        if (self.x > LIMIT_XY and vx > 0) or (self.x < -LIMIT_XY and vx < 0):
-            vx = 0.0
-        if (self.y > LIMIT_XY and vy > 0) or (self.y < -LIMIT_XY and vy < 0):
-            vy = 0.0
-        alt = -self.z
-        if (alt > LIMIT_ALT_MAX and vz < 0) or (alt < LIMIT_ALT_MIN and vz > 0):
-            vz = 0.0
-        self.vel = [vx, vy, vz]
+    def publish_target(self):
+        """发 ENU 目标位姿给 offboard_control（它自己转 NED）。"""
+        msg = PoseStamped()
+        msg.header.frame_id = 'camera_init'
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.pose.position.x = float(self.tgt_east)
+        msg.pose.position.y = float(self.tgt_north)
+        msg.pose.position.z = float(self.tgt_up)
+        yaw_enu = math.pi / 2.0 - self.tgt_yaw_ned
+        msg.pose.orientation.z = math.sin(0.5 * yaw_enu)
+        msg.pose.orientation.w = math.cos(0.5 * yaw_enu)
+        self.target_pub.publish(msg)
 
     # ---------- 键盘 ----------
     def on_key(self, ch):
-        if ch == 'l':
-            self.get_logger().info('收到降落指令')
-            self.send_command(21, 0.0)           # VEHICLE_CMD_NAV_LAND
-            self.phase = 'landing'
-            self.land_tick = self.n
+        if ch not in (' ', 'w', 's', 'a', 'd', 'q', 'e', 'r', 'f'):
             return
-
-        if self.phase != 'teleop':
-            return
-
         if ch == ' ':
-            self.vel = [0.0, 0.0, 0.0]
+            self.body_vel = [0.0, 0.0, 0.0]
+            self.yawspeed = 0.0
         elif ch == 'w':
-            self.vel[0] = SPEED
+            self.body_vel[0] = SPEED            # 机头前
         elif ch == 's':
-            self.vel[0] = -SPEED
+            self.body_vel[0] = -SPEED           # 机头后
         elif ch == 'd':
-            self.vel[1] = SPEED
+            self.body_vel[1] = SPEED            # 机头右
         elif ch == 'a':
-            self.vel[1] = -SPEED
+            self.body_vel[1] = -SPEED           # 机头左
+        elif ch == 'q':
+            self.yawspeed = -YAW_RATE           # 左转（NED 负）
+        elif ch == 'e':
+            self.yawspeed = YAW_RATE            # 右转（NED 正）
         elif ch == 'r':
-            self.vel[2] = -SPEED               # NED 里 z 负方向是上升
+            self.body_vel[2] = -SPEED           # 上升
         elif ch == 'f':
-            self.vel[2] = SPEED
-
-    # ---------- 发布 ----------
-    def publish_offboard_control_mode(self):
-        """告诉 PX4：我这一帧控制的是速度"""
-        msg = OffboardControlMode()
-        msg.timestamp = int(self.get_clock().now().nanoseconds / 1000)
-        msg.velocity = True
-        self.mode_pub.publish(msg)
-
-    def publish_trajectory_setpoint(self):
-        """速度控制：位置填 NaN 表示不控制位置"""
-        msg = TrajectorySetpoint()
-        msg.timestamp = int(self.get_clock().now().nanoseconds / 1000)
-        msg.position = [NAN, NAN, NAN]
-        msg.velocity = [float(v) for v in self.vel]
-        msg.acceleration = [NAN, NAN, NAN]
-        msg.jerk = [NAN, NAN, NAN]
-        msg.yaw = NAN
-        msg.yawspeed = NAN
-        self.sp_pub.publish(msg)
-
-    def send_command(self, command, param1, param2=0.0):
-        msg = VehicleCommand()
-        msg.timestamp = int(self.get_clock().now().nanoseconds / 1000)
-        msg.command = command
-        msg.param1 = float(param1)
-        msg.param2 = float(param2)
-        msg.target_system = 1
-        msg.target_component = 1
-        msg.source_system = 1
-        msg.source_component = 1
-        msg.from_external = True
-        self.cmd_pub.publish(msg)
+            self.body_vel[2] = SPEED            # 下降
 
     # ---------- 回调 ----------
-    def on_status(self, msg):
-        self.arming_state = msg.arming_state
-        self.nav_state = msg.nav_state
-
     def on_local_pos(self, msg):
         self.x = msg.x
         self.y = msg.y
         self.z = msg.z
+        if getattr(msg, 'heading_good_for_control', False) or not math.isnan(msg.heading):
+            self.heading = float(msg.heading)
+            self.heading_valid = not math.isnan(self.heading)
+        self.have_pos = True
 
-    def on_ack(self, msg):
-        name = RESULT_NAME.get(msg.result, f'未知({msg.result})')
-        self.get_logger().info(f'命令回执 -> command={msg.command} result={msg.result} ({name})')
+    def on_status(self, msg):
+        self.arming_state = msg.arming_state
+        self.nav_state = msg.nav_state
+
+    def on_flio_odom(self, msg):
+        p = msg.pose.pose.position
+        self.flio_x = p.x
+        self.flio_y = p.y
+        self.flio_z = p.z
+        q = msg.pose.pose.orientation
+        self.flio_yaw = math.atan2(2.0 * (q.w * q.z + q.x * q.y),
+                                   1.0 - 2.0 * (q.y * q.y + q.z * q.z))
+        self.flio_count += 1
 
 
 def main():
@@ -240,7 +234,7 @@ def main():
     old_settings = termios.tcgetattr(sys.stdin)
     try:
         tty.setcbreak(sys.stdin.fileno())
-        while rclpy.ok() and not node.done:
+        while rclpy.ok():
             rclpy.spin_once(node, timeout_sec=TICK)
             while select.select([sys.stdin], [], [], 0)[0]:
                 node.on_key(sys.stdin.read(1))

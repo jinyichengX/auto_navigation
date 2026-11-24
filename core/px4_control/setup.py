@@ -26,8 +26,6 @@ setup(
             'offboard_takeoff = px4_control.offboard_takeoff:main',
             'offboard_move = px4_control.offboard_move:main',
             'keyboard_teleop = px4_control.keyboard_teleop:main',
-            'tunnel_tour = px4_control.tunnel_tour:main',
-            'tunnel_tour_avoid = px4_control.tunnel_tour_avoid:main',
             'gz_lidar_bridge = px4_control.gz_lidar_bridge:main',
             'px4_imu_bridge = px4_control.px4_imu_bridge:main',
             'fastlio_odom_bridge = px4_control.fastlio_odom_bridge:main',

@@ -981,7 +981,7 @@ int main(int argc, char **argv)
             // 获取kf预测的全局状态（imu）
             state_point = kf.get_x();
             //世界系下雷达坐标系的位置
-            //下面式子的意义是W^p_L = W^p_I + W^R_I * I^t_L
+            //下面式子的意义是W^p_L = W^p_I + W^R_I * I^t_L计算 LiDAR 位置，offset_T_L_I是 LiDAR 相对于 IMU 的安装平移，仍然在 IMU 坐标系中
             pos_lid = state_point.pos + state_point.rot * state_point.offset_T_L_I;
 
             if (feats_undistort->empty() || (feats_undistort == NULL)) //如果点云数据为空，则代表了激光雷达没有完成去畸变，此时还不能初始化成功

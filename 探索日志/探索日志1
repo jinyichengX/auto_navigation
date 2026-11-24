@@ -1,0 +1,637 @@
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793354062.804783832] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×59°
+[WARN] [1793354063.007312341] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=1)
+[INFO] [1793354063.409422759] [nbvplanner_explorer]: 起飞中... z=-0.03 → 1.6m
+[INFO] [1793354065.805436458] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9456, total_iters=52, loopCount=52
+[INFO] [1793354065.805618258] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.9456, path_size=28, target=(0.17,1.00,0.63) 距当前 0.97 m, 最近障碍 0.90 m, 本步 1.00 m
+[INFO] [1793354065.813402258] [nbvplanner_explorer]: 飞向已发布目标 (0.17,1.00,0.63), 剩余 0.97 m
+[INFO] [1793354067.007377790] [nbvplanner_explorer]: 起飞中... z=0.52 → 1.6m
+[INFO] [1793354068.992075244] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.0461, total_iters=46, loopCount=46
+[INFO] [1793354068.992290844] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.0461, path_size=27, target=(0.21,1.79,0.71) 距当前 0.95 m, 最近障碍 0.90 m, 本步 0.96 m
+[INFO] [1793354068.999736944] [nbvplanner_explorer]: 飞向已发布目标 (0.21,1.79,0.71), 剩余 0.95 m
+[INFO] [1793354071.186566003] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0954, total_iters=35, loopCount=35
+[INFO] [1793354071.186728803] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0954, path_size=29, target=(0.68,2.42,0.69) 距当前 0.94 m, 最近障碍 0.90 m, 本步 0.98 m
+[INFO] [1793354071.194128103] [nbvplanner_explorer]: 飞向已发布目标 (0.68,2.42,0.69), 剩余 0.94 m
+[INFO] [1793354071.807376319] [nbvplanner_explorer]: 起飞中... z=0.55 → 1.6m
+[INFO] [1793354072.787791646] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0166, total_iters=57, loopCount=57
+[INFO] [1793354072.787992046] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0166, path_size=17, target=(0.75,3.01,0.66) 距当前 0.90 m, 最近障碍 0.90 m, 本步 0.95 m
+[INFO] [1793354073.214577257] [nbvplanner_explorer]: 飞向已发布目标 (0.75,3.01,0.66), 剩余 0.89 m
+[INFO] [1793354075.201429096] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1904, total_iters=14, loopCount=14
+[INFO] [1793354075.201625896] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1904, path_size=20, target=(0.99,3.58,0.77) 距当前 0.72 m, 最近障碍 0.90 m, 本步 0.78 m
+[INFO] [1793354075.241045100] [nbvplanner_explorer]: 飞向已发布目标 (0.99,3.58,0.77), 剩余 0.69 m
+[INFO] [1793354077.198908744] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.4031, total_iters=10, loopCount=10
+[INFO] [1793354077.199051644] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.4031, path_size=24, target=(1.04,4.03,0.79) 距当前 0.67 m, 最近障碍 0.90 m, 本步 0.74 m
+[INFO] [1793354077.414815870] [nbvplanner_explorer]: 飞向已发布目标 (1.04,4.03,0.79), 剩余 0.55 m
+[INFO] [1793354079.011269269] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.9065, total_iters=14, loopCount=14
+[INFO] [1793354079.011434469] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.9065, path_size=31, target=(1.03,4.51,0.83) 距当前 0.67 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793354079.418055119] [nbvplanner_explorer]: 飞向已发布目标 (1.03,4.51,0.83), 剩余 0.57 m
+[INFO] [1793354081.209787899] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.1753, total_iters=12, loopCount=12
+[INFO] [1793354081.209940699] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.1753, path_size=17, target=(1.07,5.18,0.85) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.73 m
+[INFO] [1793354081.618351302] [nbvplanner_explorer]: 飞向已发布目标 (1.07,5.18,0.85), 剩余 0.61 m
+[INFO] [1793354083.214860619] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7380, total_iters=9, loopCount=9
+[INFO] [1793354083.214988519] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.7380, path_size=32, target=(1.10,5.60,0.86) 距当前 0.65 m, 最近障碍 0.90 m, 本步 0.67 m
+[INFO] [1793354083.818003225] [nbvplanner_explorer]: 飞向已发布目标 (1.10,5.60,0.86), 剩余 0.31 m
+[INFO] [1793354084.402483231] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7313, total_iters=7, loopCount=7
+[INFO] [1793354084.402655931] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.7313, path_size=17, target=(1.16,5.98,0.79) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793354085.617905443] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6734, total_iters=10, loopCount=10
+[INFO] [1793354085.618060743] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.6734, path_size=17, target=(1.16,6.41,0.86) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793354086.018084547] [nbvplanner_explorer]: 飞向已发布目标 (1.16,6.41,0.86), 剩余 0.41 m
+[INFO] [1793354087.225163159] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8074, total_iters=11, loopCount=11
+[INFO] [1793354087.225309459] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.8074, path_size=17, target=(1.24,6.72,0.87) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793354088.423629271] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.2559, total_iters=10, loopCount=10
+[INFO] [1793354088.423858971] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.2559, path_size=23, target=(1.21,7.10,0.91) 距当前 0.62 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354088.434110871] [nbvplanner_explorer]: 飞向已发布目标 (1.21,7.10,0.91), 剩余 0.62 m
+[INFO] [1793354090.211449268] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.8366, total_iters=10, loopCount=10
+[INFO] [1793354090.211625468] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.8366, path_size=33, target=(1.27,7.52,0.91) 距当前 0.57 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793354090.614286663] [nbvplanner_explorer]: 飞向已发布目标 (1.27,7.52,0.91), 剩余 0.40 m
+[INFO] [1793354091.832184247] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0401, total_iters=50, loopCount=50
+[INFO] [1793354091.832493547] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0401, path_size=25, target=(1.32,7.92,0.91) 距当前 0.56 m, 最近障碍 0.90 m, 本步 0.59 m
+[INFO] [1793354092.614382736] [nbvplanner_explorer]: 飞向已发布目标 (1.32,7.92,0.91), 剩余 0.35 m
+[INFO] [1793354093.223669728] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4078, total_iters=72, loopCount=72
+[INFO] [1793354093.223976528] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.4078, path_size=24, target=(1.32,8.32,0.84) 距当前 0.61 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354094.611537209] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.5768, total_iters=27, loopCount=27
+[INFO] [1793354094.611708509] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.5768, path_size=28, target=(1.44,8.70,0.82) 距当前 0.56 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793354094.622427009] [nbvplanner_explorer]: 飞向已发布目标 (1.44,8.70,0.82), 剩余 0.56 m
+[INFO] [1793354096.015206191] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.3388, total_iters=22, loopCount=22
+[INFO] [1793354096.015365791] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.3388, path_size=16, target=(1.39,9.01,0.92) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793354097.220491275] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.7483, total_iters=20, loopCount=20
+[INFO] [1793354097.220745775] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.7483, path_size=29, target=(1.37,9.28,0.92) 距当前 0.49 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354097.231708374] [nbvplanner_explorer]: 飞向已发布目标 (1.37,9.28,0.92), 剩余 0.49 m
+[INFO] [1793354098.425855511] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.1633, total_iters=18, loopCount=18
+[INFO] [1793354098.426063711] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.1633, path_size=22, target=(1.24,9.61,0.92) 距当前 0.52 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793354099.415179941] [nbvplanner_explorer]: 飞向已发布目标 (1.24,9.61,0.92), 剩余 0.28 m
+[INFO] [1793354100.212306414] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.1280, total_iters=16, loopCount=16
+[INFO] [1793354100.212449814] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.1280, path_size=26, target=(1.16,10.04,0.95) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354102.019470977] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8532, total_iters=21, loopCount=21
+[INFO] [1793354102.019622477] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8532, path_size=27, target=(1.07,10.45,0.97) 距当前 0.58 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793354102.029969277] [nbvplanner_explorer]: 飞向已发布目标 (1.07,10.45,0.97), 剩余 0.58 m
+[INFO] [1793354103.621341784] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1764, total_iters=36, loopCount=36
+[INFO] [1793354103.621498184] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1764, path_size=17, target=(1.07,10.83,0.93) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354104.214372586] [nbvplanner_explorer]: 飞向已发布目标 (1.07,10.83,0.93), 剩余 0.27 m
+[INFO] [1793354104.817993089] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3523, total_iters=19, loopCount=19
+[INFO] [1793354104.818159389] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3523, path_size=16, target=(1.10,11.22,0.99) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354106.420862577] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.9344, total_iters=13, loopCount=13
+[INFO] [1793354106.421047877] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.9344, path_size=17, target=(1.13,11.52,1.02) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793354106.429216678] [nbvplanner_explorer]: 飞向已发布目标 (1.13,11.52,1.02), 剩余 0.50 m
+[INFO] [1793354107.616617372] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.2940, total_iters=7, loopCount=7
+[INFO] [1793354107.616836472] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.2940, path_size=21, target=(1.18,11.81,1.03) 距当前 0.55 m, 最近障碍 0.90 m, 本步 0.59 m
+[INFO] [1793354109.010434582] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.4357, total_iters=5, loopCount=5
+[INFO] [1793354109.010577682] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.4357, path_size=17, target=(1.25,12.18,1.05) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354109.021635883] [nbvplanner_explorer]: 飞向已发布目标 (1.25,12.18,1.05), 剩余 0.60 m
+[INFO] [1793354110.416733093] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.5259, total_iters=4, loopCount=4
+[INFO] [1793354110.416904493] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.5259, path_size=17, target=(1.37,12.53,1.06) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793354111.214371056] [nbvplanner_explorer]: 飞向已发布目标 (1.37,12.53,1.06), 剩余 0.28 m
+[INFO] [1793354111.815405803] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.5198, total_iters=4, loopCount=4
+[INFO] [1793354111.815557003] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.5198, path_size=20, target=(1.49,12.81,1.07) 距当前 0.49 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793354112.820832982] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.9121, total_iters=7, loopCount=7
+[INFO] [1793354112.821000282] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.9121, path_size=23, target=(1.60,13.14,1.10) 距当前 0.57 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354113.214467713] [nbvplanner_explorer]: 飞向已发布目标 (1.60,13.14,1.10), 剩余 0.42 m
+[INFO] [1793354114.413354967] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.9690, total_iters=8, loopCount=8
+[INFO] [1793354114.413570767] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.9690, path_size=19, target=(1.75,13.42,1.11) 距当前 0.52 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793354115.651434434] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4270, total_iters=55, loopCount=55
+[INFO] [1793354115.651561034] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.4270, path_size=17, target=(1.85,13.57,1.13) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354115.658763735] [nbvplanner_explorer]: 飞向已发布目标 (1.85,13.57,1.13), 剩余 0.40 m
+[INFO] [1793354116.639100867] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.9288, total_iters=23, loopCount=23
+[INFO] [1793354116.639244367] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.9288, path_size=17, target=(1.61,13.87,1.15) 距当前 0.49 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354118.214259979] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3014, total_iters=21, loopCount=21
+[INFO] [1793354118.214432379] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3014, path_size=17, target=(1.70,14.24,1.18) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793354118.222409680] [nbvplanner_explorer]: 飞向已发布目标 (1.70,14.24,1.18), 剩余 0.50 m
+[INFO] [1793354119.817485694] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8123, total_iters=14, loopCount=14
+[INFO] [1793354119.817631394] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.8123, path_size=31, target=(1.72,14.72,1.20) 距当前 0.67 m, 最近障碍 0.90 m, 本步 0.67 m
+[INFO] [1793354120.414278274] [nbvplanner_explorer]: 飞向已发布目标 (1.72,14.72,1.20), 剩余 0.47 m
+[INFO] [1793354121.621188744] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.1323, total_iters=31, loopCount=31
+[INFO] [1793354121.621357144] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.1323, path_size=16, target=(1.88,15.03,1.18) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.59 m
+[INFO] [1793354122.416538272] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8013, total_iters=16, loopCount=16
+[INFO] [1793354122.416686972] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.8013, path_size=17, target=(2.05,15.37,1.24) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354122.424154573] [nbvplanner_explorer]: 飞向已发布目标 (2.05,15.37,1.24), 剩余 0.60 m
+[INFO] [1793354124.032031832] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.4503, total_iters=12, loopCount=12
+[INFO] [1793354124.032219832] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.4503, path_size=17, target=(2.27,15.70,1.22) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.67 m
+[INFO] [1793354124.614194826] [nbvplanner_explorer]: 飞向已发布目标 (2.27,15.70,1.22), 剩余 0.35 m
+[INFO] [1793354125.431494758] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.0278, total_iters=11, loopCount=11
+[INFO] [1793354125.431657258] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=5.0278, path_size=29, target=(2.51,15.99,1.28) 距当前 0.59 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354126.825823683] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.1694, total_iters=7, loopCount=7
+[INFO] [1793354126.825987283] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=5.1694, path_size=17, target=(2.79,16.27,1.22) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793354126.837876585] [nbvplanner_explorer]: 飞向已发布目标 (2.79,16.27,1.22), 剩余 0.60 m
+[INFO] [1793354128.450816645] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.2689, total_iters=41, loopCount=41
+[INFO] [1793354128.450995245] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.2689, path_size=22, target=(3.09,16.43,1.31) 距当前 0.52 m, 最近障碍 0.90 m, 本步 0.59 m
+[INFO] [1793354129.018652936] [nbvplanner_explorer]: 飞向已发布目标 (3.09,16.43,1.31), 剩余 0.34 m
+[INFO] [1793354130.038730474] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6747, total_iters=19, loopCount=19
+[INFO] [1793354130.038977574] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.6747, path_size=16, target=(3.34,16.61,1.32) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354131.231879829] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.3521, total_iters=13, loopCount=13
+[INFO] [1793354131.232027329] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.3521, path_size=17, target=(3.38,16.84,1.34) 距当前 0.38 m, 最近障碍 0.90 m, 本步 0.47 m
+[INFO] [1793354131.244328838] [nbvplanner_explorer]: 飞向已发布目标 (3.38,16.84,1.34), 剩余 0.38 m
+[INFO] [1793354132.421505881] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.0823, total_iters=7, loopCount=7
+[INFO] [1793354132.421689081] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=5.0823, path_size=29, target=(3.64,16.95,1.34) 距当前 0.44 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354133.627365845] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.4210, total_iters=3, loopCount=3
+[INFO] [1793354133.627531545] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=5.4210, path_size=17, target=(3.72,17.14,1.34) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354133.639474054] [nbvplanner_explorer]: 飞向已发布目标 (3.72,17.14,1.34), 剩余 0.40 m
+[INFO] [1793354134.414078809] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.3736, total_iters=3, loopCount=3
+[WARN] [1793354134.414161509] [nbvplanner_explorer]: 目标 (3.89,17.20,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354134.841983515] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5207, total_iters=42, loopCount=42
+[WARN] [1793354134.842106115] [nbvplanner_explorer]: 目标 (3.98,17.21,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354135.264989418] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.1097, total_iters=19, loopCount=19
+[WARN] [1793354135.265088918] [nbvplanner_explorer]: 目标 (3.98,17.16,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354135.722943446] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4900, total_iters=73, loopCount=73
+[WARN] [1793354135.723052246] [nbvplanner_explorer]: 目标 (3.97,17.20,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354136.152761689] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4703, total_iters=27, loopCount=27
+[WARN] [1793354136.152841389] [nbvplanner_explorer]: 目标 (4.09,17.27,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354136.575414098] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.6065, total_iters=18, loopCount=18
+[WARN] [1793354136.575567698] [nbvplanner_explorer]: 目标 (4.12,17.26,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354137.030087407] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1030, total_iters=58, loopCount=58
+[WARN] [1793354137.030178307] [nbvplanner_explorer]: 目标 (4.12,17.28,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354137.456358414] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.5327, total_iters=28, loopCount=28
+[WARN] [1793354137.456441814] [nbvplanner_explorer]: 目标 (4.07,17.26,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354137.917250915] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8531, total_iters=48, loopCount=48
+[WARN] [1793354137.917350515] [nbvplanner_explorer]: 目标 (4.07,17.27,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354138.354484915] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7186, total_iters=19, loopCount=19
+[INFO] [1793354138.354603215] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.7186, path_size=16, target=(4.03,17.33,1.35) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793354138.386008315] [nbvplanner_explorer]: 飞向已发布目标 (4.03,17.33,1.35), 剩余 0.40 m
+[INFO] [1793354140.046621716] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.5351, total_iters=68, loopCount=68
+[INFO] [1793354140.046884916] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.5351, path_size=33, target=(4.25,17.44,1.33) 距当前 0.43 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793354140.843046716] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.3998, total_iters=46, loopCount=46
+[INFO] [1793354140.843193916] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.3998, path_size=17, target=(4.44,17.54,1.34) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354140.850478016] [nbvplanner_explorer]: 飞向已发布目标 (4.44,17.54,1.34), 剩余 0.40 m
+[INFO] [1793354141.654412917] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4206, total_iters=58, loopCount=58
+[WARN] [1793354141.654509517] [nbvplanner_explorer]: 目标 (4.60,17.58,1.32) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354142.086315417] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0361, total_iters=71, loopCount=71
+[INFO] [1793354142.086455917] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.0361, path_size=31, target=(4.61,17.68,1.32) 距当前 0.46 m, 最近障碍 0.90 m, 本步 0.47 m
+[INFO] [1793354143.440430418] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.8047, total_iters=51, loopCount=51
+[WARN] [1793354143.440525618] [nbvplanner_explorer]: 目标 (4.81,17.72,1.32) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354143.869467018] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.1245, total_iters=39, loopCount=39
+[WARN] [1793354143.869554418] [nbvplanner_explorer]: 目标 (4.77,17.77,1.33) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354144.315876518] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7784, total_iters=9, loopCount=9
+[WARN] [1793354144.315966118] [nbvplanner_explorer]: 目标 (4.81,17.75,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354144.766836919] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4569, total_iters=47, loopCount=47
+[WARN] [1793354144.766934119] [nbvplanner_explorer]: 目标 (4.86,17.73,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354145.265695619] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0076, total_iters=117, loopCount=117
+[WARN] [1793354145.265772519] [nbvplanner_explorer]: 目标 (4.90,17.72,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354145.737001543] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.3003, total_iters=90, loopCount=90
+[WARN] [1793354145.737077343] [nbvplanner_explorer]: 目标 (4.94,17.75,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354146.175526979] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5960, total_iters=32, loopCount=32
+[WARN] [1793354146.175614479] [nbvplanner_explorer]: 目标 (4.86,17.88,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354146.616917206] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.6089, total_iters=19, loopCount=19
+[WARN] [1793354146.617008505] [nbvplanner_explorer]: 目标 (4.88,17.86,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354147.054809231] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.3159, total_iters=9, loopCount=9
+[WARN] [1793354147.054909731] [nbvplanner_explorer]: 目标 (4.88,17.80,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354147.526333111] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5688, total_iters=86, loopCount=86
+[WARN] [1793354147.526413811] [nbvplanner_explorer]: 目标 (4.94,17.79,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354147.975696691] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5071, total_iters=21, loopCount=21
+[WARN] [1793354147.975764591] [nbvplanner_explorer]: 目标 (4.96,17.75,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354148.419333372] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0366, total_iters=31, loopCount=31
+[WARN] [1793354148.419415472] [nbvplanner_explorer]: 目标 (4.94,17.78,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354148.902163752] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4261, total_iters=68, loopCount=68
+[WARN] [1793354148.902242752] [nbvplanner_explorer]: 目标 (4.93,17.76,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354149.356104132] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.6247, total_iters=21, loopCount=21
+[WARN] [1793354149.356195432] [nbvplanner_explorer]: 目标 (4.93,17.76,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354149.808624013] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.7521, total_iters=58, loopCount=58
+[WARN] [1793354149.808707013] [nbvplanner_explorer]: 目标 (4.89,17.82,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354150.247112594] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.8358, total_iters=21, loopCount=21
+[WARN] [1793354150.247223994] [nbvplanner_explorer]: 目标 (4.87,17.77,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354150.705808274] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.2399, total_iters=23, loopCount=23
+[WARN] [1793354150.705888174] [nbvplanner_explorer]: 目标 (4.84,17.77,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354151.146066455] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3787, total_iters=38, loopCount=38
+[WARN] [1793354151.146140155] [nbvplanner_explorer]: 目标 (4.81,17.73,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354151.608237635] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7718, total_iters=55, loopCount=55
+[WARN] [1793354151.608316335] [nbvplanner_explorer]: 目标 (4.80,17.70,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354152.065403716] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.1600, total_iters=21, loopCount=21
+[WARN] [1793354152.065480716] [nbvplanner_explorer]: 目标 (4.77,17.67,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354152.500049697] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.4948, total_iters=14, loopCount=14
+[WARN] [1793354152.500130897] [nbvplanner_explorer]: 目标 (4.80,17.68,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354152.955411978] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.2996, total_iters=55, loopCount=55
+[WARN] [1793354152.955535078] [nbvplanner_explorer]: 目标 (4.71,17.63,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354153.392578459] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.9888, total_iters=16, loopCount=16
+[WARN] [1793354153.392675559] [nbvplanner_explorer]: 目标 (4.78,17.65,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354153.854962413] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7165, total_iters=12, loopCount=12
+[WARN] [1793354153.855064813] [nbvplanner_explorer]: 目标 (4.81,17.75,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354154.299375261] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.2588, total_iters=11, loopCount=11
+[WARN] [1793354154.299456561] [nbvplanner_explorer]: 目标 (4.80,17.72,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354154.750933312] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.9846, total_iters=58, loopCount=58
+[WARN] [1793354154.751000112] [nbvplanner_explorer]: 目标 (4.85,17.70,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354155.190994859] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.3650, total_iters=20, loopCount=20
+[WARN] [1793354155.191071859] [nbvplanner_explorer]: 目标 (4.91,17.72,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354155.632996806] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0006, total_iters=49, loopCount=49
+[WARN] [1793354155.633075906] [nbvplanner_explorer]: 目标 (4.94,17.77,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354156.110679066] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0332, total_iters=98, loopCount=98
+[WARN] [1793354156.110755766] [nbvplanner_explorer]: 目标 (4.89,17.73,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354156.570436719] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.3583, total_iters=71, loopCount=71
+[WARN] [1793354156.570503219] [nbvplanner_explorer]: 目标 (4.87,17.77,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354157.037062175] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4549, total_iters=51, loopCount=51
+[WARN] [1793354157.037135375] [nbvplanner_explorer]: 目标 (4.94,17.78,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354157.488929426] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8643, total_iters=41, loopCount=41
+[WARN] [1793354157.489000326] [nbvplanner_explorer]: 目标 (4.94,17.75,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354157.953904381] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4668, total_iters=74, loopCount=74
+[WARN] [1793354157.953988481] [nbvplanner_explorer]: 目标 (4.91,17.74,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354158.422711637] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.8029, total_iters=60, loopCount=60
+[WARN] [1793354158.422808137] [nbvplanner_explorer]: 目标 (4.89,17.72,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354158.884104791] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3282, total_iters=53, loopCount=53
+[WARN] [1793354158.884200691] [nbvplanner_explorer]: 目标 (4.81,17.78,1.43) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354159.328053100] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.6780, total_iters=14, loopCount=14
+[WARN] [1793354159.328161300] [nbvplanner_explorer]: 目标 (4.84,17.76,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354159.763841095] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.0562, total_iters=15, loopCount=15
+[WARN] [1793354159.763932795] [nbvplanner_explorer]: 目标 (4.85,17.74,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354160.261860591] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1022, total_iters=114, loopCount=114
+[WARN] [1793354160.261941491] [nbvplanner_explorer]: 目标 (4.90,17.75,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354160.721728486] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0272, total_iters=50, loopCount=50
+[WARN] [1793354160.721805386] [nbvplanner_explorer]: 目标 (4.79,17.67,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354161.230957281] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2240, total_iters=153, loopCount=153
+[WARN] [1793354161.231079581] [nbvplanner_explorer]: 目标 (4.76,17.66,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354161.693525063] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.1656, total_iters=47, loopCount=47
+[WARN] [1793354161.693610263] [nbvplanner_explorer]: 目标 (4.68,17.62,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354162.130228938] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6573, total_iters=21, loopCount=21
+[WARN] [1793354162.130369438] [nbvplanner_explorer]: 目标 (4.67,17.65,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354162.571735412] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.8599, total_iters=18, loopCount=18
+[WARN] [1793354162.571813612] [nbvplanner_explorer]: 目标 (4.80,17.69,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354163.024345686] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4205, total_iters=50, loopCount=50
+[WARN] [1793354163.024440086] [nbvplanner_explorer]: 目标 (4.87,17.68,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354163.517393157] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=31, bestGain=0.0831, total_iters=123, loopCount=123
+[WARN] [1793354163.517463157] [nbvplanner_explorer]: 目标 (4.29,17.29,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354163.957550832] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6097, total_iters=8, loopCount=8
+[WARN] [1793354163.957639832] [nbvplanner_explorer]: 目标 (4.38,17.35,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354164.398900007] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6852, total_iters=5, loopCount=5
+[WARN] [1793354164.398987907] [nbvplanner_explorer]: 目标 (4.33,17.37,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354164.822715782] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8315, total_iters=5, loopCount=5
+[WARN] [1793354164.822790782] [nbvplanner_explorer]: 目标 (4.34,17.36,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354165.251882757] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9149, total_iters=6, loopCount=6
+[WARN] [1793354165.251965057] [nbvplanner_explorer]: 目标 (4.31,17.30,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354165.705445531] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5240, total_iters=58, loopCount=58
+[WARN] [1793354165.705537531] [nbvplanner_explorer]: 目标 (4.87,17.78,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354166.134767206] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7939, total_iters=23, loopCount=23
+[WARN] [1793354166.134998306] [nbvplanner_explorer]: 目标 (4.80,17.77,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354166.580318480] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.2908, total_iters=58, loopCount=58
+[WARN] [1793354166.580397780] [nbvplanner_explorer]: 目标 (4.86,17.73,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354167.028782254] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.3470, total_iters=25, loopCount=25
+[WARN] [1793354167.028859354] [nbvplanner_explorer]: 目标 (4.84,17.73,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354167.468457229] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.3103, total_iters=13, loopCount=13
+[WARN] [1793354167.468547129] [nbvplanner_explorer]: 目标 (4.79,17.71,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354167.929343502] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4051, total_iters=77, loopCount=77
+[WARN] [1793354167.929421002] [nbvplanner_explorer]: 目标 (4.83,17.71,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354168.393718376] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.2976, total_iters=47, loopCount=47
+[WARN] [1793354168.393873776] [nbvplanner_explorer]: 目标 (4.87,17.70,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354168.850807749] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6072, total_iters=43, loopCount=43
+[WARN] [1793354168.850889349] [nbvplanner_explorer]: 目标 (4.93,17.72,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354169.278946924] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7286, total_iters=13, loopCount=13
+[WARN] [1793354169.279021524] [nbvplanner_explorer]: 目标 (4.91,17.72,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354169.765950405] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0274, total_iters=116, loopCount=116
+[WARN] [1793354169.766032705] [nbvplanner_explorer]: 目标 (4.85,17.75,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354170.197127290] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.4844, total_iters=42, loopCount=42
+[WARN] [1793354170.197235390] [nbvplanner_explorer]: 目标 (4.77,17.68,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354170.629223075] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.1025, total_iters=11, loopCount=11
+[WARN] [1793354170.629312775] [nbvplanner_explorer]: 目标 (4.61,17.61,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354171.079142360] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.8456, total_iters=57, loopCount=57
+[WARN] [1793354171.079229660] [nbvplanner_explorer]: 目标 (4.77,17.64,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354171.510516545] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7919, total_iters=31, loopCount=31
+[WARN] [1793354171.510595745] [nbvplanner_explorer]: 目标 (4.82,17.66,1.39) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354171.946956031] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.3686, total_iters=16, loopCount=16
+[WARN] [1793354171.947027231] [nbvplanner_explorer]: 目标 (4.98,17.86,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354172.379953716] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7260, total_iters=11, loopCount=11
+[WARN] [1793354172.380034116] [nbvplanner_explorer]: 目标 (4.99,17.89,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354172.842704900] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.5112, total_iters=72, loopCount=72
+[WARN] [1793354172.842776500] [nbvplanner_explorer]: 目标 (5.01,17.85,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354173.323157584] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0902, total_iters=123, loopCount=123
+[WARN] [1793354173.323248784] [nbvplanner_explorer]: 目标 (4.28,17.77,1.40) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354173.768212969] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0943, total_iters=28, loopCount=28
+[WARN] [1793354173.768316969] [nbvplanner_explorer]: 目标 (4.21,17.41,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354174.197271254] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.0327, total_iters=9, loopCount=9
+[WARN] [1793354174.197371554] [nbvplanner_explorer]: 目标 (4.29,17.24,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354174.637010239] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0037, total_iters=24, loopCount=24
+[WARN] [1793354174.637085639] [nbvplanner_explorer]: 目标 (4.27,17.26,1.43) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354175.070945224] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2309, total_iters=41, loopCount=41
+[WARN] [1793354175.071029224] [nbvplanner_explorer]: 目标 (4.26,17.27,1.43) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354175.490540209] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3706, total_iters=10, loopCount=10
+[WARN] [1793354175.490646609] [nbvplanner_explorer]: 目标 (4.14,17.20,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354175.891813495] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7539, total_iters=19, loopCount=19
+[WARN] [1793354175.891915295] [nbvplanner_explorer]: 目标 (4.22,17.26,1.44) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354176.332093580] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9132, total_iters=7, loopCount=7
+[WARN] [1793354176.332282480] [nbvplanner_explorer]: 目标 (4.21,17.27,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354176.765117865] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5915, total_iters=69, loopCount=69
+[WARN] [1793354176.765199565] [nbvplanner_explorer]: 目标 (4.38,17.96,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354177.232394649] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.0563, total_iters=118, loopCount=118
+[WARN] [1793354177.232543749] [nbvplanner_explorer]: 目标 (4.73,17.96,1.42) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354177.680440139] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6270, total_iters=36, loopCount=36
+[WARN] [1793354177.680517239] [nbvplanner_explorer]: 目标 (4.84,17.83,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354178.127781233] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7702, total_iters=40, loopCount=40
+[WARN] [1793354178.127884933] [nbvplanner_explorer]: 目标 (4.88,17.82,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354178.533681228] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6080, total_iters=49, loopCount=49
+[WARN] [1793354178.533763928] [nbvplanner_explorer]: 目标 (4.89,17.76,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354178.962269422] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7513, total_iters=32, loopCount=32
+[WARN] [1793354178.962338522] [nbvplanner_explorer]: 目标 (4.59,17.73,1.41) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354179.363656817] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.5143, total_iters=15, loopCount=15
+[WARN] [1793354179.363746917] [nbvplanner_explorer]: 目标 (4.65,17.75,1.33) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354179.766644011] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.5168, total_iters=23, loopCount=23
+[WARN] [1793354179.766723611] [nbvplanner_explorer]: 目标 (4.73,17.75,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354180.231195205] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6487, total_iters=37, loopCount=37
+[INFO] [1793354180.231336605] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.6487, path_size=30, target=(4.82,17.74,1.06) 距当前 0.52 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793354180.238591405] [nbvplanner_explorer]: 飞向已发布目标 (4.82,17.74,1.06), 剩余 0.48 m
+[INFO] [1793354182.239373478] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0077, total_iters=63, loopCount=63
+[INFO] [1793354182.239559878] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0077, path_size=17, target=(4.97,17.81,1.14) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793354182.246525378] [nbvplanner_explorer]: 飞向已发布目标 (4.97,17.81,1.14), 剩余 0.40 m
+[INFO] [1793354182.792729971] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6125, total_iters=16, loopCount=16
+[INFO] [1793354182.792900871] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.6125, path_size=31, target=(5.27,17.90,1.11) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354184.043550954] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.2990, total_iters=64, loopCount=64
+[WARN] [1793354184.043654554] [nbvplanner_explorer]: 目标 (5.50,18.00,1.14) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354184.474458948] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.1523, total_iters=28, loopCount=28
+[WARN] [1793354184.474564248] [nbvplanner_explorer]: 目标 (5.45,18.01,1.14) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354184.885275142] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=5.3109, total_iters=7, loopCount=7
+[WARN] [1793354184.885366542] [nbvplanner_explorer]: 目标 (5.50,17.98,1.14) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354185.338318536] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5866, total_iters=57, loopCount=57
+[WARN] [1793354185.338410736] [nbvplanner_explorer]: 目标 (5.66,18.05,1.16) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354185.755170449] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.1431, total_iters=25, loopCount=25
+[WARN] [1793354185.755306649] [nbvplanner_explorer]: 目标 (5.62,18.06,1.15) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354186.192998268] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.6280, total_iters=19, loopCount=19
+[WARN] [1793354186.193091168] [nbvplanner_explorer]: 目标 (5.65,18.11,1.15) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354186.647123787] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8684, total_iters=80, loopCount=80
+[WARN] [1793354186.647209087] [nbvplanner_explorer]: 目标 (5.63,18.12,1.15) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354187.113284207] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.2570, total_iters=36, loopCount=36
+[WARN] [1793354187.113365507] [nbvplanner_explorer]: 目标 (5.63,18.09,1.14) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354187.551147226] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.7193, total_iters=9, loopCount=9
+[WARN] [1793354187.551227626] [nbvplanner_explorer]: 目标 (5.59,18.14,1.13) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354187.988180844] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.8271, total_iters=12, loopCount=12
+[WARN] [1793354187.988273544] [nbvplanner_explorer]: 目标 (5.61,18.13,1.13) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354188.468420365] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0067, total_iters=129, loopCount=129
+[WARN] [1793354188.468496265] [nbvplanner_explorer]: 目标 (5.58,18.07,1.13) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354188.924187484] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0163, total_iters=79, loopCount=79
+[INFO] [1793354188.924401684] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0163, path_size=27, target=(4.77,18.08,1.14) 距当前 0.46 m, 最近障碍 0.90 m, 本步 0.47 m
+[INFO] [1793354188.958621886] [nbvplanner_explorer]: 飞向已发布目标 (4.77,18.08,1.14), 剩余 0.46 m
+[INFO] [1793354190.645730357] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1305, total_iters=64, loopCount=64
+[INFO] [1793354190.645975857] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.1305, path_size=17, target=(5.37,18.24,1.19) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354191.014722573] [nbvplanner_explorer]: 飞向已发布目标 (5.37,18.24,1.19), 剩余 0.65 m
+[INFO] [1793354192.835014651] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6251, total_iters=63, loopCount=63
+[INFO] [1793354192.835164151] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.6251, path_size=30, target=(5.65,18.42,1.14) 距当前 0.47 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354193.636551276] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4846, total_iters=47, loopCount=47
+[WARN] [1793354193.636629676] [nbvplanner_explorer]: 目标 (5.86,18.43,1.15) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354194.073371874] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0580, total_iters=25, loopCount=25
+[WARN] [1793354194.073606274] [nbvplanner_explorer]: 目标 (5.89,18.41,1.15) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354194.529757972] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5688, total_iters=53, loopCount=53
+[INFO] [1793354194.529928872] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.5688, path_size=29, target=(5.93,18.39,1.13) 距当前 0.43 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793354194.565572372] [nbvplanner_explorer]: 飞向已发布目标 (5.93,18.39,1.13), 剩余 0.43 m
+[INFO] [1793354196.455397064] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0873, total_iters=141, loopCount=141
+[INFO] [1793354196.455633564] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0873, path_size=21, target=(6.06,18.42,1.18) 距当前 0.38 m, 最近障碍 0.90 m, 本步 0.41 m
+[INFO] [1793354197.033433461] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=4.0254, total_iters=62, loopCount=62
+[INFO] [1793354197.033668861] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=4.0254, path_size=17, target=(6.24,18.50,1.21) 距当前 0.40 m, 最近障碍 0.83 m, 本步 0.41 m
+[INFO] [1793354197.040881161] [nbvplanner_explorer]: 飞向已发布目标 (6.24,18.50,1.21), 剩余 0.40 m
+[INFO] [1793354198.029826357] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.5245, total_iters=34, loopCount=34
+[WARN] [1793354198.029974957] [nbvplanner_explorer]: 目标 (6.36,18.47,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354198.486935055] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3022, total_iters=129, loopCount=129
+[WARN] [1793354198.487014255] [nbvplanner_explorer]: 目标 (6.36,18.47,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354198.957239353] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0383, total_iters=80, loopCount=80
+[WARN] [1793354198.957329253] [nbvplanner_explorer]: 目标 (6.47,18.54,1.24) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354199.439036451] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0703, total_iters=110, loopCount=110
+[WARN] [1793354199.439128451] [nbvplanner_explorer]: 目标 (6.49,18.56,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354199.926861849] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0383, total_iters=142, loopCount=142
+[WARN] [1793354199.926989949] [nbvplanner_explorer]: 目标 (6.42,18.54,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354200.425144047] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0526, total_iters=129, loopCount=129
+[WARN] [1793354200.425230747] [nbvplanner_explorer]: 目标 (6.53,18.56,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354200.905593845] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0651, total_iters=84, loopCount=84
+[WARN] [1793354200.905683145] [nbvplanner_explorer]: 目标 (6.56,18.57,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354201.374862343] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9309, total_iters=112, loopCount=112
+[WARN] [1793354201.374975843] [nbvplanner_explorer]: 目标 (6.54,18.58,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354201.847947935] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0842, total_iters=84, loopCount=84
+[WARN] [1793354201.848046135] [nbvplanner_explorer]: 目标 (6.54,18.56,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354202.312831726] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.9719, total_iters=66, loopCount=66
+[WARN] [1793354202.312916526] [nbvplanner_explorer]: 目标 (6.59,18.56,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354202.788953217] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2740, total_iters=95, loopCount=95
+[WARN] [1793354202.789035717] [nbvplanner_explorer]: 目标 (6.61,18.57,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354203.241778808] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.2611, total_iters=44, loopCount=44
+[WARN] [1793354203.241859408] [nbvplanner_explorer]: 目标 (6.57,18.55,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354203.689453199] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.6382, total_iters=58, loopCount=58
+[WARN] [1793354203.689531899] [nbvplanner_explorer]: 目标 (6.48,18.50,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354204.148102490] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.9638, total_iters=44, loopCount=44
+[WARN] [1793354204.148214490] [nbvplanner_explorer]: 目标 (6.47,18.51,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354204.610480181] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.8335, total_iters=77, loopCount=77
+[WARN] [1793354204.610549581] [nbvplanner_explorer]: 目标 (6.54,18.52,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354205.105253971] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0383, total_iters=115, loopCount=115
+[WARN] [1793354205.105339971] [nbvplanner_explorer]: 目标 (6.41,18.53,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354205.583563962] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0961, total_iters=125, loopCount=125
+[WARN] [1793354205.583647162] [nbvplanner_explorer]: 目标 (6.51,18.53,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354206.077064852] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0581, total_iters=98, loopCount=98
+[WARN] [1793354206.077146752] [nbvplanner_explorer]: 目标 (6.51,18.49,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354206.564623743] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0776, total_iters=138, loopCount=138
+[WARN] [1793354206.564706543] [nbvplanner_explorer]: 目标 (6.40,18.47,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354207.081120732] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0839, total_iters=174, loopCount=174
+[WARN] [1793354207.081206232] [nbvplanner_explorer]: 目标 (6.47,18.49,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354207.599980522] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0210, total_iters=168, loopCount=168
+[WARN] [1793354207.600065722] [nbvplanner_explorer]: 目标 (6.44,18.49,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354208.094088413] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0140, total_iters=101, loopCount=101
+[WARN] [1793354208.094187713] [nbvplanner_explorer]: 目标 (6.46,18.50,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354208.541384804] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.9832, total_iters=41, loopCount=41
+[WARN] [1793354208.541475704] [nbvplanner_explorer]: 目标 (6.37,18.50,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354209.039377094] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0134, total_iters=142, loopCount=142
+[WARN] [1793354209.039457694] [nbvplanner_explorer]: 目标 (6.42,18.54,1.24) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354209.524376887] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0991, total_iters=93, loopCount=93
+[WARN] [1793354209.524456187] [nbvplanner_explorer]: 目标 (6.45,18.61,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354210.028558396] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0867, total_iters=148, loopCount=148
+[WARN] [1793354210.028678496] [nbvplanner_explorer]: 目标 (6.51,18.63,1.24) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354210.510102904] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0575, total_iters=104, loopCount=104
+[WARN] [1793354210.510185004] [nbvplanner_explorer]: 目标 (6.56,18.61,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354211.004135213] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1281, total_iters=103, loopCount=103
+[WARN] [1793354211.004215913] [nbvplanner_explorer]: 目标 (6.58,18.58,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354211.468564921] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0575, total_iters=72, loopCount=72
+[WARN] [1793354211.468639821] [nbvplanner_explorer]: 目标 (6.60,18.55,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354211.949447529] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0267, total_iters=118, loopCount=118
+[WARN] [1793354211.949572129] [nbvplanner_explorer]: 目标 (6.64,18.55,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354212.429791937] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5026, total_iters=89, loopCount=89
+[WARN] [1793354212.429871837] [nbvplanner_explorer]: 目标 (6.67,18.57,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354212.869783245] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.2530, total_iters=40, loopCount=40
+[WARN] [1793354212.869854845] [nbvplanner_explorer]: 目标 (6.55,18.52,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354213.362181153] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0973, total_iters=133, loopCount=133
+[WARN] [1793354213.362279453] [nbvplanner_explorer]: 目标 (6.59,18.50,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354213.845020662] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0782, total_iters=112, loopCount=112
+[WARN] [1793354213.845097962] [nbvplanner_explorer]: 目标 (6.45,18.46,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354214.333954070] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1043, total_iters=97, loopCount=97
+[WARN] [1793354214.334049770] [nbvplanner_explorer]: 目标 (6.42,18.48,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354214.810169678] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0712, total_iters=101, loopCount=101
+[WARN] [1793354214.810244178] [nbvplanner_explorer]: 目标 (6.49,18.49,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354215.300456787] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0663, total_iters=94, loopCount=94
+[WARN] [1793354215.300538287] [nbvplanner_explorer]: 目标 (6.39,18.50,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354215.838085496] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1114, total_iters=170, loopCount=170
+[WARN] [1793354215.838211896] [nbvplanner_explorer]: 目标 (6.41,18.50,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354216.312422404] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1435, total_iters=111, loopCount=111
+[WARN] [1793354216.312506104] [nbvplanner_explorer]: 目标 (6.49,18.52,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354216.825658613] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0349, total_iters=127, loopCount=127
+[WARN] [1793354216.825747713] [nbvplanner_explorer]: 目标 (6.51,18.52,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354217.324832122] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0782, total_iters=163, loopCount=163
+[WARN] [1793354217.324943322] [nbvplanner_explorer]: 目标 (6.46,18.51,1.24) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354217.851546282] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1246, total_iters=119, loopCount=119
+[WARN] [1793354217.851664782] [nbvplanner_explorer]: 目标 (6.43,18.52,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354218.313314750] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2609, total_iters=96, loopCount=96
+[WARN] [1793354218.313396450] [nbvplanner_explorer]: 目标 (6.37,18.54,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354218.774212819] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0712, total_iters=95, loopCount=95
+[WARN] [1793354218.774297619] [nbvplanner_explorer]: 目标 (6.47,18.56,1.23) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354219.257829090] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0447, total_iters=93, loopCount=93
+[WARN] [1793354219.257942790] [nbvplanner_explorer]: 目标 (6.44,18.56,1.24) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354219.710647058] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.2932, total_iters=54, loopCount=54
+[WARN] [1793354219.710737558] [nbvplanner_explorer]: 目标 (6.56,18.59,1.25) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354220.237597136] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1028, total_iters=198, loopCount=198
+[WARN] [1793354220.237681536] [nbvplanner_explorer]: 目标 (6.56,18.57,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354220.708967306] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6249, total_iters=69, loopCount=69
+[WARN] [1793354220.709043806] [nbvplanner_explorer]: 目标 (6.62,18.59,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354221.180946176] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1016, total_iters=84, loopCount=84
+[WARN] [1793354221.181025776] [nbvplanner_explorer]: 目标 (6.66,18.57,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354221.631259642] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6259, total_iters=65, loopCount=65
+[WARN] [1793354221.631336542] [nbvplanner_explorer]: 目标 (6.63,18.52,1.26) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354222.117971614] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0936, total_iters=121, loopCount=121
+[WARN] [1793354222.118058315] [nbvplanner_explorer]: 目标 (6.61,18.53,1.31) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354222.601036686] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4231, total_iters=123, loopCount=123
+[WARN] [1793354222.601107086] [nbvplanner_explorer]: 目标 (6.54,18.50,1.31) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354223.094310659] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0571, total_iters=115, loopCount=115
+[WARN] [1793354223.094402059] [nbvplanner_explorer]: 目标 (5.89,18.20,1.31) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354223.538434725] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0597, total_iters=19, loopCount=19
+[WARN] [1793354223.538512925] [nbvplanner_explorer]: 目标 (5.78,18.28,1.30) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354223.966886089] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1979, total_iters=21, loopCount=21
+[WARN] [1793354223.966957389] [nbvplanner_explorer]: 目标 (5.79,18.17,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354224.495430467] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=32, bestGain=0.0045, total_iters=119, loopCount=119
+[WARN] [1793354224.495554667] [nbvplanner_explorer]: 目标 (5.79,18.20,1.29) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354224.950923535] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0047, total_iters=8, loopCount=8
+[INFO] [1793354224.951041935] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0047, path_size=20, target=(5.76,18.39,1.24) 距当前 0.33 m, 最近障碍 0.81 m, 本步 0.40 m
+[INFO] [1793354224.985394240] [nbvplanner_explorer]: 飞向已发布目标 (5.76,18.39,1.24), 剩余 0.37 m
+[INFO] [1793354226.026064816] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0905, total_iters=6, loopCount=6
+[WARN] [1793354226.026154316] [nbvplanner_explorer]: 目标 (5.56,18.30,1.32) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354226.441891519] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4897, total_iters=4, loopCount=4
+[WARN] [1793354226.442013019] [nbvplanner_explorer]: 目标 (5.62,18.24,1.32) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354226.876150422] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6367, total_iters=1, loopCount=1
+[WARN] [1793354226.876255622] [nbvplanner_explorer]: 目标 (5.55,18.18,1.31) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354227.319358425] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6308, total_iters=2, loopCount=2
+[WARN] [1793354227.319449625] [nbvplanner_explorer]: 目标 (5.47,18.17,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354227.739644628] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6303, total_iters=2, loopCount=2
+[WARN] [1793354227.739739428] [nbvplanner_explorer]: 目标 (5.43,18.15,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354228.186326232] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7125, total_iters=5, loopCount=5
+[WARN] [1793354228.186426032] [nbvplanner_explorer]: 目标 (5.42,18.15,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354228.641872835] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9174, total_iters=4, loopCount=4
+[WARN] [1793354228.641960135] [nbvplanner_explorer]: 目标 (5.46,18.16,1.27) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354229.131286038] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0401, total_iters=101, loopCount=101
+[INFO] [1793354229.131474038] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0401, path_size=17, target=(6.11,18.52,1.27) 距当前 0.40 m, 最近障碍 0.88 m, 本步 0.41 m
+[INFO] [1793354229.166829439] [nbvplanner_explorer]: 飞向已发布目标 (6.11,18.52,1.27), 剩余 0.39 m
+[INFO] [1793354230.874167951] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0140, total_iters=138, loopCount=138
+[INFO] [1793354230.874321551] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0140, path_size=27, target=(6.21,18.62,1.24) 距当前 0.35 m, 最近障碍 0.83 m, 本步 0.41 m
+[INFO] [1793354231.612892056] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=37, bestGain=0.0079, total_iters=175, loopCount=175
+[INFO] [1793354231.613048156] [nbvplanner_explorer]: 规划 OK: counter=37, gainFound=1, bestGain=0.0079, path_size=17, target=(5.61,18.53,1.25) 距当前 0.40 m, 最近障碍 0.87 m, 本步 0.43 m
+[INFO] [1793354231.626189656] [nbvplanner_explorer]: 飞向已发布目标 (5.61,18.53,1.25), 剩余 0.40 m
+[INFO] [1793354233.408262469] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0083, total_iters=0, loopCount=0
+[WARN] [1793354233.408385269] [nbvplanner_explorer]: 目标 (5.56,18.30,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354233.818178574] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0087, total_iters=1, loopCount=1
+[WARN] [1793354233.818278774] [nbvplanner_explorer]: 目标 (5.54,18.36,1.28) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354234.230242479] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1286, total_iters=5, loopCount=5
+[INFO] [1793354234.230474579] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.1286, path_size=17, target=(5.52,18.32,1.29) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.43 m
+[INFO] [1793354234.265050279] [nbvplanner_explorer]: 飞向已发布目标 (5.52,18.32,1.29), 剩余 0.35 m
+[INFO] [1793354234.815087786] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3364, total_iters=3, loopCount=3
+[WARN] [1793354234.815179486] [nbvplanner_explorer]: 目标 (5.28,18.19,1.33) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354235.217086891] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2758, total_iters=1, loopCount=1
+[WARN] [1793354235.217174791] [nbvplanner_explorer]: 目标 (5.27,18.20,1.33) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354235.666310397] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2346, total_iters=3, loopCount=3
+[INFO] [1793354235.666504897] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.2346, path_size=26, target=(5.32,18.24,1.32) 距当前 0.37 m, 最近障碍 0.88 m, 本步 0.43 m
+[INFO] [1793354236.419470106] [nbvplanner_explorer]: 飞向已发布目标 (5.32,18.24,1.32), 剩余 0.36 m
+[INFO] [1793354237.417539418] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2757, total_iters=3, loopCount=3
+[WARN] [1793354237.417629918] [nbvplanner_explorer]: 目标 (5.20,18.11,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354237.837754323] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4635, total_iters=3, loopCount=3
+[WARN] [1793354237.837901123] [nbvplanner_explorer]: 目标 (5.20,18.10,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354238.243047728] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4405, total_iters=5, loopCount=5
+[WARN] [1793354238.243127228] [nbvplanner_explorer]: 目标 (5.17,18.05,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354238.860749336] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=35, bestGain=0.0855, total_iters=191, loopCount=191
+[WARN] [1793354238.860841636] [nbvplanner_explorer]: 目标 (5.03,18.37,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354239.306999942] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4342, total_iters=8, loopCount=8
+[WARN] [1793354239.307077542] [nbvplanner_explorer]: 目标 (5.07,18.12,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354239.750595747] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7215, total_iters=3, loopCount=3
+[WARN] [1793354239.750709247] [nbvplanner_explorer]: 目标 (5.06,18.06,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354240.191032152] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8776, total_iters=1, loopCount=1
+[WARN] [1793354240.191122452] [nbvplanner_explorer]: 目标 (5.01,18.04,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354240.631911958] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8583, total_iters=1, loopCount=1
+[WARN] [1793354240.632020558] [nbvplanner_explorer]: 目标 (5.00,17.98,1.38) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354241.073934363] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9391, total_iters=2, loopCount=2
+[INFO] [1793354241.074081563] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.9391, path_size=33, target=(5.02,17.97,1.37) 距当前 0.38 m, 最近障碍 0.90 m, 本步 0.40 m
+[INFO] [1793354241.107664264] [nbvplanner_explorer]: 飞向已发布目标 (5.02,17.97,1.37), 剩余 0.39 m
+[INFO] [1793354242.668711782] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0383, total_iters=104, loopCount=104
+[INFO] [1793354242.668888182] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0383, path_size=32, target=(5.37,18.44,1.37) 距当前 0.40 m, 最近障碍 0.85 m, 本步 0.43 m
+[INFO] [1793354243.214620688] [nbvplanner_explorer]: 飞向已发布目标 (5.37,18.44,1.37), 剩余 0.74 m
+[INFO] [1793354244.924555107] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=33, bestGain=0.0442, total_iters=134, loopCount=134
+[INFO] [1793354244.924732207] [nbvplanner_explorer]: 规划 OK: counter=33, gainFound=1, bestGain=0.0442, path_size=16, target=(5.02,18.07,1.32) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354245.414166512] [nbvplanner_explorer]: 飞向已发布目标 (5.02,18.07,1.32), 剩余 0.68 m
+[INFO] [1793354247.222923632] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0462, total_iters=26, loopCount=26
+[INFO] [1793354247.223083032] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0462, path_size=27, target=(4.67,18.08,1.39) 距当前 0.46 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354247.417396534] [nbvplanner_explorer]: 飞向已发布目标 (4.67,18.08,1.39), 剩余 0.31 m
+[INFO] [1793354248.429616145] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0483, total_iters=31, loopCount=31
+[WARN] [1793354248.429751045] [nbvplanner_explorer]: 目标 (4.47,17.76,1.34) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354248.847113650] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0505, total_iters=22, loopCount=22
+[WARN] [1793354248.847194650] [nbvplanner_explorer]: 目标 (4.56,17.68,1.34) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354249.263076555] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1101, total_iters=25, loopCount=25
+[WARN] [1793354249.263230955] [nbvplanner_explorer]: 目标 (4.54,17.62,1.35) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354249.679947361] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0155, total_iters=32, loopCount=32
+[WARN] [1793354249.680033461] [nbvplanner_explorer]: 目标 (4.54,17.61,1.36) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354250.120381869] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1368, total_iters=24, loopCount=24
+[WARN] [1793354250.120472369] [nbvplanner_explorer]: 目标 (4.50,17.59,1.37) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354250.614810379] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0128, total_iters=111, loopCount=111
+[INFO] [1793354250.614963279] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0128, path_size=33, target=(5.04,18.26,1.37) 距当前 0.44 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793354250.651204379] [nbvplanner_explorer]: 飞向已发布目标 (5.04,18.26,1.37), 剩余 0.46 m
+[INFO] [1793354253.116877727] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=32, bestGain=0.0159, total_iters=150, loopCount=150
+[INFO] [1793354253.117043227] [nbvplanner_explorer]: 规划 OK: counter=32, gainFound=1, bestGain=0.0159, path_size=32, target=(4.75,17.95,1.41) 距当前 0.44 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354253.129865027] [nbvplanner_explorer]: 飞向已发布目标 (4.75,17.95,1.41), 剩余 0.44 m
+[INFO] [1793354254.818100960] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4982, total_iters=10, loopCount=10
+[WARN] [1793354254.818202760] [nbvplanner_explorer]: 目标 (4.67,17.80,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354255.220899067] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6173, total_iters=2, loopCount=2
+[WARN] [1793354255.220976067] [nbvplanner_explorer]: 目标 (4.62,17.84,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354255.624455675] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6527, total_iters=3, loopCount=3
+[WARN] [1793354255.624581275] [nbvplanner_explorer]: 目标 (4.58,17.79,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354256.025447183] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6909, total_iters=1, loopCount=1
+[WARN] [1793354256.025559083] [nbvplanner_explorer]: 目标 (4.57,17.77,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354256.450980691] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7181, total_iters=1, loopCount=1
+[WARN] [1793354256.451093791] [nbvplanner_explorer]: 目标 (4.54,17.70,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354256.853974599] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7910, total_iters=1, loopCount=1
+[WARN] [1793354256.854061399] [nbvplanner_explorer]: 目标 (4.52,17.67,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354257.322061408] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0085, total_iters=100, loopCount=100
+[WARN] [1793354257.322168608] [nbvplanner_explorer]: 目标 (4.49,17.63,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354257.758114604] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2952, total_iters=13, loopCount=13
+[WARN] [1793354257.758241504] [nbvplanner_explorer]: 目标 (4.43,17.73,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354258.206754391] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.5923, total_iters=12, loopCount=12
+[WARN] [1793354258.206836791] [nbvplanner_explorer]: 目标 (4.40,17.74,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354258.634991479] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6098, total_iters=5, loopCount=5
+[WARN] [1793354258.635074279] [nbvplanner_explorer]: 目标 (4.38,17.70,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354259.066178567] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.2596, total_iters=16, loopCount=16
+[WARN] [1793354259.066262767] [nbvplanner_explorer]: 目标 (4.40,17.68,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354259.481522955] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7457, total_iters=12, loopCount=12
+[WARN] [1793354259.481650355] [nbvplanner_explorer]: 目标 (4.41,17.64,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354259.891380243] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6682, total_iters=12, loopCount=12
+[WARN] [1793354259.891460543] [nbvplanner_explorer]: 目标 (4.43,17.62,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354260.310584231] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0280, total_iters=19, loopCount=19
+[WARN] [1793354260.310679731] [nbvplanner_explorer]: 目标 (4.47,17.64,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354260.713628819] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.3248, total_iters=18, loopCount=18
+[WARN] [1793354260.713708719] [nbvplanner_explorer]: 目标 (4.50,17.64,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354261.190861106] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0064, total_iters=94, loopCount=94
+[INFO] [1793354261.191003106] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0064, path_size=16, target=(5.06,18.29,1.44) 距当前 0.40 m, 最近障碍 0.82 m, 本步 0.40 m
+[INFO] [1793354261.198164805] [nbvplanner_explorer]: 飞向已发布目标 (5.06,18.29,1.44), 剩余 0.37 m
+[INFO] [1793354262.693956462] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0136, total_iters=127, loopCount=127
+[WARN] [1793354262.694039362] [nbvplanner_explorer]: 目标 (4.67,17.81,1.43) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354263.107112950] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1305, total_iters=14, loopCount=14
+[INFO] [1793354263.107315150] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.1305, path_size=17, target=(4.54,18.01,1.44) 距当前 0.40 m, 最近障碍 0.85 m, 本步 0.43 m
+[INFO] [1793354263.214242647] [nbvplanner_explorer]: 飞向已发布目标 (4.54,18.01,1.44), 剩余 0.64 m
+[INFO] [1793354265.046552295] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.5259, total_iters=7, loopCount=7
+[INFO] [1793354265.046758895] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.5259, path_size=17, target=(4.35,17.88,1.49) 距当前 0.40 m, 最近障碍 0.90 m, 本步 0.43 m
+[INFO] [1793354265.616902280] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8112, total_iters=3, loopCount=3
+[INFO] [1793354265.617026080] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.8112, path_size=27, target=(4.12,17.71,1.47) 距当前 0.41 m, 最近障碍 0.90 m, 本步 0.43 m
+[INFO] [1793354265.623859280] [nbvplanner_explorer]: 飞向已发布目标 (4.12,17.71,1.47), 剩余 0.41 m
+[INFO] [1793354266.429793274] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8230, total_iters=1, loopCount=1
+[INFO] [1793354266.429949974] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.8230, path_size=20, target=(3.93,17.49,1.46) 距当前 0.48 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354268.222511960] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7761, total_iters=2, loopCount=2
+[WARN] [1793354268.222599960] [nbvplanner_explorer]: 目标 (3.85,17.26,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354268.635996657] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.8370, total_iters=3, loopCount=3
+[WARN] [1793354268.636122557] [nbvplanner_explorer]: 目标 (3.86,17.25,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354269.074118954] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.1642, total_iters=3, loopCount=3
+[WARN] [1793354269.074212054] [nbvplanner_explorer]: 目标 (3.79,17.15,1.46) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354269.522118650] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.3138, total_iters=1, loopCount=1
+[WARN] [1793354269.522251550] [nbvplanner_explorer]: 目标 (3.71,17.08,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354269.962141147] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.2147, total_iters=3, loopCount=3
+[WARN] [1793354269.962276547] [nbvplanner_explorer]: 目标 (3.71,17.08,1.45) 的放大安全盒在当前地图上有障碍 → 悬停
+[INFO] [1793354270.469161443] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0375, total_iters=159, loopCount=159
+[INFO] [1793354270.469378443] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0375, path_size=17, target=(4.27,17.90,1.44) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354270.506360843] [nbvplanner_explorer]: 飞向已发布目标 (4.27,17.90,1.44), 剩余 0.49 m
+[INFO] [1793354272.614503127] [nbvplanner_explorer]: 飞向已发布目标 (4.27,17.90,1.44), 剩余 0.37 m
+[INFO] [1793354273.525635720] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0258, total_iters=225, loopCount=225
+[INFO] [1793354273.525794720] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0258, path_size=23, target=(4.60,18.41,1.47) 距当前 0.49 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793354274.619046528] [nbvplanner_explorer]: 飞向已发布目标 (4.60,18.41,1.47), 剩余 0.59 m
+[INFO] [1793354276.814188744] [nbvplanner_explorer]: 飞向已发布目标 (4.60,18.41,1.47), 剩余 0.59 m
+[INFO] [1793354279.016274259] [nbvplanner_explorer]: 飞向已发布目标 (4.60,18.41,1.47), 剩余 0.59 m
+[WARN] [1793354280.614064125] [nbvplanner_explorer]: 目标 7.1s 未到达 (剩余 0.59m, 预算 7.0s) → 丢弃重规划
+[INFO] [1793354281.053186588] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0134, total_iters=103, loopCount=103
+[INFO] [1793354281.053351288] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.0134, path_size=17, target=(4.67,18.16,1.47) 距当前 0.48 m, 最近障碍 0.90 m, 本步 0.49 m
+[INFO] [1793354281.060206088] [nbvplanner_explorer]: 飞向已发布目标 (4.67,18.16,1.47), 剩余 0.48 m
+[INFO] [1793354283.214127953] [nbvplanner_explorer]: 飞向已发布目标 (4.67,18.16,1.47), 剩余 0.48 m
+[INFO] [1793354285.216553960] [nbvplanner_explorer]: 飞向已发布目标 (4.67,18.16,1.47), 剩余 0.48 m
+^C[INFO] [1793354285.410526461] [rclcpp]: signal_handler(SIGINT/SIGTERM)

@@ -1,0 +1,89 @@
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793414727.739216533] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×60° pitch=15°, 增益仰角带=[-45°,15°] (yaw无关=1), degressive=0.25, gainRange=1.00, gainEps=0.240, initIters=30
+[WARN] [1793414727.941729833] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=1)
+[INFO] [1793414728.141842233] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.6m
+[INFO] [1793414730.341860835] [nbvplanner_explorer]: 起飞中... z=0.57 → 1.6m
+[INFO] [1793414731.432243143] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.4381, total_iters=58, loopCount=58
+[INFO] [1793414731.432974243] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.4381, path_size=17, target=(0.17,-0.97,1.25) 距当前 1.10 m, 最近障碍 0.90 m, 本步 1.00 m
+[INFO] [1793414731.441703043] [nbvplanner_explorer]: 飞向已发布目标 (0.17,-0.97,1.25), 剩余 1.10 m
+[INFO] [1793414734.428336672] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.1480, total_iters=30, loopCount=30
+[INFO] [1793414734.433825872] [nbvplanner_explorer]: 前沿 (2.5,4.0,1.2) 直线不可达 → 绕行，先到 (0.2,-0.3,1.2)
+[INFO] [1793414734.434461272] [nbvplanner_explorer]: 沿前沿推进: 前沿 (2.5,4.0,1.2) 距 5.4 m, 本步到 (0.2,-0.3,1.2)
+[INFO] [1793414734.449037672] [nbvplanner_explorer]: 飞向已发布目标 (0.24,-0.32,1.25), 剩余 0.63 m
+[INFO] [1793414735.979384987] [nbvplanner_explorer]: 前沿 (2.5,-0.3,1.2) 直线不可达 → 绕行，先到 (0.8,-0.5,1.2)
+[INFO] [1793414736.554779592] [nbvplanner_explorer]: 飞向已发布目标 (0.79,-0.47,1.25), 剩余 0.51 m
+[INFO] [1793414737.550357702] [nbvplanner_explorer]: 沿前沿推进: 前沿 (2.5,-0.3,1.2) 距 1.7 m, 本步到 (1.1,-0.3,1.2)
+[INFO] [1793414738.750967915] [nbvplanner_explorer]: 飞向已发布目标 (1.29,-0.39,1.28), 剩余 0.30 m
+[INFO] [1793414740.150488345] [nbvplanner_explorer]: 沿前沿推进: 前沿 (2.5,-0.3,1.2) 距 1.2 m, 本步到 (1.6,-0.5,1.3)
+[INFO] [1793414741.881686282] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0490, total_iters=26, loopCount=26
+[INFO] [1793414741.888856683] [nbvplanner_explorer]: 前沿 (-2.6,-0.2,1.3) 直线不可达 → 绕行，先到 (1.0,-0.4,1.3)
+[INFO] [1793414741.900772883] [nbvplanner_explorer]: 飞向已发布目标 (1.01,-0.43,1.29), 剩余 0.36 m
+[INFO] [1793414743.151277410] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-2.6,-0.2,1.3) 距 3.8 m, 本步到 (0.4,-0.4,1.3)
+[INFO] [1793414743.949192827] [nbvplanner_explorer]: 飞向已发布目标 (0.41,-0.36,1.29), 剩余 0.40 m
+[INFO] [1793414746.159340575] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-2.6,-0.2,1.3) 距 2.6 m, 本步到 (-0.8,-0.5,1.3)
+[INFO] [1793414746.354369879] [nbvplanner_explorer]: 飞向已发布目标 (-0.79,-0.46,1.29), 剩余 0.69 m
+[INFO] [1793414748.350003686] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-2.6,-0.2,1.3) 距 1.7 m, 本步到 (-1.2,-0.5,1.3)
+[INFO] [1793414748.560234986] [nbvplanner_explorer]: 飞向已发布目标 (-1.19,-0.46,1.30), 剩余 0.27 m
+[INFO] [1793414751.639074388] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0573, total_iters=31, loopCount=31
+[INFO] [1793414751.647090988] [nbvplanner_explorer]: 前沿 (2.4,-0.3,1.5) 直线不可达 → 绕行，先到 (-0.9,-0.5,1.5)
+[INFO] [1793414751.647703488] [nbvplanner_explorer]: 沿前沿推进: 前沿 (2.4,-0.3,1.5) 距 3.8 m, 本步到 (-0.9,-0.5,1.5)
+[INFO] [1793414751.661939088] [nbvplanner_explorer]: 飞向已发布目标 (-0.86,-0.46,1.51), 剩余 0.63 m
+[WARN] [1793414751.748583988] [nbvplanner_explorer]: 目标 (-0.86,-0.46,1.51) 已被占据，作废并重规划
+[WARN] [1793414751.798383388] [nbvplanner_explorer]: 根节点附近放不下安全盒（121 次采样 0 扩展）→ 先脱离
+[INFO] [1793414754.053876990] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0127, total_iters=52, loopCount=52
+[INFO] [1793414754.061001490] [nbvplanner_explorer]: 前沿 (-2.5,0.2,1.3) 直线不可达 → 绕行，先到 (-2.5,-0.6,1.3)
+[INFO] [1793414755.173851891] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0199, total_iters=45, loopCount=45
+[INFO] [1793414756.321459891] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0100, total_iters=69, loopCount=69
+[INFO] [1793414756.328369891] [nbvplanner_explorer]: 前沿 (-2.5,0.2,1.3) 直线不可达 → 绕行，先到 (-2.5,-0.6,1.3)
+[INFO] [1793414757.480647192] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0131, total_iters=53, loopCount=53
+[INFO] [1793414758.646027992] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0155, total_iters=37, loopCount=37
+[INFO] [1793414758.652969892] [nbvplanner_explorer]: 前沿 (-2.5,0.2,1.3) 直线不可达 → 绕行，先到 (-2.5,-0.6,1.3)
+[INFO] [1793414758.653337092] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.01553, 计数器5) → 悬停
+[INFO] [1793414760.853559193] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0142, total_iters=57, loopCount=57
+[INFO] [1793414760.860591793] [nbvplanner_explorer]: 前沿 (-2.5,0.1,1.3) 直线不可达 → 绕行，先到 (-2.5,0.0,1.3)
+[INFO] [1793414763.049649393] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0206, total_iters=35, loopCount=35
+[INFO] [1793414763.056399093] [nbvplanner_explorer]: 前沿 (-2.4,0.2,1.4) 直线不可达 → 绕行，先到 (-2.4,-0.5,1.4)
+[INFO] [1793414763.056748793] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.02058, 计数器7) → 悬停
+[INFO] [1793414765.254755790] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0544, total_iters=38, loopCount=38
+[INFO] [1793414765.261635990] [nbvplanner_explorer]: 前沿 (-2.5,0.2,1.3) 直线不可达 → 绕行，先到 (-2.5,0.1,1.3)
+[WARN] [1793414765.269182290] [nbvplanner_explorer]: 15s 内净位移不足 0.9m (当前位置 -1.64,-0.53,1.30) → 转全局前沿
+[INFO] [1793414767.453132186] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0158, total_iters=42, loopCount=42
+[INFO] [1793414767.460048186] [nbvplanner_explorer]: 前沿 (-2.5,-1.3,1.2) 直线不可达 → 绕行，先到 (-2.5,-1.3,1.2)
+[INFO] [1793414767.460585286] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.01580, 计数器9) → 悬停
+[INFO] [1793414769.645645583] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0498, total_iters=41, loopCount=41
+[INFO] [1793414769.652367083] [nbvplanner_explorer]: 前沿 (-2.4,1.3,1.2) 直线不可达 → 绕行，先到 (-1.8,0.1,1.2)
+[INFO] [1793414771.857426781] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0030, total_iters=45, loopCount=45
+[INFO] [1793414771.864552181] [nbvplanner_explorer]: 前沿 (-2.4,1.3,1.2) 直线不可达 → 绕行，先到 (-1.8,0.1,1.2)
+[INFO] [1793414771.865107481] [nbvplanner_explorer]: 沿前沿推进: 前沿 (-2.4,1.3,1.2) 距 1.9 m, 本步到 (-1.7,-0.2,1.3)
+[INFO] [1793414771.873455881] [nbvplanner_explorer]: 飞向已发布目标 (-1.70,-0.22,1.29), 剩余 0.30 m
+[WARN] [1793414772.952468782] [nbvplanner_explorer]: 目标 (-1.73,-0.04,1.25) 已被占据，作废并重规划
+[WARN] [1793414773.149070082] [nbvplanner_explorer]: 目标 (-1.73,-0.04,1.25) 已被占据，作废并重规划
+[INFO] [1793414774.281278182] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0405, total_iters=43, loopCount=43
+[INFO] [1793414774.288316382] [nbvplanner_explorer]: 前沿 (-2.5,1.5,1.3) 直线不可达 → 绕行，先到 (-1.9,0.3,1.3)
+[INFO] [1793414775.411553982] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0136, total_iters=52, loopCount=52
+[INFO] [1793414776.564226282] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0125, total_iters=39, loopCount=39
+[INFO] [1793414776.570800482] [nbvplanner_explorer]: 前沿 (-2.5,-1.6,1.3) 直线不可达 → 绕行，先到 (-1.9,-1.0,1.3)
+[INFO] [1793414777.708640083] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0251, total_iters=44, loopCount=44
+[ERROR] [1793414777.735670683] [nbvplanner_explorer]: 近距障碍 0.59m < 0.60m → 退回到安全点 (当前位置 -1.72,-0.20,1.33)
+[INFO] [1793414778.836195781] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0124, total_iters=40, loopCount=40
+[INFO] [1793414778.842962981] [nbvplanner_explorer]: 前沿 (-2.5,-1.6,1.3) 直线不可达 → 绕行，先到 (-1.9,-1.0,1.3)
+[INFO] [1793414778.843225381] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.01241, 计数器5) → 悬停
+[ERROR] [1793414778.948614981] [nbvplanner_explorer]: 近距障碍 0.59m < 0.60m → 退回到安全点 (当前位置 -1.70,-0.23,1.31)
+[WARN] [1793414780.013435273] [nbvplanner_explorer]: 根节点附近放不下安全盒（121 次采样 0 扩展）→ 先脱离
+[WARN] [1793414780.348347270] [nbvplanner_explorer]: 15s 内净位移不足 0.8m (当前位置 -1.70,-0.20,1.26) → 转全局前沿
+[INFO] [1793414782.235153856] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0048, total_iters=60, loopCount=60
+[INFO] [1793414782.241839556] [nbvplanner_explorer]: 前沿 (-2.5,1.5,1.3) 直线不可达 → 绕行，先到 (-1.9,0.3,1.3)
+[INFO] [1793414782.242107156] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.00484, 计数器6) → 悬停
+[INFO] [1793414784.451707340] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0101, total_iters=53, loopCount=53
+[INFO] [1793414784.458549240] [nbvplanner_explorer]: 前沿 (-2.5,-1.6,1.3) 直线不可达 → 绕行，先到 (-1.9,-1.0,1.3)
+[INFO] [1793414786.658029424] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.0387, total_iters=38, loopCount=38
+[INFO] [1793414786.664695624] [nbvplanner_explorer]: 前沿 (-2.5,-1.6,1.3) 直线不可达 → 绕行，先到 (-1.9,-1.0,1.3)
+[INFO] [1793414786.664945324] [nbvplanner_explorer]: 局部/全局都已无可达前沿 (bestGain=0.03867, 计数器8) → 悬停
+[WARN] [1793414787.807960815] [nbvplanner_explorer]: 根节点附近放不下安全盒（121 次采样 0 扩展）→ 先脱离
+[ERROR] [1793414788.948698007] [nbvplanner_explorer]: 近距障碍 0.57m < 0.60m → 退回到安全点 (当前位置 -1.65,-0.14,1.50)
+[ERROR] [1793414789.548392803] [nbvplanner_explorer]: 近距障碍 0.57m < 0.60m → 退回到安全点 (当前位置 -1.65,-0.13,1.51)
+[WARN] [1793414790.003101600] [nbvplanner_explorer]: 根节点附近放不下安全盒（121 次采样 0 扩展）→ 先脱离
+[INFO] [1793414790.010277000] [nbvplanner_explorer]: 前沿 (-2.5,-1.5,1.3) 直线不可达 → 绕行，先到 (-1.9,-0.9,1.3)
+[ERROR] [1793414790.548197196] [nbvplanner_explorer]: 近距障碍 0.54m < 0.60m → 退回到安全点 (当前位置 -1.71,-0.17,1.45)
+[ERROR] [1793414791.148283292] [nbvplanner_explorer]: 近距障碍 0.54m < 0.60m → 退回到安全点 (当前位置 -1.73,-0.16,1.42)
+^C[INFO] [1793414791.195545891] [rclcpp]: signal_handler(SIGINT/SIGTERM)

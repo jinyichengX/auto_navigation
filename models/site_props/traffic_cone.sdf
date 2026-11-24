@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- 锥桶：总高 0.60，原点在底面（放置时 z = 地面） -->
+<sdf version="1.9">
+  <model name="traffic_cone">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.30 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.17</radius>
+            <length>0.60</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="base">
+        <pose>0 0 0.025 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.36 0.36 0.05</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.85 0.24 0.02 1</ambient>
+          <diffuse>1.00 0.35 0.04 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+      <visual name="body">
+        <pose>0 0 0.31 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.145</radius>
+            <length>0.52</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.85 0.24 0.02 1</ambient>
+          <diffuse>1.00 0.35 0.04 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+      <visual name="band">
+        <pose>0 0 0.34 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.152</radius>
+            <length>0.12</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.80 0.80 0.78 1</ambient>
+          <diffuse>0.95 0.95 0.92 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

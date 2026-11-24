@@ -1,0 +1,24 @@
+整个项目的目标是无人机自己探索完整个地图（不限于下面的地图，而是任意的不规则地图），依次启动命令是
+PX4_GZ_NO_FOLLOW=1 PX4_GZ_WORLD=urban_starting_area_with_pedestrians PX4_GZ_MODEL_POSE="-40.877358,64.956595,1.5" make px4_sitl gz_x500_livox_mid360
+MicroXRCEAgent udp4 -p 8888
+ros2 run nav3 fastlio2_input_bridge
+ros2 launch fast_lio mapping.launch.py rviz:=false
+ros2 run nav3 fastlio_odom_bridge
+ros2 launch px4_control octomap_mapping.launch.py
+ros2 run nav3 offboard_control
+ros2 run nav3 nbvplanner_explorer
+还是先建议你先阅读下整个源码，体会下现在的思路和架构，现在你全程自己跑自己测试，
+然后跑的过程中发现有任何不对的地方就停掉上面所有程序（一定要关干净），
+然后改完bug（甚至可以大改整个探索器，甚至探索器可以换成更好的方案，
+你也可以去网络上浏览任何论文任何文章任何算法等等参考资料或者参考文献）
+后再构建再依次启动命令跑。直到能探索完整个地图后，你再结束任务。不限时。
+注意了，如果中途又需要我介入的情况下你才可以停，不限时。
+注意了，如果中途又需要我介入的情况下你才可以停。
+不然你不能停直到高质量地完成这个项目的任务。我忘记说了最重要的一点。
+这个项目一定要保证再不规则3D地图下的自主探索和建图哦。
+还有一个比较重要的点是你可以先改变雷达外参哦（也就是相当于无人机的安装位置）
+（有可能这在论文中可以成为一个单独讨论的点，验证安装在哪的外参可以最大满足项目要求，
+如果可以（我是说如果，如果现在的外参能达到要求也可以不改）
+理论证明的话你可以带上证明（写成一个单独的html文件），要考虑机身body哦，
+还有不要忽略桨叶等等）。LIO 发散了（比如位置跳到 68 km）极大概率是飞机撞障碍物了。
+还有不要修改任何PX4飞控的参数，如果现在的配置和预设参数不一样，给我改成和预设参数一样。

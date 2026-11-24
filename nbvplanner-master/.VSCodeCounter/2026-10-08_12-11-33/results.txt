@@ -1,0 +1,94 @@
+Date : 2026-10-08 12:11:33
+Directory : i:\论文\models\nbvplanner-master
+Total : 38 files,  3508 codes, 412 comments, 452 blanks, all 4372 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         18 |      2,271 |        358 |        214 |      2,843 |
+| C        |          1 |        597 |         49 |        116 |        762 |
+| XML      |         11 |        395 |          1 |         61 |        457 |
+| CMake    |          5 |        137 |          0 |         34 |        171 |
+| YAML     |          2 |         66 |          4 |         10 |         80 |
+| Markdown |          1 |         42 |          0 |         17 |         59 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                        | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                           |         38 |      3,508 |        412 |        452 |      4,372 |
+| . (Files)                                                                                                                   |          1 |         42 |          0 |         17 |         59 |
+| interface_nbvp_rotors                                                                                                       |         10 |        502 |         31 |         63 |        596 |
+| interface_nbvp_rotors (Files)                                                                                               |          2 |         41 |          0 |         12 |         53 |
+| interface_nbvp_rotors\launch                                                                                                |          5 |        288 |          1 |         27 |        316 |
+| interface_nbvp_rotors\resource                                                                                              |          2 |         66 |          4 |         10 |         80 |
+| interface_nbvp_rotors\src                                                                                                   |          1 |        107 |         26 |         14 |        147 |
+| kdtree                                                                                                                      |          4 |        668 |        106 |        148 |        922 |
+| kdtree (Files)                                                                                                              |          2 |         34 |          0 |         11 |         45 |
+| kdtree\include                                                                                                              |          1 |         37 |         57 |         21 |        115 |
+| kdtree\include\kdtree                                                                                                       |          1 |         37 |         57 |         21 |        115 |
+| kdtree\src                                                                                                                  |          1 |        597 |         49 |        116 |        762 |
+| multiagent_collision_check                                                                                                  |          4 |        159 |         37 |         32 |        228 |
+| multiagent_collision_check (Files)                                                                                          |          2 |         44 |          0 |         15 |         59 |
+| multiagent_collision_check\include                                                                                          |          1 |         18 |         15 |          9 |         42 |
+| multiagent_collision_check\include\multiagent_collision_check                                                               |          1 |         18 |         15 |          9 |         42 |
+| multiagent_collision_check\src                                                                                              |          1 |         97 |         22 |          8 |        127 |
+| nbvplanner                                                                                                                  |         13 |      1,986 |        203 |        161 |      2,350 |
+| nbvplanner (Files)                                                                                                          |          2 |         74 |          0 |         16 |         90 |
+| nbvplanner\include                                                                                                          |          6 |        745 |        108 |         88 |        941 |
+| nbvplanner\include\nbvplanner                                                                                               |          6 |        745 |        108 |         88 |        941 |
+| nbvplanner\src                                                                                                              |          5 |      1,167 |         95 |         57 |      1,319 |
+| prune_pointcloud                                                                                                            |          6 |        151 |         35 |         31 |        217 |
+| prune_pointcloud (Files)                                                                                                    |          2 |         38 |          0 |         13 |         51 |
+| prune_pointcloud\include                                                                                                    |          1 |         21 |         15 |          5 |         41 |
+| prune_pointcloud\include\prune_pointcloud                                                                                   |          1 |         21 |         15 |          5 |         41 |
+| prune_pointcloud\launch                                                                                                     |          1 |         13 |          0 |          1 |         14 |
+| prune_pointcloud\src                                                                                                        |          2 |         79 |         20 |         12 |        111 |
++-----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                    | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| i:\论文\models\nbvplanner-master\README.md                                                                                    | Markdown |         42 |          0 |         17 |         59 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\CMakeLists.txt                                                         | CMake    |         18 |          0 |          5 |         23 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\launch\area_exploration.launch                                         | XML      |         29 |          0 |          4 |         33 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\launch\flat_exploration.launch                                         | XML      |         27 |          0 |          4 |         31 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\launch\mav_inspector.launch                                            | XML      |         66 |          1 |          3 |         70 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\launch\multiagent_area_exploration.launch                              | XML      |         89 |          0 |          8 |         97 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\launch\multiagent_flat_exploration.launch                              | XML      |         77 |          0 |          8 |         85 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\package.xml                                                            | XML      |         23 |          0 |          7 |         30 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\resource\area_exploration.yaml                                         | YAML     |         33 |          2 |          5 |         40 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\resource\exploration.yaml                                              | YAML     |         33 |          2 |          5 |         40 |
+| i:\论文\models\nbvplanner-master\interface_nbvp_rotors\src\exploration.cpp                                                    | C++      |        107 |         26 |         14 |        147 |
+| i:\论文\models\nbvplanner-master\kdtree\CMakeLists.txt                                                                        | CMake    |         19 |          0 |          6 |         25 |
+| i:\论文\models\nbvplanner-master\kdtree\include\kdtree\kdtree.h                                                               | C++      |         37 |         57 |         21 |        115 |
+| i:\论文\models\nbvplanner-master\kdtree\package.xml                                                                           | XML      |         15 |          0 |          5 |         20 |
+| i:\论文\models\nbvplanner-master\kdtree\src\kdtree.c                                                                          | C        |        597 |         49 |        116 |        762 |
+| i:\论文\models\nbvplanner-master\multiagent_collision_check\CMakeLists.txt                                                    | CMake    |         30 |          0 |          8 |         38 |
+| i:\论文\models\nbvplanner-master\multiagent_collision_check\include\multiagent_collision_check\multiagent_collision_checker.h | C++      |         18 |         15 |          9 |         42 |
+| i:\论文\models\nbvplanner-master\multiagent_collision_check\package.xml                                                       | XML      |         14 |          0 |          7 |         21 |
+| i:\论文\models\nbvplanner-master\multiagent_collision_check\src\multiagent_collision_checker.cpp                              | C++      |         97 |         22 |          8 |        127 |
+| i:\论文\models\nbvplanner-master\nbvplanner\CMakeLists.txt                                                                    | CMake    |         48 |          0 |          9 |         57 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\mesh_structure.h                                               | C++      |         58 |         15 |          9 |         82 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\nbvp.h                                                         | C++      |         53 |         15 |         13 |         81 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\nbvp.hpp                                                       | C++      |        388 |         33 |         27 |        448 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\rrt.h                                                          | C++      |         48 |         15 |          8 |         71 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\tree.h                                                         | C++      |         99 |         15 |         14 |        128 |
+| i:\论文\models\nbvplanner-master\nbvplanner\include\nbvplanner\tree.hpp                                                       | C++      |         99 |         15 |         17 |        131 |
+| i:\论文\models\nbvplanner-master\nbvplanner\package.xml                                                                       | XML      |         26 |          0 |          7 |         33 |
+| i:\论文\models\nbvplanner-master\nbvplanner\src\mesh_structure.cpp                                                            | C++      |        461 |         38 |         22 |        521 |
+| i:\论文\models\nbvplanner-master\nbvplanner\src\nbv_planner_node.cpp                                                          | C++      |         12 |          0 |          4 |         16 |
+| i:\论文\models\nbvplanner-master\nbvplanner\src\nbvp.cpp                                                                      | C++      |          2 |          0 |          1 |          3 |
+| i:\论文\models\nbvplanner-master\nbvplanner\src\rrt.cpp                                                                       | C++      |        691 |         42 |         28 |        761 |
+| i:\论文\models\nbvplanner-master\nbvplanner\src\tree.cpp                                                                      | C++      |          1 |         15 |          2 |         18 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\CMakeLists.txt                                                              | CMake    |         22 |          0 |          6 |         28 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\include\prune_pointcloud\prune.h                                            | C++      |         21 |         15 |          5 |         41 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\launch\prune_pointcloud.launch                                              | XML      |         13 |          0 |          1 |         14 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\package.xml                                                                 | XML      |         16 |          0 |          7 |         23 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\src\prune.cc                                                                | C++      |         69 |         20 |          7 |         96 |
+| i:\论文\models\nbvplanner-master\prune_pointcloud\src\prune_node.cc                                                           | C++      |         10 |          0 |          5 |         15 |
+| Total                                                                                                                       |          |      3,508 |        412 |        452 |      4,372 |
++-----------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

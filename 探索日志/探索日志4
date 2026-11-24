@@ -1,0 +1,233 @@
+jinyicheng@DESKTOP-M2V3GT5:~/auto_navigation$ ros2 run nav3 nbvplanner_explorer
+[INFO] [1793410322.955639470] [nbvplanner_explorer]: NBVPlanner explorer ready. 坐标系=camera_init, 高度带 z∈[1.0,3.5], 边界自动跟随地图=1 (余量 40 m), FOV=360°×59°
+[WARN] [1793410323.158079571] [nbvplanner_explorer]: 等待 /octomap_binary 和 /Odometry (map=0 odom=1)
+[INFO] [1793410323.358191771] [nbvplanner_explorer]: 起飞中... z=-0.02 → 1.6m
+[INFO] [1793410325.997253177] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6781, total_iters=58, loopCount=58
+[INFO] [1793410325.997887177] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.6781, path_size=17, target=(0.19,-0.92,0.72) 距当前 1.00 m, 最近障碍 0.90 m, 本步 1.00 m
+[INFO] [1793410326.005524777] [nbvplanner_explorer]: 飞向已发布目标 (0.19,-0.92,0.72), 剩余 1.00 m
+[INFO] [1793410328.157514398] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.0601, total_iters=32, loopCount=32
+[INFO] [1793410328.158127198] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.0601, path_size=17, target=(-0.59,-1.42,0.74) 距当前 1.00 m, 最近障碍 0.90 m, 本步 1.00 m
+[INFO] [1793410328.171934898] [nbvplanner_explorer]: 飞向已发布目标 (-0.59,-1.42,0.74), 剩余 1.00 m
+[INFO] [1793410328.358139001] [nbvplanner_explorer]: 起飞中... z=0.60 → 1.6m
+[INFO] [1793410328.971827509] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9196, total_iters=28, loopCount=28
+[INFO] [1793410328.972429709] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9196, path_size=17, target=(-0.29,-1.89,0.86) 距当前 1.00 m, 最近障碍 0.90 m, 本步 1.00 m
+[INFO] [1793410330.365517528] [nbvplanner_explorer]: 飞向已发布目标 (-0.29,-1.89,0.86), 剩余 0.41 m
+[INFO] [1793410331.177459740] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.4201, total_iters=14, loopCount=14
+[INFO] [1793410331.178035240] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.4201, path_size=17, target=(-0.14,-2.62,0.98) 距当前 0.90 m, 最近障碍 0.90 m, 本步 0.98 m
+[INFO] [1793410332.565062559] [nbvplanner_explorer]: 飞向已发布目标 (-0.14,-2.62,0.98), 剩余 0.26 m
+[INFO] [1793410333.223659568] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8933, total_iters=19, loopCount=19
+[INFO] [1793410333.224440568] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8933, path_size=31, target=(-0.08,-3.27,1.04) 距当前 0.81 m, 最近障碍 0.90 m, 本步 0.81 m
+[INFO] [1793410334.565476086] [nbvplanner_explorer]: 飞向已发布目标 (-0.08,-3.27,1.04), 剩余 0.30 m
+[INFO] [1793410335.381946389] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8451, total_iters=10, loopCount=10
+[INFO] [1793410335.382642089] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8451, path_size=16, target=(-0.16,-3.90,1.09) 距当前 0.80 m, 最近障碍 0.90 m, 本步 0.85 m
+[INFO] [1793410336.565587089] [nbvplanner_explorer]: 飞向已发布目标 (-0.16,-3.90,1.09), 剩余 0.35 m
+[INFO] [1793410337.375643089] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8252, total_iters=19, loopCount=19
+[INFO] [1793410337.376495889] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8252, path_size=17, target=(-0.21,-4.50,1.14) 距当前 0.80 m, 最近障碍 0.90 m, 本步 0.82 m
+[INFO] [1793410338.568697689] [nbvplanner_explorer]: 飞向已发布目标 (-0.21,-4.50,1.14), 剩余 0.34 m
+[INFO] [1793410339.378747589] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8028, total_iters=16, loopCount=16
+[INFO] [1793410339.379468889] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8028, path_size=30, target=(-0.27,-5.16,1.19) 距当前 0.80 m, 最近障碍 0.90 m, 本步 0.81 m
+[INFO] [1793410341.182670190] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0298, total_iters=13, loopCount=13
+[INFO] [1793410341.183285790] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0298, path_size=16, target=(-0.29,-5.68,1.20) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.79 m
+[INFO] [1793410341.191000190] [nbvplanner_explorer]: 飞向已发布目标 (-0.29,-5.68,1.20), 剩余 0.70 m
+[INFO] [1793410342.988436590] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4138, total_iters=23, loopCount=23
+[INFO] [1793410342.988999090] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.4138, path_size=17, target=(-0.28,-6.22,1.24) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.78 m
+[INFO] [1793410343.365558889] [nbvplanner_explorer]: 飞向已发布目标 (-0.28,-6.22,1.24), 剩余 0.53 m
+[INFO] [1793410344.833322488] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7989, total_iters=109, loopCount=109
+[INFO] [1793410344.833956888] [nbvplanner_explorer]: 新目标方向与上一步反向且增益优势不明显 (0.799 vs 3.414) → 沿用上一步方向
+[INFO] [1793410344.834548288] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.7989, path_size=17, target=(-0.26,-6.77,1.27) 距当前 0.74 m, 最近障碍 0.90 m, 本步 0.74 m
+[INFO] [1793410345.368325188] [nbvplanner_explorer]: 飞向已发布目标 (-0.26,-6.77,1.27), 剩余 0.56 m
+[INFO] [1793410346.809376987] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.1787, total_iters=29, loopCount=29
+[INFO] [1793410346.809968087] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.1787, path_size=22, target=(-0.32,-5.94,1.29) 距当前 0.67 m, 最近障碍 0.90 m, 本步 0.74 m
+[INFO] [1793410347.568118486] [nbvplanner_explorer]: 飞向已发布目标 (-0.32,-5.94,1.29), 剩余 0.80 m
+[INFO] [1793410348.998634885] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.5714, total_iters=19, loopCount=19
+[INFO] [1793410348.999394085] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.5714, path_size=17, target=(-0.19,-5.51,1.31) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793410350.195008084] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9208, total_iters=20, loopCount=20
+[INFO] [1793410350.195599084] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9208, path_size=31, target=(-0.17,-5.08,1.33) 距当前 0.66 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793410350.203362984] [nbvplanner_explorer]: 飞向已发布目标 (-0.17,-5.08,1.33), 剩余 0.66 m
+[INFO] [1793410352.180987484] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0086, total_iters=19, loopCount=19
+[INFO] [1793410352.181589984] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0086, path_size=18, target=(-0.01,-4.56,1.32) 距当前 0.65 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410352.365167684] [nbvplanner_explorer]: 飞向已发布目标 (-0.01,-4.56,1.32), 剩余 0.53 m
+[INFO] [1793410353.586313484] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1323, total_iters=12, loopCount=12
+[INFO] [1793410353.586911284] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1323, path_size=17, target=(0.00,-4.20,1.33) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410354.565426284] [nbvplanner_explorer]: 飞向已发布目标 (0.00,-4.20,1.33), 剩余 0.35 m
+[INFO] [1793410355.193338684] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.2877, total_iters=34, loopCount=34
+[INFO] [1793410355.193906484] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.2877, path_size=17, target=(0.13,-3.73,1.35) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793410356.786897585] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1817, total_iters=21, loopCount=21
+[INFO] [1793410356.787485485] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1817, path_size=17, target=(0.12,-3.23,1.32) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.79 m
+[INFO] [1793410356.795178885] [nbvplanner_explorer]: 飞向已发布目标 (0.12,-3.23,1.32), 剩余 0.70 m
+[INFO] [1793410358.997687385] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.5404, total_iters=40, loopCount=40
+[INFO] [1793410358.998256685] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.5404, path_size=17, target=(0.14,-2.58,1.34) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.70 m
+[INFO] [1793410359.005813285] [nbvplanner_explorer]: 飞向已发布目标 (0.14,-2.58,1.34), 剩余 0.70 m
+[INFO] [1793410360.800078584] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0139, total_iters=23, loopCount=23
+[INFO] [1793410360.800637584] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0139, path_size=26, target=(0.12,-2.08,1.35) 距当前 0.67 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410361.165879984] [nbvplanner_explorer]: 飞向已发布目标 (0.12,-2.08,1.35), 剩余 0.50 m
+[INFO] [1793410362.594640583] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.3747, total_iters=15, loopCount=15
+[INFO] [1793410362.595508683] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.3747, path_size=17, target=(0.05,-1.72,1.35) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410363.168149983] [nbvplanner_explorer]: 飞向已发布目标 (0.05,-1.72,1.35), 剩余 0.33 m
+[INFO] [1793410364.025848783] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4266, total_iters=58, loopCount=58
+[INFO] [1793410364.026474683] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.4266, path_size=17, target=(0.11,-1.19,1.38) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.73 m
+[INFO] [1793410365.788522282] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4345, total_iters=42, loopCount=42
+[INFO] [1793410365.789204182] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.4345, path_size=17, target=(-0.03,-0.70,1.39) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.73 m
+[INFO] [1793410365.796227282] [nbvplanner_explorer]: 飞向已发布目标 (-0.03,-0.70,1.39), 剩余 0.70 m
+[INFO] [1793410367.378896677] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.2736, total_iters=12, loopCount=12
+[INFO] [1793410367.379489877] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.2736, path_size=17, target=(0.03,-0.21,1.39) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.74 m
+[INFO] [1793410367.965331871] [nbvplanner_explorer]: 飞向已发布目标 (0.03,-0.21,1.39), 剩余 0.41 m
+[INFO] [1793410369.185816761] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.4411, total_iters=8, loopCount=8
+[INFO] [1793410369.186547161] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.4411, path_size=17, target=(-0.03,0.33,1.41) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.74 m
+[INFO] [1793410369.965821354] [nbvplanner_explorer]: 飞向已发布目标 (-0.03,0.33,1.41), 剩余 0.43 m
+[INFO] [1793410371.000417245] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5390, total_iters=12, loopCount=12
+[INFO] [1793410371.001041945] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.5390, path_size=17, target=(0.03,0.74,1.44) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410372.380942233] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.7538, total_iters=7, loopCount=7
+[INFO] [1793410372.381570633] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.7538, path_size=17, target=(-0.02,1.10,1.44) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410372.391627533] [nbvplanner_explorer]: 飞向已发布目标 (-0.02,1.10,1.44), 剩余 0.60 m
+[INFO] [1793410373.786742020] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.8175, total_iters=24, loopCount=24
+[INFO] [1793410373.787303420] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.8175, path_size=17, target=(-0.02,1.49,1.45) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410374.565371314] [nbvplanner_explorer]: 飞向已发布目标 (-0.02,1.49,1.45), 剩余 0.34 m
+[INFO] [1793410375.196621205] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.8909, total_iters=31, loopCount=31
+[INFO] [1793410375.197215004] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.8909, path_size=17, target=(-0.01,1.85,1.45) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.67 m
+[INFO] [1793410376.602418279] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6441, total_iters=20, loopCount=20
+[INFO] [1793410376.603049479] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.6441, path_size=17, target=(0.03,2.22,1.45) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410376.612711279] [nbvplanner_explorer]: 飞向已发布目标 (0.03,2.22,1.45), 剩余 0.60 m
+[INFO] [1793410378.196241251] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0767, total_iters=20, loopCount=20
+[INFO] [1793410378.196787751] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0767, path_size=17, target=(0.06,2.52,1.48) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410378.765114541] [nbvplanner_explorer]: 飞向已发布目标 (0.06,2.52,1.48), 剩余 0.31 m
+[INFO] [1793410379.399867630] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.7254, total_iters=21, loopCount=21
+[INFO] [1793410379.400464230] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.7254, path_size=17, target=(0.05,2.79,1.48) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410380.796609305] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0580, total_iters=17, loopCount=17
+[INFO] [1793410380.797193705] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0580, path_size=19, target=(0.10,3.07,1.49) 距当前 0.51 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410380.804181105] [nbvplanner_explorer]: 飞向已发布目标 (0.10,3.07,1.49), 剩余 0.51 m
+[INFO] [1793410381.997668083] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.5980, total_iters=18, loopCount=18
+[INFO] [1793410381.998261983] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.5980, path_size=25, target=(0.11,3.35,1.51) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410383.213170668] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4604, total_iters=50, loopCount=50
+[INFO] [1793410383.213882168] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.4604, path_size=20, target=(0.15,3.70,1.54) 距当前 0.55 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410383.221402768] [nbvplanner_explorer]: 飞向已发布目标 (0.15,3.70,1.54), 剩余 0.55 m
+[INFO] [1793410384.990620964] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0240, total_iters=18, loopCount=18
+[INFO] [1793410384.991170464] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0240, path_size=30, target=(0.23,4.14,1.52) 距当前 0.68 m, 最近障碍 0.90 m, 本步 0.69 m
+[INFO] [1793410385.365755863] [nbvplanner_explorer]: 飞向已发布目标 (0.23,4.14,1.52), 剩余 0.42 m
+[INFO] [1793410386.795966660] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3889, total_iters=11, loopCount=11
+[INFO] [1793410386.796534360] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3889, path_size=17, target=(0.16,4.54,1.50) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410387.367795159] [nbvplanner_explorer]: 飞向已发布目标 (0.16,4.54,1.50), 剩余 0.45 m
+[INFO] [1793410388.401029756] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.7778, total_iters=10, loopCount=10
+[INFO] [1793410388.401604856] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.7778, path_size=26, target=(0.28,5.00,1.55) 距当前 0.62 m, 最近障碍 0.90 m, 本步 0.66 m
+[INFO] [1793410389.801186353] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.2699, total_iters=37, loopCount=37
+[INFO] [1793410389.801730353] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.2699, path_size=27, target=(0.25,5.46,1.54) 距当前 0.66 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410389.811287253] [nbvplanner_explorer]: 飞向已发布目标 (0.25,5.46,1.54), 剩余 0.66 m
+[INFO] [1793410391.578519750] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.2368, total_iters=21, loopCount=21
+[INFO] [1793410391.579081350] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.2368, path_size=17, target=(0.32,5.84,1.56) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410391.969565950] [nbvplanner_explorer]: 飞向已发布目标 (0.32,5.84,1.56), 剩余 0.38 m
+[INFO] [1793410392.987259649] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.8499, total_iters=19, loopCount=19
+[INFO] [1793410392.987860349] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.8499, path_size=16, target=(0.39,6.20,1.54) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.66 m
+[INFO] [1793410394.607534547] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.6293, total_iters=63, loopCount=63
+[INFO] [1793410394.608141947] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.6293, path_size=24, target=(0.42,6.63,1.58) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410394.615622847] [nbvplanner_explorer]: 飞向已发布目标 (0.42,6.63,1.58), 剩余 0.60 m
+[INFO] [1793410396.054645346] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.9717, total_iters=86, loopCount=86
+[INFO] [1793410396.055193146] [nbvplanner_explorer]: 新目标方向与上一步反向且增益优势不明显 (0.972 vs 1.629) → 沿用上一步方向
+[INFO] [1793410396.055742346] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.9717, path_size=17, target=(0.59,6.98,1.57) 距当前 0.59 m, 最近障碍 0.90 m, 本步 0.59 m
+[INFO] [1793410396.765253345] [nbvplanner_explorer]: 飞向已发布目标 (0.59,6.98,1.57), 剩余 0.38 m
+[INFO] [1793410397.796287144] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.4305, total_iters=9, loopCount=9
+[INFO] [1793410397.796839944] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.4305, path_size=24, target=(0.27,6.32,1.58) 距当前 0.54 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793410398.765688943] [nbvplanner_explorer]: 飞向已发布目标 (0.27,6.32,1.58), 剩余 0.63 m
+[INFO] [1793410399.781800334] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.6977, total_iters=14, loopCount=14
+[INFO] [1793410399.782363734] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.6977, path_size=16, target=(0.13,5.99,1.60) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410400.581406827] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.7217, total_iters=5, loopCount=5
+[INFO] [1793410400.581990327] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.7217, path_size=17, target=(0.06,5.64,1.58) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.67 m
+[INFO] [1793410400.967711624] [nbvplanner_explorer]: 飞向已发布目标 (0.06,5.64,1.58), 剩余 0.44 m
+[INFO] [1793410401.807801517] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6927, total_iters=40, loopCount=40
+[INFO] [1793410401.808413517] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.6927, path_size=17, target=(-0.00,5.29,1.58) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410402.968040707] [nbvplanner_explorer]: 飞向已发布目标 (-0.00,5.29,1.58), 剩余 0.26 m
+[INFO] [1793410403.584053201] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.6338, total_iters=26, loopCount=26
+[INFO] [1793410403.584614501] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.6338, path_size=23, target=(-0.06,4.85,1.59) 距当前 0.64 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410405.589825284] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9085, total_iters=9, loopCount=9
+[INFO] [1793410405.590376484] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9085, path_size=18, target=(-0.19,4.31,1.60) 距当前 0.65 m, 最近障碍 0.90 m, 本步 0.68 m
+[INFO] [1793410405.598793284] [nbvplanner_explorer]: 飞向已发布目标 (-0.19,4.31,1.60), 剩余 0.65 m
+[INFO] [1793410407.183985964] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0347, total_iters=7, loopCount=7
+[INFO] [1793410407.184558264] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0347, path_size=19, target=(-0.22,3.79,1.58) 距当前 0.70 m, 最近障碍 0.90 m, 本步 0.70 m
+[INFO] [1793410407.765977249] [nbvplanner_explorer]: 飞向已发布目标 (-0.22,3.79,1.58), 剩余 0.51 m
+[INFO] [1793410408.983394118] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0727, total_iters=9, loopCount=9
+[INFO] [1793410408.984121718] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0727, path_size=17, target=(-0.26,3.39,1.62) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410410.401776781] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6447, total_iters=37, loopCount=37
+[INFO] [1793410410.402303881] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.6447, path_size=17, target=(-0.26,3.06,1.63) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793410410.412209081] [nbvplanner_explorer]: 飞向已发布目标 (-0.26,3.06,1.63), 剩余 0.50 m
+[INFO] [1793410411.405920055] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.2152, total_iters=46, loopCount=46
+[INFO] [1793410411.406505055] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.2152, path_size=17, target=(-0.17,2.68,1.66) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410412.568144725] [nbvplanner_explorer]: 飞向已发布目标 (-0.17,2.68,1.66), 剩余 0.32 m
+[INFO] [1793410413.388910303] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9167, total_iters=19, loopCount=19
+[INFO] [1793410413.389499203] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9167, path_size=31, target=(-0.29,2.33,1.66) 距当前 0.51 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410414.780522567] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1036, total_iters=14, loopCount=14
+[INFO] [1793410414.781101167] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1036, path_size=17, target=(-0.21,2.00,1.61) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410414.788231167] [nbvplanner_explorer]: 飞向已发布目标 (-0.21,2.00,1.61), 剩余 0.50 m
+[INFO] [1793410416.419345021] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.6951, total_iters=56, loopCount=56
+[INFO] [1793410416.419855021] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.6951, path_size=17, target=(-0.25,1.64,1.65) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410416.968067005] [nbvplanner_explorer]: 飞向已发布目标 (-0.25,1.64,1.65), 剩余 0.35 m
+[INFO] [1793410418.199158270] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.3591, total_iters=21, loopCount=21
+[INFO] [1793410418.199783770] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.3591, path_size=17, target=(-0.22,1.34,1.65) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793410419.199592342] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9883, total_iters=19, loopCount=19
+[INFO] [1793410419.200265442] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9883, path_size=22, target=(-0.19,0.94,1.66) 距当前 0.58 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410419.210456541] [nbvplanner_explorer]: 飞向已发布目标 (-0.19,0.94,1.66), 剩余 0.58 m
+[INFO] [1793410420.990671791] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0520, total_iters=8, loopCount=8
+[INFO] [1793410420.991231791] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0520, path_size=17, target=(-0.20,0.55,1.66) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410421.364896980] [nbvplanner_explorer]: 飞向已发布目标 (-0.20,0.55,1.66), 剩余 0.45 m
+[INFO] [1793410422.384532751] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1669, total_iters=11, loopCount=11
+[INFO] [1793410422.385122351] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1669, path_size=30, target=(-0.22,0.19,1.66) 距当前 0.58 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410423.990732828] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.4837, total_iters=8, loopCount=8
+[INFO] [1793410423.991302128] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.4837, path_size=27, target=(-0.17,-0.21,1.69) 距当前 0.59 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410424.001566128] [nbvplanner_explorer]: 飞向已发布目标 (-0.17,-0.21,1.69), 剩余 0.59 m
+[INFO] [1793410425.600539614] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.2215, total_iters=44, loopCount=44
+[INFO] [1793410425.601130214] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.2215, path_size=17, target=(-0.20,-0.71,1.62) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410426.165571709] [nbvplanner_explorer]: 飞向已发布目标 (-0.20,-0.71,1.62), 剩余 0.49 m
+[INFO] [1793410427.407434098] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.9912, total_iters=25, loopCount=25
+[INFO] [1793410427.408060398] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.9912, path_size=17, target=(-0.22,-1.17,1.66) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.62 m
+[INFO] [1793410428.364938090] [nbvplanner_explorer]: 飞向已发布目标 (-0.22,-1.17,1.66), 剩余 0.37 m
+[INFO] [1793410429.009242784] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6394, total_iters=14, loopCount=14
+[INFO] [1793410429.009818084] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.6394, path_size=28, target=(-0.13,-1.54,1.69) 距当前 0.57 m, 最近障碍 0.90 m, 本步 0.57 m
+[INFO] [1793410430.613659570] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=1.6954, total_iters=50, loopCount=50
+[INFO] [1793410430.614220770] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=1.6954, path_size=17, target=(-0.16,-1.96,1.68) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410430.624598470] [nbvplanner_explorer]: 飞向已发布目标 (-0.16,-1.96,1.68), 剩余 0.60 m
+[INFO] [1793410432.193760462] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.0214, total_iters=13, loopCount=13
+[INFO] [1793410432.194325862] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.0214, path_size=17, target=(-0.12,-2.38,1.70) 距当前 0.60 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410432.768064159] [nbvplanner_explorer]: 飞向已发布目标 (-0.12,-2.38,1.70), 剩余 0.39 m
+[INFO] [1793410433.789851254] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.4874, total_iters=15, loopCount=15
+[INFO] [1793410433.790450954] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.4874, path_size=17, target=(-0.12,-2.72,1.70) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410434.587438750] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.7215, total_iters=7, loopCount=7
+[INFO] [1793410434.588204750] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.7215, path_size=19, target=(0.00,-2.87,1.72) 距当前 0.34 m, 最近障碍 0.90 m, 本步 0.40 m
+[INFO] [1793410435.186438947] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3064, total_iters=11, loopCount=11
+[INFO] [1793410435.187204947] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3064, path_size=29, target=(0.05,-3.23,1.70) 距当前 0.54 m, 最近障碍 0.90 m, 本步 0.56 m
+[INFO] [1793410435.198248347] [nbvplanner_explorer]: 飞向已发布目标 (0.05,-3.23,1.70), 剩余 0.54 m
+[INFO] [1793410437.369097936] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3374, total_iters=6, loopCount=6
+[INFO] [1793410437.369650236] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3374, path_size=22, target=(-0.07,-3.48,1.75) 距当前 0.43 m, 最近障碍 0.90 m, 本步 0.45 m
+[INFO] [1793410437.379493436] [nbvplanner_explorer]: 飞向已发布目标 (-0.07,-3.48,1.75), 剩余 0.43 m
+[INFO] [1793410438.182242732] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.4103, total_iters=4, loopCount=4
+[INFO] [1793410438.182858132] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.4103, path_size=17, target=(-0.05,-3.81,1.75) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.51 m
+[INFO] [1793410439.191684428] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.3439, total_iters=6, loopCount=6
+[INFO] [1793410439.192251828] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.3439, path_size=17, target=(-0.00,-4.09,1.72) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410439.567725827] [nbvplanner_explorer]: 飞向已发布目标 (-0.00,-4.09,1.72), 剩余 0.26 m
+[INFO] [1793410440.222310425] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.6091, total_iters=40, loopCount=40
+[INFO] [1793410440.222905725] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.6091, path_size=18, target=(0.09,-4.40,1.71) 距当前 0.54 m, 最近障碍 0.90 m, 本步 0.60 m
+[INFO] [1793410441.815069122] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=0.7628, total_iters=69, loopCount=69
+[INFO] [1793410441.815745622] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=0.7628, path_size=17, target=(0.06,-4.70,1.75) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410441.825925722] [nbvplanner_explorer]: 飞向已发布目标 (0.06,-4.70,1.75), 剩余 0.50 m
+[INFO] [1793410442.591320620] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=2.1976, total_iters=30, loopCount=30
+[INFO] [1793410442.591930220] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=2.1976, path_size=27, target=(0.11,-4.97,1.73) 距当前 0.52 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410443.991573217] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0393, total_iters=16, loopCount=16
+[INFO] [1793410443.992137717] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0393, path_size=23, target=(0.26,-5.31,1.74) 距当前 0.48 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410444.002034116] [nbvplanner_explorer]: 飞向已发布目标 (0.26,-5.31,1.74), 剩余 0.48 m
+[INFO] [1793410445.385199213] [nbvplanner_explorer]: 循环退出: gainFound=1, counter=30, bestGain=3.0832, total_iters=9, loopCount=9
+[INFO] [1793410445.385793913] [nbvplanner_explorer]: 规划 OK: counter=30, gainFound=1, bestGain=3.0832, path_size=17, target=(0.15,-5.63,1.73) 距当前 0.50 m, 最近障碍 0.90 m, 本步 0.54 m
+[INFO] [1793410446.165189211] [nbvplanner_explorer]: 飞向已发布目标 (0.15,-5.63,1.73), 剩余 0.38 m
+[INFO] [1793410448.165398309] [nbvplanner_explorer]: 飞向已发布目标 (0.15,-5.63,1.73), 剩余 0.88 m
+[INFO] [1793410450.365375307] [nbvplanner_explorer]: 飞向已发布目标 (0.15,-5.63,1.73), 剩余 0.72 m
+[ERROR] [1793410450.970901206] [nbvplanner_explorer]: 近距障碍 0.47m < 0.60m → 退回到安全点 (当前位置 1.55,-5.95,1.99)
+[ERROR] [1793410451.564294506] [nbvplanner_explorer]: 近距障碍 0.00m < 0.60m → 退回到安全点 (当前位置 3.58,-5.95,1.65)
+[WARN] [1793410451.958087205] [nbvplanner_explorer]: 疑似坠机/落地: z 1.20→0.03, 当前位置 (7.58,-5.70,0.03), 上一个目标 (1.28,-5.91,1.91)
+[INFO] [1793410451.958334605] [nbvplanner_explorer]: 起飞中... z=0.03 → 1.6m
+[ERROR] [1793410453.558092004] [nbvplanner_explorer]: 里程计异常 (32.2, -4.0, -12.1) → 停止发布目标
+[ERROR] [1793410454.758088203] [nbvplanner_explorer]: 里程计异常 (71.2, -4.5, -40.7) → 停止发布目标
+[ERROR] [1793410455.758134800] [nbvplanner_explorer]: 里程计异常 (117.3, -6.2, -71.9) → 停止发布目标
+[ERROR] [1793410457.042645597] [nbvplanner_explorer]: 里程计异常 (180.5, -11.8, -120.3) → 停止发布目标
+[ERROR] [1793410458.158055994] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410459.158063791] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410460.158074489] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410461.158137586] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410462.358067383] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410463.558062579] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
+[ERROR] [1793410464.558101377] [nbvplanner_explorer]: 里程计异常 (191.9, -13.2, -129.8) → 停止发布目标
